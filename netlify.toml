@@ -1,5 +1,6 @@
 [build]
   publish = "."
+  command = "npm install"
   functions = "netlify/functions"
 
 [functions]
@@ -8,4 +9,5 @@
 
 [[plugins]]
   package = "@netlify/blobs"
+
 
