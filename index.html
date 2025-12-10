@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Овсиенко Алексей — личный сайт</title>
+
+  <style>
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --muted: #9aa4b2;
+      --accent: #6ee7b7;
+      --text: #e6eef6;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+      --max-width: 1100px;
+      font-family: Inter, system-ui, Arial;
+    }
+    body{margin:0;background:var(--bg);color:var(--text);}
+    .wrap{max-width:var(--max-width);margin:auto;padding:24px;}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+    .logo{width:48px;height:48px;border-radius:12px;background:var(--accent);display:flex;justify-content:center;align-items:center;font-weight:800;color:#000;}
+    nav a{margin-left:16px;color:var(--muted);text-decoration:none;font-weight:600;}
+    nav a:hover{color:var(--text);}
+    .card{background:var(--card);padding:22px;border-radius:var(--radius);margin-bottom:24px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+    .project{padding:18px;background:var(--glass);border-radius:12px;}
+    .tags{display:flex;gap:8px;margin-top:8px;}
+    .tag{font-size:12px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.1);}
+    footer{text-align:center;color:var(--muted);margin-top:24px;}
+    .avatar{width:140px;height:140px;border-radius:18px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--muted);margin:auto;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Школьник / начинающий dev</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#about"><a href="notes.html" class="btn">Конспекты</a></a>
+        <a href="#projects"></a>
+        <a href="#contact"></a>
+      </nav>
+    </header>
+
+    <section class="card" id="about">
+      <h2>Обо мне</h2>
+      <p>Привет! Меня зовут <b>Овсиенко Алексей</b>. Я начинающий разработчик, учусь в школе и живу в селе <b>Стойб❤️</b>.  
+      Интересуюсь созданием игр, серверов и веб-технологиями.</p>
+    </section>
+
+    <section class="card" id="projects">
+      <h2>Мои проекты</h2>
+      <div class="grid">
+
+        <div class="project">
+          <h3>Minecraft-сервер «Teseract»</h3>
+          <p class="muted">Мой собственный Minecraft-сервер. Настройка плагинов, управление хостингом, разработка концепций мира.</p>
+          <div class="tags">
+            <span class="tag">Minecraft</span>
+            <span class="tag">Plugins</span>
+            <span class="tag">Server</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <h3>Unity-игра «Палач Онлайн»</h3>
+          <p class="muted">Онлайн-игра на Unity. Создание механик, обработка ввода, интерфейсы, базовая логика.</p>
+          <div class="tags">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">GameDev</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card" id="contact">
+      <h2>Контакты</h2>
+      <p>Связаться со мной можно в Telegram:</p>
+      <p><a href="https://t.me/alex_berlin_N1" style="color:var(--accent);font-weight:700;">@alex_berlin_N1</a></p>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Овсиенко Алексей  
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
