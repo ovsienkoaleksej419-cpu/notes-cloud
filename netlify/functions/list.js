@@ -1,8 +1,12 @@
 // netlify/functions/list.js
-import { blobs } from "@netlify/blobs";
+
+// *** ИСПРАВЛЕНИЕ ОШИБКИ ИМПОРТА: TypeError: (0 , import_blobs.blobs) is not a function
+// Используем require вместо import
+const { blobs } = require("@netlify/blobs"); 
 
 exports.handler = async function(event, context) {
   try {
+    // Инициализация хранилища
     const storage = blobs({ token: process.env.NETLIFY_BLOBS_TOKEN });
 
     // Получаем префикс и курсор из параметров запроса для пагинации
@@ -11,17 +15,17 @@ exports.handler = async function(event, context) {
     
     const prefix = subject ? `${subject}/` : "";
 
-    // *** ИСПРАВЛЕНИЕ: ДОБАВЛЯЕМ ЛИМИТ ДЛЯ ОГРАНИЧЕНИЯ РАЗМЕРА ОТВЕТА ***
+    // ДОБАВЛЯЕМ ЛИМИТ ДЛЯ ОГРАНИЧЕНИЯ РАЗМЕРА ОТВЕТА (предотвращает Content-Length error)
     const listOptions = {
         prefix,
-        limit: 1000, // Ограничиваем до 1000 элементов за раз
-        cursor: cursor // Для получения следующей страницы данных
+        limit: 1000, 
+        cursor: cursor
     };
     
     // Вызываем storage.list с опциями пагинации
     const listResponse = await storage.list(listOptions);
     
-    // Получаем массив элементов из ответа, учитывая возможные вариации SDK
+    // Получаем массив элементов
     const items = listResponse.keys || listResponse.blobs || listResponse;
 
     // Нормализация и форматирование элементов
