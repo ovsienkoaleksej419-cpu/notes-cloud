@@ -7,7 +7,6 @@
   node_bundler = "esbuild"
   external_node_modules = ["@netlify/blobs"]
 
-[[plugins]]
-  package = "@netlify/blobs"
+
 
 
