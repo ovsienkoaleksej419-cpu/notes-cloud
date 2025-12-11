@@ -1,45 +1,31 @@
-// netlify/functions/upload.js
+import { getStore } from "@netlify/blobs";
 
-// *** ИСПРАВЛЕНИЕ ОШИБКИ ИМПОРТА: Замена 'import' на 'require' ***
-const { blobs } = require("@netlify/blobs");
+export async function handler(event, context) {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method not allowed" };
+  }
 
-exports.handler = async function(event, context) {
-  try {
-    if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method not allowed" };
+  try {
+    const body = JSON.parse(event.body);
+    const { subject, filename, dataUrl, password } = body;
 
-    // parse JSON body (client sends JSON)
-    const body = JSON.parse(event.body || "{}");
-    const { subject, filename, dataUrl, password } = body;
+    if (password !== process.env.MASTER_PASSWORD) {
+      return { statusCode: 403, body: JSON.stringify({ status: "wrong_password" }) };
+    }
 
-    const MASTER = process.env.MASTER_PASSWORD || "1234";
-    if (password !== MASTER) {
-      return { statusCode: 403, body: JSON.stringify({ status: "wrong_password" }) };
-    }
-    if (!subject || !filename || !dataUrl) {
-      return { statusCode: 400, body: JSON.stringify({ status: "bad_request" }) };
-    }
+    const base64 = dataUrl.split(",")[1];
+    const buffer = Buffer.from(base64, "base64");
 
-    // extract base64 part
-    const commaIndex = dataUrl.indexOf(",");
-    const base64 = commaIndex >= 0 ? dataUrl.slice(commaIndex + 1) : dataUrl;
-    const buffer = Buffer.from(base64, "base64");
+    const store = getStore();
+    const path = `${subject}/${filename}`;
 
-    // init storage
-    // В этом месте 'blobs' теперь корректно определен благодаря 'require'
-    const storage = blobs({ token: process.env.NETLIFY_BLOBS_TOKEN });
+    await store.set(path, buffer);
 
-    const path = `${subject}/${filename}`;
-
-    await storage.set(path, buffer);
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ status: "success", path })
-    };
-  } catch (err) {
-    console.error(err);
-    return { statusCode: 500, body: JSON.stringify({ status: "error", message: String(err) }) };
-  }
-};
-
-
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ status: "success", path })
+    };
+  } catch (e) {
+    return { statusCode: 500, body: JSON.stringify({ error: String(e) }) };
+  }
+}
