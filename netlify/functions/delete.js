@@ -1,29 +1,29 @@
-// netlify/functions/delete.js
+import { getStore } from "@netlify/blobs";
 
-// *** ИСПРАВЛЕНИЕ ОШИБКИ ИМПОРТА: Замена 'import' на 'require' ***
-const { blobs } = require("@netlify/blobs");
+export async function handler(event, context) {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method not allowed" };
+  }
 
-exports.handler = async function(event, context) {
-  try {
-    if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method not allowed" };
-    
-    const body = JSON.parse(event.body || "{}");
-    const { path, password } = body;
+  try {
+    const { path, password } = JSON.parse(event.body);
 
-    const MASTER = process.env.MASTER_PASSWORD || "1234";
-    if (password !== MASTER) {
-      return { statusCode: 403, body: JSON.stringify({ status: "wrong_password" }) };
-    }
-    if (!path) return { statusCode: 400, body: JSON.stringify({ status: "bad_request" }) };
+    if (password !== process.env.MASTER_PASSWORD) {
+      return { statusCode: 403, body: JSON.stringify({ status: "wrong_password" }) };
+    }
 
-    // Инициализация storage теперь будет работать корректно
-    const storage = blobs({ token: process.env.NETLIFY_BLOBS_TOKEN });
-    
-    await storage.delete(path);
+    const store = getStore();
 
-    return { statusCode: 200, body: JSON.stringify({ status: "deleted", path }) };
-  } catch (err) {
-    console.error(err);
-    return { statusCode: 500, body: JSON.stringify({ status: "error", message: String(err) }) };
-  }
-};
+    await store.delete(path);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ status: "deleted" })
+    };
+  } catch (e) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: String(e) })
+    };
+  }
+}
