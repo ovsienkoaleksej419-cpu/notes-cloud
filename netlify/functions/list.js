@@ -2,13 +2,14 @@ import { getStore } from "@netlify/blobs";
 
 export async function handler(event, context) {
   try {
-    const store = getStore();
-    const subject = event.queryStringParameters?.subject || "";
+    const store = getStore("files"); // имя хранилища
 
+    const subject = event.queryStringParameters?.subject || "";
     const prefix = subject ? `${subject}/` : "";
+
     const items = await store.list({ prefix });
 
-    const files = items.blobs.map((b) => ({
+    const files = items.blobs.map(b => ({
       name: b.key.split("/").pop(),
       path: b.key,
       size: b.size,
@@ -22,8 +23,7 @@ export async function handler(event, context) {
   } catch (e) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: String(e) })
+      body: JSON.stringify({ error: e.message })
     };
   }
 }
-
