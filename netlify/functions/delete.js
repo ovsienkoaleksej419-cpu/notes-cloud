@@ -1,6 +1,6 @@
 import { getStore } from "@netlify/blobs";
 
-export async function handler(event, context) {
+export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method not allowed" };
   }
@@ -12,7 +12,7 @@ export async function handler(event, context) {
       return { statusCode: 403, body: JSON.stringify({ status: "wrong_password" }) };
     }
 
-    const store = getStore();
+    const store = getStore("files"); // имя хранилища
 
     await store.delete(path);
 
@@ -23,7 +23,7 @@ export async function handler(event, context) {
   } catch (e) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: String(e) })
+      body: JSON.stringify({ error: e.message })
     };
   }
 }
