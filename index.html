@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Овсиенко Алексей — сайт</title>
+  <title>Овсиенко Алексей — личный сайт</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,68 +11,143 @@
 
   <style>
     :root{
-      --bg:#020617;
-      --card:rgba(255,255,255,0.06);
-      --border:rgba(255,255,255,0.08);
-      --text:#e5e7eb;
-      --muted:#94a3b8;
-      --accent:#22c55e;
-    }
-
-    [data-theme="light"]{
-      --bg:#f8fafc;
-      --card:#ffffff;
-      --border:#e5e7eb;
-      --text:#020617;
-      --muted:#475569;
-      --accent:#16a34a;
+      --bg: radial-gradient(1200px 600px at 10% -10%, #1e293b 0%, #020617 60%);
+      --card: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --radius: 16px;
+      --max-width: 1100px;
     }
 
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:Inter,system-ui;
+      font-family:Inter,system-ui,Arial;
       background:var(--bg);
       color:var(--text);
-      transition:.3s;
+      line-height:1.6;
     }
 
-    .wrap{max-width:1100px;margin:auto;padding:28px}
-    header{display:flex;justify-content:space-between;align-items:center}
-    nav a{margin-left:16px;color:var(--muted);font-weight:600}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3{margin:0 0 12px}
+
+    .wrap{
+      max-width:var(--max-width);
+      margin:auto;
+      padding:28px 20px 60px;
+    }
+
+    /* HEADER */
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:32px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .logo{
+      width:52px;height:52px;
+      border-radius:14px;
+      background:linear-gradient(135deg,#22c55e,#4ade80);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      color:#022c22;
+      font-size:18px;
+    }
+
+    nav a{
+      margin-left:18px;
+      font-weight:600;
+      color:var(--muted);
+    }
     nav a:hover{color:var(--text)}
 
+    /* CARD */
     .card{
       background:var(--card);
       border:1px solid var(--border);
-      border-radius:16px;
+      border-radius:var(--radius);
       padding:26px;
-      margin-top:24px;
-      animation:fadeUp .6s ease both;
+      margin-bottom:24px;
+      backdrop-filter: blur(14px);
     }
 
-    @keyframes fadeUp{
-      from{opacity:0;transform:translateY(20px)}
-      to{opacity:1;transform:none}
+    /* HERO */
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr 260px;
+      gap:28px;
+      align-items:center;
     }
 
-    .hero{display:grid;grid-template-columns:1fr 240px;gap:24px}
     .avatar{
-      width:200px;height:200px;border-radius:20px;
-      background:linear-gradient(135deg,#22c55e,#4ade80);
-      display:flex;align-items:center;justify-content:center;
-      font-size:64px;color:#022c22;margin:auto
+      width:220px;
+      height:220px;
+      border-radius:24px;
+      background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:64px;
+      color:var(--muted);
+      margin:auto;
     }
 
-    .btn{
-      padding:10px 16px;border-radius:10px;
-      background:var(--accent);color:#022c22;
-      font-weight:700;border:none;cursor:pointer
+    /* PROJECTS */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px;
     }
 
-    footer{text-align:center;margin:40px 0;color:var(--muted)}
+    .project{
+      padding:20px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border);
+      transition:.25s;
+    }
 
-    @media(max-width:768px){
+    .project:hover{
+      transform:translateY(-4px);
+      background:rgba(255,255,255,0.08);
+    }
+
+    .tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(34,197,94,.15);
+      color:#4ade80;
+      font-weight:600;
+    }
+
+    footer{
+      margin-top:40px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    @media (max-width:768px){
       .hero{grid-template-columns:1fr}
       nav{display:none}
     }
@@ -82,51 +157,83 @@
   <div class="wrap">
 
     <header>
-      <strong>Овсиенко Алексей</strong>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Школьник · начинающий разработчик</div>
+        </div>
+      </div>
       <nav>
+        <a href="#about">Обо мне</a>
         <a href="notes.html">Конспекты</a>
-        <a href="#">Проекты</a>
-        <a href="#">Контакты</a>
-        <button class="btn" onclick="toggleTheme()">🌙</button>
+        <a href="#projects">Проекты</a>
+        <a href="#contact">Контакты</a>
       </nav>
     </header>
 
-    <section class="card hero">
+    <section class="card hero" id="about">
       <div>
         <h1>Привет 👋</h1>
-        <p>Это мой личный сайт с проектами и конспектами.</p>
-        <p style="color:var(--muted)">Сайт размещён на Netlify и обновляется через GitHub.</p>
+        <p>
+          Меня зовут <b>Овсиенко Алексей</b>.  
+          Я учусь в школе, интересуюсь программированием, играми, серверами и веб-разработкой.
+        </p>
+        <p style="color:var(--muted)">
+          Этот сайт — моя личная платформа с проектами и конспектами.
+        </p>
       </div>
       <div class="avatar">👨‍💻</div>
     </section>
 
-    <section class="card">
-      <h2>Возможности</h2>
-      <ul>
-        <li>✨ Анимации</li>
-        <li>🌙 Светлая / тёмная тема</li>
-        <li>📚 Конспекты по предметам</li>
-        <li>🔐 Закрытые разделы</li>
-      </ul>
+    <section class="card" id="projects">
+      <h2>Проекты</h2>
+      <div class="grid">
+
+        <div class="project">
+          <h3>Minecraft-сервер «Tesseract»</h3>
+          <p style="color:var(--muted)">
+            Настройка серверов, плагины, управление хостингом, концепции миров.
+          </p>
+          <div class="tags">
+            <span class="tag">Minecraft</span>
+            <span class="tag">Plugins</span>
+            <span class="tag">Server</span>
+          </div>
+        </div>
+
+        <div class="project">
+          <h3>Unity-игра «Палач Online»</h3>
+          <p style="color:var(--muted)">
+            Онлайн-игра на Unity: логика, интерфейсы, механики, C#.
+          </p>
+          <div class="tags">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">GameDev</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="card" id="contact">
+      <h2>Контакты</h2>
+      <p>Telegram:</p>
+      <p>
+        <a href="https://t.me/alex_berlin_N1" style="color:var(--accent);font-weight:700">
+          @alex_berlin_N1
+        </a>
+      </p>
     </section>
 
     <footer>
-      © <span id="year"></span>
+      © <span id="year"></span> Овсиенко Алексей
     </footer>
 
   </div>
 
   <script>
-    const root = document.documentElement;
-    const saved = localStorage.getItem('theme');
-    if(saved) root.setAttribute('data-theme', saved);
-
-    function toggleTheme(){
-      const t = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      root.setAttribute('data-theme', t);
-      localStorage.setItem('theme', t);
-    }
-
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
