@@ -2,14 +2,15 @@ import { getStore } from "@netlify/blobs";
 
 export async function handler(event) {
   try {
-    const path = event.queryStringParameters?.path;
+    const { path } = JSON.parse(event.body || "{}");
     const store = getStore("files");
-    const blob = await store.get(path, { type: "arrayBuffer" });
+
+    await store.delete(path);
 
     return {
       statusCode: 200,
-      body: Buffer.from(blob).toString("base64"),
-      isBase64Encoded: true
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ success: true })
     };
   } catch (e) {
     return {
@@ -19,4 +20,3 @@ export async function handler(event) {
     };
   }
 }
-
