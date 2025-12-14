@@ -1,34 +1,21 @@
 import { getStore } from "@netlify/blobs";
 
-export async function handler(event) {
+export async function handler() {
   try {
     const store = getStore("files");
-
-    const subject = event.queryStringParameters?.subject || "";
-    const prefix = subject ? ${subject}/ : "";
-
-    const items = await store.list({ prefix });
-
-    const files = items.blobs.map(b => ({
-      name: b.key.split("/").pop(),
-      path: b.key
-    }));
+    const items = await store.list();
 
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(files) // ✅ ВАЖНО
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(items.blobs || [])
     };
-
-  } catch (err) {
+  } catch (e) {
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ error: err.message })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: e.message })
     };
   }
 }
+
