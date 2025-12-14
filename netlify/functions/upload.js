@@ -2,9 +2,12 @@ import { getStore } from "@netlify/blobs";
 
 export async function handler(event) {
   try {
-    const { name, content } = JSON.parse(event.body || "{}");
-    const store = getStore("files");
+    if (!event.body) throw new Error("Empty body");
 
+    const { name, content } = JSON.parse(event.body);
+    if (!name || !content) throw new Error("Invalid data");
+
+    const store = getStore("files");
     await store.set(name, content);
 
     return {
@@ -14,7 +17,7 @@ export async function handler(event) {
     };
   } catch (e) {
     return {
-      statusCode: 500,
+      statusCode: 400,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ error: e.message })
     };
