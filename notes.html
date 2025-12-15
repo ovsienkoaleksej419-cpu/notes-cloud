@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Notes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  
   <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
@@ -41,6 +43,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 let allNotes = [];
 
+// === ЗАГРУЗКА ДАННЫХ ===
 fetch('notes.json')
   .then(r => {
     if (!r.ok) throw new Error('Не удалось загрузить notes.json');
@@ -51,12 +54,13 @@ fetch('notes.json')
     renderNotes(data);
   })
   .catch(err => {
-    // Используем класс 'note' для красивого отображения ошибки
+    // Отображение ошибки в стиле карточки
     document.getElementById('notes').innerHTML =
       '<p class="note" style="color: #e3342f; text-align: center; border: 1px solid #f9d8d8;">Ошибка загрузки конспектов. Проверьте файл notes.json.</p>';
     console.error(err);
   });
 
+// === ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНСПЕКТОВ ===
 function renderNotes(data) {
   const container = document.getElementById('notes');
   container.innerHTML = '';
@@ -69,14 +73,14 @@ function renderNotes(data) {
     empty = false;
 
     const sectionEl = document.createElement('div');
-    // Используем существующий класс .section для контейнера предмета
+    // Используем класс .section (контейнер предмета)
     sectionEl.className = 'section'; 
 
     sectionEl.innerHTML = <h2>${section}</h2>;
 
     data[section].forEach(note => {
       const noteWrapper = document.createElement('div');
-      // Внутренний контейнер для ссылки и скачивания
+      // Используем класс .note-item-wrapper для внутренней компоновки Flexbox
       noteWrapper.className = 'note-item-wrapper'; 
 
       // Структура конспекта с основной ссылкой и ссылкой на скачивание
@@ -100,6 +104,7 @@ function renderNotes(data) {
   }
 }
 
+// === ОБРАБОТЧИК ПОИСКА ===
 document.getElementById('search').addEventListener('input', e => {
   const q = e.target.value.toLowerCase();
   const filtered = {};
