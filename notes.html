@@ -2,49 +2,79 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>Конспекты</title>
+  <title>Notes</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>📚 Конспекты</h1>
+  <h1>📚 Notes</h1>
 </header>
 
 <div class="container">
-  <input id="search" placeholder="Поиск по конспектам...">
 
-  <div id="content"></div>
+  <input
+    id="search"
+    placeholder="Поиск по конспектам..."
+    autocomplete="off"
+  >
+
+  <div id="notes"></div>
+
 </div>
 
 <script>
 let allNotes = [];
 
 fetch('notes.json')
-  .then(r => r.json())
+  .then(r => {
+    if (!r.ok) throw new Error('Не удалось загрузить notes.json');
+    return r.json();
+  })
   .then(data => {
     allNotes = data;
-    render(data);
+    renderNotes(data);
+  })
+  .catch(err => {
+    document.getElementById('notes').innerHTML =
+      `<p style="color:red">Ошибка загрузки конспектов</p>`;
+    console.error(err);
   });
 
-function render(data) {
-  const content = document.getElementById('content');
-  content.innerHTML = '';
+function renderNotes(data) {
+  const container = document.getElementById('notes');
+  container.innerHTML = '';
+
+  let empty = true;
 
   for (const section in data) {
-    const block = document.createElement('div');
-    block.className = 'section';
+    if (!data[section].length) continue;
 
-    block.innerHTML = `<h2>${section}</h2>`;
+    empty = false;
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'section';
+
+    sectionEl.innerHTML = `<h2>${section}</h2>`;
 
     data[section].forEach(note => {
-      const div = document.createElement('div');
-      div.className = 'note';
-      div.innerHTML = `<a href="${note.file}">${note.title}</a>`;
-      block.appendChild(div);
+      const card = document.createElement('div');
+      card.className = 'note';
+
+      card.innerHTML = `
+        <a href="${note.file}">
+          📄 ${note.title}
+        </a>
+      `;
+
+      sectionEl.appendChild(card);
     });
 
-    content.appendChild(block);
+    container.appendChild(sectionEl);
+  }
+
+  if (empty) {
+    container.innerHTML = '<p>Конспекты не найдены</p>';
   }
 }
 
@@ -53,12 +83,12 @@ document.getElementById('search').addEventListener('input', e => {
   const filtered = {};
 
   for (const section in allNotes) {
-    filtered[section] = allNotes[section].filter(n =>
-      n.title.toLowerCase().includes(q)
+    filtered[section] = allNotes[section].filter(note =>
+      note.title.toLowerCase().includes(q)
     );
   }
 
-  render(filtered);
+  renderNotes(filtered);
 });
 </script>
 
