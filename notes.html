@@ -60,7 +60,7 @@ fetch('notes.json')
     console.error(err);
   });
 
-// === ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНСПЕКТОВ ===
+// === ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНСПЕКТОВ (Сетка) ===
 function renderNotes(data) {
   const container = document.getElementById('notes');
   container.innerHTML = '';
@@ -73,17 +73,18 @@ function renderNotes(data) {
     empty = false;
 
     const sectionEl = document.createElement('div');
-    // Используем класс .section (контейнер предмета)
     sectionEl.className = 'section'; 
 
     sectionEl.innerHTML = <h2>${section}</h2>;
-
+    
+    // Контейнер сетки для плиток
+    const gridContainer = document.createElement('div');
+    gridContainer.className = 'notes-grid';
+    
     data[section].forEach(note => {
       const noteWrapper = document.createElement('div');
-      // Используем класс .note-item-wrapper для внутренней компоновки Flexbox
       noteWrapper.className = 'note-item-wrapper'; 
 
-      // Структура конспекта с основной ссылкой и ссылкой на скачивание
       noteWrapper.innerHTML = `
         <a href="${note.file}">
           📄 ${note.title}
@@ -93,8 +94,10 @@ function renderNotes(data) {
         </a>
       `;
 
-      sectionEl.appendChild(noteWrapper);
+      gridContainer.appendChild(noteWrapper);
     });
+    
+    sectionEl.appendChild(gridContainer); 
 
     container.appendChild(sectionEl);
   }
