@@ -18,23 +18,23 @@
     placeholder="Поиск по конспектам..."
     autocomplete="off"
   >
-  <a href="index.html" style="
-  display:inline-block;
-  margin-bottom:20px;
-  text-decoration:none;
-  color:#2563eb;
-  font-weight:500;
-">
-  ← На главную
-</a>
 
+  <a href="index.html" style="
+    display:inline-block;
+    margin-bottom:20px;
+    text-decoration:none;
+    color:#2563eb;
+    font-weight:500;
+  ">
+    ← На главную
+  </a>
 
   <div id="notes"></div>
 
 </div>
 
 <script>
-let allNotes = [];
+let allNotes = {};
 
 fetch('notes.json')
   .then(r => {
@@ -46,7 +46,6 @@ fetch('notes.json')
     renderNotes(data);
   })
   .catch(err => {
-    // ИСПРАВЛЕНО: использование строки в кавычках
     document.getElementById('notes').innerHTML =
       '<p style="color:red">Ошибка загрузки конспектов</p>';
     console.error(err);
@@ -65,15 +64,12 @@ function renderNotes(data) {
 
     const sectionEl = document.createElement('div');
     sectionEl.className = 'section';
-
-    // ИСПРАВЛЕНО: использование шаблонного литерала (обратные кавычки)
     sectionEl.innerHTML = <h2>${section}</h2>;
 
     data[section].forEach(note => {
       const card = document.createElement('div');
       card.className = 'note';
 
-      // ИСПРАВЛЕНО: Добавлена логика со ссылкой на скачивание
       card.innerHTML = `
         <div>
           <a href="${note.file}">
@@ -107,10 +103,10 @@ document.getElementById('search').addEventListener('input', e => {
     );
   }
 
-  // ИСПРАВЛЕНО: удален неверно вставленный код
   renderNotes(filtered);
 });
 </script>
+
 <div style="margin:40px 0; padding:20px; background:#fff; border-radius:12px;">
   <h3>➕ Добавить конспект</h3>
   <p>
