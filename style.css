@@ -67,3 +67,71 @@ input {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 10px 24px rgba(0,0,0,.12);
 }
+/*
+ * СТИЛИ ДЛЯ СТРАНИЦЫ КОНСПЕКТОВ
+ */
+
+/* Стилизация контейнера для одной записи конспекта (для Flexbox) */
+.note-item-wrapper {
+    /* Обеспечивает разделение ссылки и кнопки скачивания */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    /* Разделитель между конспектами в одном предмете */
+    border-bottom: 1px solid #f0f0f0; 
+}
+.note-item-wrapper:last-child {
+    border-bottom: none; /* Убираем границу у последнего элемента */
+}
+
+/* Основная ссылка на конспект */
+.note-item-wrapper a:first-child {
+    font-weight: 500;
+    flex-grow: 1; 
+    padding: 5px 0;
+    text-decoration: none;
+    color: #222; /* Цвет основного текста */
+}
+.note-item-wrapper a:first-child:hover {
+    color: #2563eb; /* Акцентный цвет */
+}
+
+/* Ссылка "Скачать" */
+.download-link {
+    font-size: 0.9em;
+    color: #888; /* Более приглушенный цвет */
+    text-decoration: none;
+    padding-left: 15px;
+    flex-shrink: 0;
+}
+.download-link:hover {
+    color: #2563eb; /* Акцентный цвет */
+}
+
+/* Стили для ссылки "На главную" */
+.back-link {
+    display: inline-block;
+    font-weight: 500;
+    text-decoration: none;
+    color: #2563eb; /* Акцентный цвет */
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Заголовки предметов (ВНУТРИ .section) */
+.section h2 {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    font-size: 1.5em;
+    color: #222;
+}
+
+/* Обновленный стиль .note для использования в шапке и блоке поиска
+   (Так как у вас .note уже стилизован как карточка, мы используем его.) */
+
+/* Убираем внутренние отступы и margin-bottom у input, так как они уже есть в общем .note */
+input {
+    margin-bottom: 0; /* Убираем стандартный нижний отступ, так как он уже есть в секции */
+}
