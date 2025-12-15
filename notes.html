@@ -44,7 +44,7 @@ let allNotes = [];
 
 // === ЗАГРУЗКА ДАННЫХ (с надежной обработкой пути и ошибок) ===
 
-// Используем fetch('/notes.json'), чтобы гарантировать поиск от корня сайта
+// Используем /notes.json для поиска от корня сайта, что надежно работает на Netlify
 fetch('/notes.json') 
   .then(r => {
     if (!r.ok) {
@@ -61,7 +61,8 @@ fetch('/notes.json')
         allNotes = data;
         renderNotes(data);
     } catch (e) {
-        // Если парсинг не удался (вероятно, получен HTML-код 404 страницы или ошибка JSON)
+        // Если парсинг не удался (вероятно, невалидный JSON или BOM-маркер)
+        console.error("ОШИБКА ПАРСИНГА JSON:", e);
         throw new Error('Файл notes.json не является корректным JSON. Проверьте содержимое.');
     }
   })
@@ -69,7 +70,7 @@ fetch('/notes.json')
     // В этом блоке обрабатываются все ошибки (404, неверный синтаксис, проблемы сети)
     console.error("ОШИБКА ЗАГРУЗКИ КОНСПЕКТОВ:", err);
     document.getElementById('notes').innerHTML =
-      '<p class="note" style="color: #e3342f; text-align: center; border: 1px solid #f9d8d8;">Ошибка загрузки конспектов: Файл не найден или содержит ошибку.</p>';
+      '<p class="note" style="color: #e3342f; text-align: center; border: 1px solid #f9d8d8;">Ошибка загрузки конспектов: Файл не найден или содержит ошибку. Проверьте Консоль (F12) для деталей.</p>';
   });
 
 // === ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНСПЕКТОВ (Сетка) ===
@@ -80,7 +81,7 @@ function renderNotes(data) {
   let empty = true;
 
   for (const section in data) {
-    // Проверка на пустые или несуществующие разделы
+    // Проверка на принадлежность свойства объекту и наличие данных
     if (!data.hasOwnProperty(section)  !data[section]  !data[section].length) continue;
 
     empty = false;
@@ -99,7 +100,7 @@ function renderNotes(data) {
       if (!note  !note.title  !note.file) return; 
       
       const noteWrapper = document.createElement('div');
-      noteWrapper.className = 'note-item-wrapper note'; // Добавил класс .note для стилей карточки
+      noteWrapper.className = 'note-item-wrapper note';
 
       noteWrapper.innerHTML = `
         <a href="${note.file}">
