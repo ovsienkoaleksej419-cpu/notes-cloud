@@ -3,39 +3,129 @@
 <head>
   <meta charset="utf-8">
   <title>Notes</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"> 
+  
+  <style>
+    /*
+    * АДАПТАЦИЯ СТИЛЕЙ КАРТОЧЕК ДЛЯ СПИСКА КОНСПЕКТОВ
+    */
+
+    /* Стиль для секций/предметов (каждая секция - это карточка) */
+    .section {
+      background: var(--card-bg); 
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+    }
+
+    /* Стиль для заголовков предметов */
+    .section h2 {
+      margin-top: 0;
+      color: var(--text-color); 
+      font-size: 1.5em;
+      border-bottom: 1px solid var(--border-color); 
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    /* Стиль для отдельного элемента конспекта */
+    .note {
+      padding: 8px 0;
+      display: flex; /* Используем flexbox для выравнивания */
+      justify-content: space-between; /* Растягивает элементы */
+      align-items: center;
+    }
+
+    /* Стиль для ссылки на скачивание */
+    .download-link {
+      font-size: 0.9em;
+      color: var(--muted);
+      text-decoration: none;
+      padding-left: 15px;
+      flex-shrink: 0; /* Чтобы не сжималась */
+    }
+
+    .download-link:hover {
+      color: var(--accent);
+    }
+
+    /* Стиль для основной ссылки на конспект */
+    .note a:first-child {
+      color: var(--text-color); 
+      text-decoration: none;
+      font-weight: 500;
+      flex-grow: 1; /* Занимает все доступное пространство */
+      padding: 5px 0;
+    }
+
+    .note a:first-child:hover {
+      color: var(--accent); 
+    }
+
+    /* Стиль для поля поиска, как на главной странице */
+    #search {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1em;
+      background: var(--input-bg, #f4f4f5); 
+      color: var(--text-color);
+      box-sizing: border-box;
+    }
+    
+    /* Добавляем немного пространства для ссылки "На главную" */
+    .back-link {
+        margin-top: -10px; /* Приподнимаем, чтобы лучше вписать в карточку */
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>📚 Notes</h1>
-</header>
+<div class="container"> 
 
-<div class="container">
+  <header class="card" style="margin-top:20px; margin-bottom: 20px; padding: 15px 20px;">
+    <h1>📚 Конспекты</h1>
+  </header>
 
-  <input
-    id="search"
-    placeholder="Поиск по конспектам..."
-    autocomplete="off"
-  >
-  <a href="index.html" style="
-  display:inline-block;
-  margin-bottom:20px;
-  text-decoration:none;
-  color:#2563eb;
-  font-weight:500;
-">
-  ← На главную
-</a>
+  <section class="card" style="margin-bottom: 20px;">
+    <input
+      id="search"
+      placeholder="Поиск по конспектам..."
+      autocomplete="off"
+    >
+    
+    <a href="index.html" class="back-link" style="
+      display:inline-block;
+      text-decoration:none;
+      color:var(--accent); 
+      font-weight:700; 
+    ">
+      ← На главную
+    </a>
+  </section>
 
 
   <div id="notes"></div>
 
 </div>
 
+<footer>
+  <div class="container">
+    © <span id="year"></span> Овсиенко Алексей
+  </div>
+</footer>
+
 <script>
+// Установка текущего года
+document.getElementById('year').textContent = new Date().getFullYear();
+
 let allNotes = [];
 
+// УДАЛЕНА вся логика добавления конспектов
+// Загрузка данных
 fetch('notes.json')
   .then(r => {
     if (!r.ok) throw new Error('Не удалось загрузить notes.json');
@@ -46,9 +136,8 @@ fetch('notes.json')
     renderNotes(data);
   })
   .catch(err => {
-    // ИСПРАВЛЕНО: использование строки в кавычках
     document.getElementById('notes').innerHTML =
-      '<p style="color:red">Ошибка загрузки конспектов</p>';
+      '<p style="color:red; text-align: center;">Ошибка загрузки конспектов. Проверьте файл notes.json.</p>';
     console.error(err);
   });
 
@@ -59,31 +148,28 @@ function renderNotes(data) {
   let empty = true;
 
   for (const section in data) {
-    if (!data[section].length) continue;
+    // Проверяем, есть ли конспекты в этой секции после фильтрации
+    if (!data[section] || !data[section].length) continue;
 
     empty = false;
 
     const sectionEl = document.createElement('div');
-    sectionEl.className = 'section';
+    sectionEl.className = 'section'; 
 
-    // ИСПРАВЛЕНО: использование шаблонного литерала (обратные кавычки)
     sectionEl.innerHTML = <h2>${section}</h2>;
 
     data[section].forEach(note => {
       const card = document.createElement('div');
       card.className = 'note';
 
-      // ИСПРАВЛЕНО: Добавлена логика со ссылкой на скачивание
+      // Улучшенная структура карточки конспекта
       card.innerHTML = `
-        <div>
-          <a href="${note.file}">
-            📄 ${note.title}
-          </a>
-          <br>
-          <a href="${note.file}" download style="font-size:14px;">
-            ⬇️ Скачать
-          </a>
-        </div>
+        <a href="${note.file}">
+          📄 ${note.title}
+        </a>
+        <a href="${note.file}" download class="download-link">
+          ⬇️ Скачать
+        </a>
       `;
 
       sectionEl.appendChild(card);
@@ -93,10 +179,11 @@ function renderNotes(data) {
   }
 
   if (empty) {
-    container.innerHTML = '<p>Конспекты не найдены</p>';
+    container.innerHTML = '<p class="card" style="padding: 20px; text-align: center;">Конспекты не найдены по вашему запросу.</p>';
   }
 }
 
+// Логика поиска
 document.getElementById('search').addEventListener('input', e => {
   const q = e.target.value.toLowerCase();
   const filtered = {};
@@ -107,19 +194,8 @@ document.getElementById('search').addEventListener('input', e => {
     );
   }
 
-  // ИСПРАВЛЕНО: удален неверно вставленный код
   renderNotes(filtered);
 });
 </script>
-<div style="margin:40px 0; padding:20px; background:#fff; border-radius:12px;">
-  <h3>➕ Добавить конспект</h3>
-  <p>
-    Чтобы добавить конспект:
-    <br>1. Скопируй файл в папку <b>notes/предмет/</b>
-    <br>2. Добавь запись в <b>notes.json</b>
-    <br>3. Сделай Commit → Push
-  </p>
-</div>
-
 </body>
 </html>
