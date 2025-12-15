@@ -1,8 +1,8 @@
 {
   "Математика": [
     {
-      "title": "Интегралы и производные",
-      "file": "notes/math/integrals.pdf"
+      "title": "МКТ",
+      "file": "notes/physics/mkt.html"
     },
     {
       "title": "Тригонометрические функции",
@@ -29,8 +29,8 @@
       "file": "notes/info/sql_basics.pdf"
     },
     {
-      "title": "Основы веб-разработки (HTML/CSS)",
-      "file": "notes/info/web_basics.pdf"
+      "title": "Импликация и Эквиваленция",
+      "file": "notes/information/imp and ekv"
     }
   ]
 }
