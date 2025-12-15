@@ -1,36 +1,18 @@
 {
-  "Математика": [
+  "Маркетинг": [
     {
-      "title": "МКТ",
-      "file": "notes/physics/mkt.html"
-    },
-    {
-      "title": "Тригонометрические функции",
-      "file": "notes/math/trigonometry.docx"
-    }
-  ],
-  "Физика": [
-    {
-      "title": "Основы механики (законы Ньютона)",
-      "file": "notes/physics/mechanics.pdf"
-    },
-    {
-      "title": "Оптика и линзы",
-      "file": "notes/physics/optics.pdf"
+      "title": "Основы интернет-маркетинга",
+      "file": "mkt.html"
     }
   ],
   "Информатика": [
     {
-      "title": "Введение в Python",
-      "file": "notes/info/python_intro.docx"
+      "title": "Введение в информационные системы",
+      "file": "Inform.html"
     },
     {
-      "title": "Базы данных SQL",
-      "file": "notes/info/sql_basics.pdf"
-    },
-    {
-      "title": "Импликация и Эквиваленция",
-      "file": "notes/information/imp and ekv"
+      "title": "Логика: Импликация и Эквивалентность",
+      "file": "notes/information/imp and ekv.html"
     }
   ]
 }
