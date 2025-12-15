@@ -1,121 +1,45 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <title>Notes</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<section class="card hero">
+  <div>
+    <h1>📚 Конспекты</h1>
+    <p>
+      Здесь собраны мои учебные конспекты по разным предметам —
+      для повторения, подготовки и удобного доступа.
+    </p>
+    <p style="color:var(--muted)">
+      Можно искать по названию и скачивать файлы.
+    </p>
+  </div>
+  <div class="avatar">📝</div>
+</section>
 
-<header>
-  <h1>📚 Notes</h1>
-</header>
-
-<div class="container">
-
+<section class="card">
+  <h2>Поиск</h2>
   <input
     id="search"
     placeholder="Поиск по конспектам..."
     autocomplete="off"
+    style="
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:var(--bg);
+      color:var(--text);
+      font-size:15px;
+    "
   >
+</section>
 
-  <a href="index.html" style="
-    display:inline-block;
-    margin-bottom:20px;
-    text-decoration:none;
-    color:#2563eb;
-    font-weight:500;
-  ">
-    ← На главную
-  </a>
+<section class="card" id="notes-section">
+  <h2>Все конспекты</h2>
+  <div id="notes" class="grid"></div>
+</section>
 
-  <div id="notes"></div>
-
-</div>
-
-<script>
-let allNotes = {};
-
-fetch('notes.json')
-  .then(r => {
-    if (!r.ok) throw new Error('Не удалось загрузить notes.json');
-    return r.json();
-  })
-  .then(data => {
-    allNotes = data;
-    renderNotes(data);
-  })
-  .catch(err => {
-    document.getElementById('notes').innerHTML =
-      '<p style="color:red">Ошибка загрузки конспектов</p>';
-    console.error(err);
-  });
-
-function renderNotes(data) {
-  const container = document.getElementById('notes');
-  container.innerHTML = '';
-
-  let empty = true;
-
-  for (const section in data) {
-    if (!data[section].length) continue;
-
-    empty = false;
-
-    const sectionEl = document.createElement('div');
-    sectionEl.className = 'section';
-    sectionEl.innerHTML = <h2>${section}</h2>;
-
-    data[section].forEach(note => {
-      const card = document.createElement('div');
-      card.className = 'note';
-
-      card.innerHTML = `
-        <div>
-          <a href="${note.file}">
-            📄 ${note.title}
-          </a>
-          <br>
-          <a href="${note.file}" download style="font-size:14px;">
-            ⬇️ Скачать
-          </a>
-        </div>
-      `;
-
-      sectionEl.appendChild(card);
-    });
-
-    container.appendChild(sectionEl);
-  }
-
-  if (empty) {
-    container.innerHTML = '<p>Конспекты не найдены</p>';
-  }
-}
-
-document.getElementById('search').addEventListener('input', e => {
-  const q = e.target.value.toLowerCase();
-  const filtered = {};
-
-  for (const section in allNotes) {
-    filtered[section] = allNotes[section].filter(note =>
-      note.title.toLowerCase().includes(q)
-    );
-  }
-
-  renderNotes(filtered);
-});
-</script>
-
-<div style="margin:40px 0; padding:20px; background:#fff; border-radius:12px;">
-  <h3>➕ Добавить конспект</h3>
-  <p>
-    Чтобы добавить конспект:
-    <br>1. Скопируй файл в папку <b>notes/предмет/</b>
-    <br>2. Добавь запись в <b>notes.json</b>
-    <br>3. Сделай Commit → Push
+<section class="card">
+  <h2>➕ Как добавить конспект</h2>
+  <p style="color:var(--muted)">
+    1. Скопируй файл в папку <b>notes/предмет/</b><br>
+    2. Добавь запись в <b>notes.json</b><br>
+    3. Сделай Commit → Push
   </p>
-</div>
-
-</body>
-</html>
+</section>
