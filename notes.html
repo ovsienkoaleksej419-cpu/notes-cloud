@@ -2,27 +2,64 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>Notes</title>
+  <title>Конспекты</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Конспекты</h2>
-<ul id="list"></ul>
+<header>
+  <h1>📚 Конспекты</h1>
+</header>
+
+<div class="container">
+  <input id="search" placeholder="Поиск по конспектам...">
+
+  <div id="content"></div>
+</div>
 
 <script>
+let allNotes = [];
+
 fetch('notes.json')
   .then(r => r.json())
-  .then(notes => {
-    const list = document.getElementById('list');
-    notes.forEach(n => {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = n.file;
-      a.textContent = n.title;
-      li.appendChild(a);
-      list.appendChild(li);
-    });
+  .then(data => {
+    allNotes = data;
+    render(data);
   });
+
+function render(data) {
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+
+  for (const section in data) {
+    const block = document.createElement('div');
+    block.className = 'section';
+
+    block.innerHTML = `<h2>${section}</h2>`;
+
+    data[section].forEach(note => {
+      const div = document.createElement('div');
+      div.className = 'note';
+      div.innerHTML = `<a href="${note.file}">${note.title}</a>`;
+      block.appendChild(div);
+    });
+
+    content.appendChild(block);
+  }
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  const filtered = {};
+
+  for (const section in allNotes) {
+    filtered[section] = allNotes[section].filter(n =>
+      n.title.toLowerCase().includes(q)
+    );
+  }
+
+  render(filtered);
+});
 </script>
 
 </body>
