@@ -4,108 +4,21 @@
   <meta charset="utf-8">
   <title>Notes</title>
   <link rel="stylesheet" href="style.css"> 
-  
-  <style>
-    /* * CSS для адаптации элементов конспектов к стилю "карточек" 
-    * (Предполагается, что переменные, такие как --card-bg, --accent, --muted, 
-    * определены в style.css)
-    */
-
-    /* Индивидуальные секции конспектов (Предметы) стилизуются как карточки */
-    .section {
-      background: var(--card-bg); 
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow, 0 1px 3px rgba(0,0,0,0.1)); /* Используем переменную тени, если она есть */
-    }
-
-    /* Заголовки предметов */
-    .section h2 {
-      margin-top: 0;
-      color: var(--text-color); 
-      font-size: 1.5em;
-      /* Убираем нижнюю линию, чтобы лучше соответствовать стилю карточек "Проекты" */
-      border-bottom: none; 
-      padding-bottom: 0;
-      margin-bottom: 15px;
-    }
-
-    /* Стиль для отдельного элемента конспекта */
-    .note {
-      padding: 8px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      /* Добавляем легкую границу, чтобы визуально разделить конспекты, как элементы сетки */
-      border-bottom: 1px dashed var(--border-color, #eee); 
-    }
-    .note:last-child {
-        border-bottom: none; /* Убираем границу у последнего элемента */
-    }
-
-    /* Стиль для основной ссылки на конспект */
-    .note a:first-child {
-      color: var(--text-color); 
-      text-decoration: none;
-      font-weight: 500;
-      flex-grow: 1; 
-      padding: 5px 0;
-    }
-
-    .note a:first-child:hover {
-      color: var(--accent); /* Акцентный цвет при наведении */
-    }
-
-    /* Стиль для ссылки на скачивание */
-    .download-link {
-      font-size: 0.9em;
-      color: var(--muted); /* Используем цвет --muted, как для описаний */
-      text-decoration: none;
-      padding-left: 15px;
-      flex-shrink: 0; 
-    }
-
-    .download-link:hover {
-      color: var(--accent);
-    }
-
-    /* Стиль для поля поиска, чтобы оно выглядело как современный инпут */
-    #search {
-      width: 100%;
-      padding: 12px 15px;
-      margin-bottom: 15px; /* Уменьшаем отступ для лучшей группировки */
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 1em;
-      background: var(--input-bg, #f4f4f5); 
-      color: var(--text-color);
-      box-sizing: border-box;
-    }
-    
-    /* Ссылка "На главную" */
-    .back-link {
-        display: inline-block;
-        text-decoration: none;
-        color: var(--accent); /* Акцентный цвет */
-        font-weight: 700; 
-        margin-top: 5px; /* Небольшой отступ от поиска */
-    }
-  </style>
 </head>
 <body>
 
 <div class="container"> 
 
-  <header class="card" style="margin-top:20px; margin-bottom: 20px; padding: 15px 20px;">
+  <header class="note" style="margin-top:20px; margin-bottom: 20px;">
     <h1>📚 Конспекты</h1>
   </header>
 
-  <section class="card" style="margin-bottom: 20px;">
+  <section class="note" style="margin-bottom: 20px;">
     <input
       id="search"
       placeholder="Поиск по конспектам..."
       autocomplete="off"
+      class="search-input"
     >
     
     <a href="index.html" class="back-link">
@@ -138,8 +51,9 @@ fetch('notes.json')
     renderNotes(data);
   })
   .catch(err => {
+    // Используем класс 'note' для красивого отображения ошибки
     document.getElementById('notes').innerHTML =
-      '<p class="card" style="padding: 20px; text-align: center; color: var(--accent);">Ошибка загрузки конспектов. Проверьте файл notes.json.</p>';
+      '<p class="note" style="color: #e3342f; text-align: center; border: 1px solid #f9d8d8;">Ошибка загрузки конспектов. Проверьте файл notes.json.</p>';
     console.error(err);
   });
 
@@ -155,15 +69,15 @@ function renderNotes(data) {
     empty = false;
 
     const sectionEl = document.createElement('div');
-// Каждая секция предмета становится отдельной карточкой
+    // Используем существующий класс .section для контейнера предмета
     sectionEl.className = 'section'; 
 
     sectionEl.innerHTML = <h2>${section}</h2>;
 
     data[section].forEach(note => {
       const noteWrapper = document.createElement('div');
-      // Класс 'note' используется для внутреннего форматирования списка
-      noteWrapper.className = 'note'; 
+      // Внутренний контейнер для ссылки и скачивания
+      noteWrapper.className = 'note-item-wrapper'; 
 
       // Структура конспекта с основной ссылкой и ссылкой на скачивание
       noteWrapper.innerHTML = `
@@ -182,7 +96,7 @@ function renderNotes(data) {
   }
 
   if (empty) {
-    container.innerHTML = '<p class="card" style="padding: 20px; text-align: center; color: var(--muted);">Конспекты не найдены по вашему запросу.</p>';
+    container.innerHTML = '<p class="note" style="text-align: center;">Конспекты не найдены по вашему запросу.</p>';
   }
 }
 
