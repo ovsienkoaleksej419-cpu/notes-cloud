@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <title>Notes</title>
+  <title>Конспекты</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   
   <link rel="stylesheet" href="style.css"> 
@@ -22,7 +22,6 @@
       autocomplete="off"
       class="search-input"
     >
-    
     <a href="index.html" class="back-link">
       ← На главную
     </a>
@@ -43,21 +42,34 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 let allNotes = [];
 
-// === ЗАГРУЗКА ДАННЫХ ===
-fetch('/notes.json')
+// === ЗАГРУЗКА ДАННЫХ (с надежной обработкой пути и ошибок) ===
+
+// Используем fetch('/notes.json'), чтобы гарантировать поиск от корня сайта
+fetch('/notes.json') 
   .then(r => {
-    if (!r.ok) throw new Error('Не удалось загрузить notes.json');
-    return r.json();
+    if (!r.ok) {
+        // Если статус не 200 (например, 404), бросаем ошибку
+        throw new Error('Не удалось загрузить notes.json. Статус: ' + r.status);
+    }
+    // Используем .text(), чтобы избежать SyntaxError при получении HTML-страницы ошибки
+    return r.text(); 
   })
-  .then(data => {
-    allNotes = data;
-    renderNotes(data);
+  .then(text => {
+    try {
+        // Пытаемся распарсить полученный текст как JSON
+        const data = JSON.parse(text); 
+        allNotes = data;
+        renderNotes(data);
+    } catch (e) {
+        // Если парсинг не удался (вероятно, получен HTML-код 404 страницы или ошибка JSON)
+        throw new Error('Файл notes.json не является корректным JSON. Проверьте содержимое.');
+    }
   })
   .catch(err => {
-    // Отображение ошибки в стиле карточки
+    // В этом блоке обрабатываются все ошибки (404, неверный синтаксис, проблемы сети)
+    console.error("ОШИБКА ЗАГРУЗКИ КОНСПЕКТОВ:", err);
     document.getElementById('notes').innerHTML =
-      '<p class="note" style="color: #e3342f; text-align: center; border: 1px solid #f9d8d8;">Ошибка загрузки конспектов. Проверьте файл notes.json.</p>';
-    console.error(err);
+      '<p class="note" style="color: #e3342f; text-align: center; border: 1px solid #f9d8d8;">Ошибка загрузки конспектов: Файл не найден или содержит ошибку.</p>';
   });
 
 // === ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНСПЕКТОВ (Сетка) ===
@@ -68,7 +80,8 @@ function renderNotes(data) {
   let empty = true;
 
   for (const section in data) {
-    if (!data[section] || !data[section].length) continue;
+    // Проверка на пустые или несуществующие разделы
+    if (!data.hasOwnProperty(section)  !data[section]  !data[section].length) continue;
 
     empty = false;
 
@@ -82,8 +95,11 @@ function renderNotes(data) {
     gridContainer.className = 'notes-grid';
     
     data[section].forEach(note => {
+      // Дополнительная проверка, что запись не пустая
+      if (!note  !note.title  !note.file) return; 
+      
       const noteWrapper = document.createElement('div');
-      noteWrapper.className = 'note-item-wrapper'; 
+      noteWrapper.className = 'note-item-wrapper note'; // Добавил класс .note для стилей карточки
 
       noteWrapper.innerHTML = `
         <a href="${note.file}">
@@ -113,6 +129,8 @@ document.getElementById('search').addEventListener('input', e => {
   const filtered = {};
 
   for (const section in allNotes) {
+    if (!allNotes.hasOwnProperty(section)) continue;
+
     filtered[section] = allNotes[section].filter(note =>
       note.title.toLowerCase().includes(q)
     );
