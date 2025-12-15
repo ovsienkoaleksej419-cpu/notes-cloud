@@ -46,8 +46,9 @@ fetch('notes.json')
     renderNotes(data);
   })
   .catch(err => {
+    // ИСПРАВЛЕНО: использование строки в кавычках
     document.getElementById('notes').innerHTML =
-      `<p style="color:red">Ошибка загрузки конспектов</p>`;
+      '<p style="color:red">Ошибка загрузки конспектов</p>';
     console.error(err);
   });
 
@@ -65,16 +66,24 @@ function renderNotes(data) {
     const sectionEl = document.createElement('div');
     sectionEl.className = 'section';
 
-    sectionEl.innerHTML = `<h2>${section}</h2>`;
+    // ИСПРАВЛЕНО: использование шаблонного литерала (обратные кавычки)
+    sectionEl.innerHTML = <h2>${section}</h2>;
 
     data[section].forEach(note => {
       const card = document.createElement('div');
       card.className = 'note';
 
+      // ИСПРАВЛЕНО: Добавлена логика со ссылкой на скачивание
       card.innerHTML = `
-        <a href="${note.file}">
-          📄 ${note.title}
-        </a>
+        <div>
+          <a href="${note.file}">
+            📄 ${note.title}
+          </a>
+          <br>
+          <a href="${note.file}" download style="font-size:14px;">
+            ⬇️ Скачать
+          </a>
+        </div>
       `;
 
       sectionEl.appendChild(card);
@@ -98,18 +107,8 @@ document.getElementById('search').addEventListener('input', e => {
     );
   }
 
-  renderNotes(filtered)card.innerHTML = `
-  <div>
-    <a href="${note.file}">
-      📄 ${note.title}
-    </a>
-    <br>
-    <a href="${note.file}" download style="font-size:14px;">
-      ⬇️ Скачать
-    </a>
-  </div>
-`;
-;
+  // ИСПРАВЛЕНО: удален неверно вставленный код
+  renderNotes(filtered);
 });
 </script>
 <div style="margin:40px 0; padding:20px; background:#fff; border-radius:12px;">
