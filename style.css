@@ -135,3 +135,162 @@ input {
 input {
     margin-bottom: 0; /* Убираем стандартный нижний отступ, так как он уже есть в секции */
 }
+/*
+ * === АДАПТИВНОСТЬ (RESPONSIVE DESIGN) ===
+ */
+
+/* Оптимизация для очень маленьких экранов (смартфоны в вертикальной ориентации, ширина < 576px) */
+@media (max-width: 576px) {
+    
+    /* Уменьшаем внешний отступ контейнера */
+    .container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    /* Уменьшаем padding для карточек (.note, .section) */
+    .note, .section {
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+    
+    /* Уменьшаем размер шрифта заголовков, чтобы они умещались */
+    h1 {
+        font-size: 1.8em;
+    }
+    h2 {
+        font-size: 1.3em;
+    }
+
+    /* Адаптация элемента поиска и навигации */
+    .search-input {
+        /* Input уже имеет width: 100%, что хорошо */
+        padding: 10px 12px;
+    }
+
+    /* Уменьшаем размер текста для ссылки "Скачать" */
+    .download-link {
+        font-size: 0.8em;
+        padding-left: 10px;
+    }
+    
+    /* Уменьшаем отступ для футера */
+    footer {
+        padding: 15px 0;
+    }
+}
+
+/* Оптимизация для планшетов (ширина от 577px до 900px) */
+@media (min-width: 577px) and (max-width: 900px) {
+    /* На планшетах можно увеличить отступы */
+    .container {
+        padding: 0 30px;
+    }
+    
+    /* Немного уменьшаем отступы в карточках, если они были слишком большими */
+    .note, .section {
+        padding: 16px 20px;
+    }
+    
+    /* Сохраняем стандартный размер шрифта */
+    h1 {
+        font-size: 2em;
+    }
+}
+
+/* Для больших экранов (>= 901px) */
+/* .container max-width: 900px уже обеспечивает центрирование, дополнительные медиазапросы не требуются */
+/*
+ * СТИЛИ ДЛЯ СТРАНИЦЫ КОНСПЕКТОВ
+ */
+
+/* Стилизация контейнера для одной записи конспекта (для Flexbox) */
+.note-item-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0; 
+}
+.note-item-wrapper:last-child {
+    border-bottom: none; 
+}
+
+/* Основная ссылка на конспект */
+.note-item-wrapper a:first-child {
+    font-weight: 500;
+    flex-grow: 1; 
+    padding: 5px 0;
+    text-decoration: none;
+    color: #222; 
+}
+.note-item-wrapper a:first-child:hover {
+    color: #2563eb; /* Акцентный цвет */
+}
+
+/* Ссылка "Скачать" */
+.download-link {
+    font-size: 0.9em;
+    color: #888; 
+    text-decoration: none;
+    padding-left: 15px;
+    flex-shrink: 0;
+}
+.download-link:hover {
+    color: #2563eb; 
+}
+
+/* Стили для ссылки "На главную" */
+.back-link {
+    display: inline-block;
+    font-weight: 500;
+    text-decoration: none;
+    color: #2563eb; 
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Убираем стандартные отступы input */
+input {
+    margin-bottom: 0;
+}
+
+/*
+ * === АДАПТИВНОСТЬ (RESPONSIVE DESIGN) ===
+ */
+
+@media (max-width: 576px) {
+    
+    .container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .note, .section {
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    h2 {
+        font-size: 1.3em;
+    }
+
+    .download-link {
+        font-size: 0.8em;
+        padding-left: 10px;
+    }
+    
+    footer {
+        padding: 15px 0;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 900px) {
+    .container {
+        padding: 0 30px;
+    }
+}
