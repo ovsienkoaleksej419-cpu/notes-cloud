@@ -98,7 +98,18 @@ document.getElementById('search').addEventListener('input', e => {
     );
   }
 
-  renderNotes(filtered);
+  renderNotes(filtered)card.innerHTML = `
+  <div>
+    <a href="${note.file}">
+      📄 ${note.title}
+    </a>
+    <br>
+    <a href="${note.file}" download style="font-size:14px;">
+      ⬇️ Скачать
+    </a>
+  </div>
+`;
+;
 });
 </script>
 
