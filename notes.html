@@ -44,7 +44,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 let allNotes = [];
 
 // === ЗАГРУЗКА ДАННЫХ ===
-fetch('notes.json')
+fetch('/notes.json')
   .then(r => {
     if (!r.ok) throw new Error('Не удалось загрузить notes.json');
     return r.json();
