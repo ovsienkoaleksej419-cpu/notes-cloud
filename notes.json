@@ -1,18 +1,14 @@
 {
   "Физика": [
     {
-      "title": "МКТ",
+      "title": "МКТ — молекулярно-кинетическая теория",
       "file": "notes/physics/mkt.html"
     }
   ],
   "Информатика": [
     {
-      "title": "Введение в информационные системы",
-      "file": "Inform.html"
-    },
-    {
-      "title": "Логика: Импликация и Эквивалентность",
-      "file": "notes/information/imp and ekv.html"
+      "title": "Императивное и эквивалентное программирование",
+      "file": "notes/informatics/imp-and-ekv.html"
     }
   ]
 }
