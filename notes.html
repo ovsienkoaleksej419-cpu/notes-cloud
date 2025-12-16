@@ -96,11 +96,8 @@ function renderNotes(data) {
       card.className = 'note-item-wrapper note';
 
       card.innerHTML = `
-        <a href="${note.file}" class="note-link">
+        <a href="${note.file}" class="note-link" target="_blank">
           📄 ${note.title}
-        </a>
-        <a href="${note.file}" download class="download-link">
-          ⬇️ Скачать
         </a>
       `;
 
@@ -139,3 +136,4 @@ document.getElementById('search').addEventListener('input', e => {
 
 </body>
 </html>
+
