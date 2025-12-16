@@ -38,72 +38,65 @@
 </footer>
 
 <script>
+/* ===== ГОД ===== */
 document.getElementById('year').textContent = new Date().getFullYear();
 
-let allNotes = [];
+let allNotes = {};
 
-// === ЗАГРУЗКА ДАННЫХ (с надежной обработкой пути и ошибок) ===
-
-// Используем /notes.json для поиска от корня сайта, что надежно работает на Netlify
-fetch('/notes.json') 
-  .then(r => {
-    if (!r.ok) {
-        // Если статус не 200 (например, 404), бросаем ошибку
-        throw new Error('Не удалось загрузить notes.json. Статус: ' + r.status);
+/* ===== ЗАГРУЗКА notes.json ===== */
+fetch('/notes.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
     }
-    // Используем .text(), чтобы избежать SyntaxError при получении HTML-страницы ошибки
-    return r.text(); 
+    return response.text();
   })
   .then(text => {
-    try {
-        // Пытаемся распарсить полученный текст как JSON
-        const data = JSON.parse(text); 
-        allNotes = data;
-        renderNotes(data);
-    } catch (e) {
-        // Если парсинг не удался (вероятно, невалидный JSON или BOM-маркер)
-        console.error("ОШИБКА ПАРСИНГА JSON:", e);
-        throw new Error('Файл notes.json не является корректным JSON. Проверьте содержимое.');
-    }
+    const data = JSON.parse(text);
+    allNotes = data;
+    renderNotes(data);
   })
   .catch(err => {
-    // В этом блоке обрабатываются все ошибки (404, неверный синтаксис, проблемы сети)
-    console.error("ОШИБКА ЗАГРУЗКИ КОНСПЕКТОВ:", err);
-    document.getElementById('notes').innerHTML =
-      '<p class="note" style="color: #e3342f; text-align: center; border: 1px solid #f9d8d8;">Ошибка загрузки конспектов: Файл не найден или содержит ошибку. Проверьте Консоль (F12) для деталей.</p>';
+    console.error('Ошибка загрузки:', err);
+    document.getElementById('notes').innerHTML = `
+      <p class="note" style="color:#e3342f;text-align:center;">
+        Ошибка загрузки конспектов.<br>
+        Проверьте наличие <b>notes.json</b> в корне сайта.
+      </p>
+    `;
   });
 
-// === ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНСПЕКТОВ (Сетка) ===
+/* ===== ОТОБРАЖЕНИЕ ===== */
 function renderNotes(data) {
   const container = document.getElementById('notes');
   container.innerHTML = '';
 
-  let empty = true;
+  let hasAny = false;
 
   for (const section in data) {
-    // Проверка на принадлежность свойства объекту и наличие данных
-    if (!data.hasOwnProperty(section)  !data[section]  !data[section].length) continue;
+    if (
+      !Object.prototype.hasOwnProperty.call(data, section) ||
+      !Array.isArray(data[section]) ||
+      data[section].length === 0
+    ) continue;
 
-    empty = false;
+    hasAny = true;
 
     const sectionEl = document.createElement('div');
-    sectionEl.className = 'section'; 
+    sectionEl.className = 'section';
+    sectionEl.innerHTML = `<h2>${section}</h2>`;
 
-    sectionEl.innerHTML = <h2>${section}</h2>;
-    
-    // Контейнер сетки для плиток
-    const gridContainer = document.createElement('div');
-    gridContainer.className = 'notes-grid';
-    
+    const grid = document.createElement('div');
+    grid.className = 'notes-grid';
+
     data[section].forEach(note => {
-      // Дополнительная проверка, что запись не пустая
-      if (!note  !note.title  !note.file) return; 
-      
-      const noteWrapper = document.createElement('div');
-      noteWrapper.className = 'note-item-wrapper note';
+      if (!note || !note.title || !note.file) return;
 
-      noteWrapper.innerHTML = `
-        <a href="${note.file}">
+      const card = document.createElement('div');
+      card.className = 'note-item-wrapper note';
+
+      card.innerHTML = `
+        <a href="${note.file}" class="note-link">
           📄 ${note.title}
         </a>
         <a href="${note.file}" download class="download-link">
@@ -111,26 +104,29 @@ function renderNotes(data) {
         </a>
       `;
 
-      gridContainer.appendChild(noteWrapper);
+      grid.appendChild(card);
     });
-    
-    sectionEl.appendChild(gridContainer); 
 
+    sectionEl.appendChild(grid);
     container.appendChild(sectionEl);
   }
 
-  if (empty) {
-    container.innerHTML = '<p class="note" style="text-align: center;">Конспекты не найдены по вашему запросу.</p>';
+  if (!hasAny) {
+    container.innerHTML = `
+      <p class="note" style="text-align:center;">
+        Конспекты не найдены
+      </p>
+    `;
   }
 }
 
-// === ОБРАБОТЧИК ПОИСКА ===
+/* ===== ПОИСК ===== */
 document.getElementById('search').addEventListener('input', e => {
   const q = e.target.value.toLowerCase();
   const filtered = {};
 
   for (const section in allNotes) {
-    if (!allNotes.hasOwnProperty(section)) continue;
+    if (!Object.prototype.hasOwnProperty.call(allNotes, section)) continue;
 
     filtered[section] = allNotes[section].filter(note =>
       note.title.toLowerCase().includes(q)
@@ -140,5 +136,6 @@ document.getElementById('search').addEventListener('input', e => {
   renderNotes(filtered);
 });
 </script>
+
 </body>
 </html>
