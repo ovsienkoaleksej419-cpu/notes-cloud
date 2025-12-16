@@ -9,6 +9,10 @@
     {
       "title": "Императивное и эквивалентное программирование",
       "file": "notes/information/imp and ekv.html"
-    }
+    },
+     {
+      "title": "Закон фано",
+      "file": "notes/information/Zakon-Fano-Osnovy-effektivnogo-kodirovaniya.pdf"
+    },
   ]
 }
