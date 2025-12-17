@@ -190,3 +190,48 @@ input {
         padding: 0 30px;
     }
 }
+.graph-window {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  margin-top: 15px;
+}
+
+.graph-header {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.graph-tab {
+  font-weight: bold;
+  color: #6366f1;
+  cursor: pointer;
+  padding-bottom: 4px;
+}
+
+.graph-tab.active {
+  border-bottom: 3px solid #6366f1;
+}
+
+.graph-box {
+  display: none;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.graph-box.active {
+  display: block;
+}
+
+.graph-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+svg {
+  max-width: 100%;
+}
