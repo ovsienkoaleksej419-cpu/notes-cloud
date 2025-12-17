@@ -11,35 +11,35 @@
       "file": "notes/information/imp and ekv.html"
     },
     {
-      "title": "Закон фано (задание 4)",
+      "title": "Закон Фано (задание 4)",
       "file": "notes/information/fano_law.html"
     },
     {
-      "title": "Рекурсивные Алгоритмы (задание 16)",
-      "file": "notes/information/16zadania.html"
-    },
-        {
-      "title": "Системы исчисления (задание 12)",
-      "file": " notes/information/zad12.html"
-    }
-        {
-      "title": "Комбинаторика (задание 8)",
-      "file": "notes/information/infzad8.html"
-    },
-    {
-      "title": "Анфлиз алгоритмов (задание 5)",
+      "title": "Анализ алгоритмов (задание 5)",
       "file": "notes/information/infzad5.html"
-    },
-    {
-      "title": "Обработка тобличных днных (задание 9)",
-      "file": "notes/information/infzad9.html"
     },
     {
       "title": "Кодирование информации (задание 7)",
       "file": "notes/information/infzad7.html"
     },
     {
-      "title": " Выигрышные и проигрышные позиции(задание 19-21)",
+      "title": "Комбинаторика (задание 8)",
+      "file": "notes/information/infzad8.html"
+    },
+    {
+      "title": "Обработка табличных данных (задание 9)",
+      "file": "notes/information/infzad9.html"
+    },
+    {
+      "title": "Системы счисления (задание 12)",
+      "file": "notes/information/zad12.html"
+    },
+    {
+      "title": "Рекурсивные алгоритмы (задание 16)",
+      "file": "notes/information/16zadania.html"
+    },
+    {
+      "title": "Теория игр: 19–21 задания",
       "file": "notes/information/infzad19.html"
     }
   ]
