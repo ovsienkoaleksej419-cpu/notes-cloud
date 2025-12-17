@@ -20,9 +20,9 @@ exports.handler = async (event) => {
     const genAI = new GoogleGenerativeAI(apiKey);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash-001",
+      model: "gemini-1.0-pro",
       systemInstruction:
-        "Ты — AlexBot, помощник для сайта с конспектами ЕГЭ. Отвечай кратко, понятно и по делу."
+        "Ты — AlexBot, помощник сайта с конспектами ЕГЭ. Отвечай кратко, понятно и по делу."
     });
 
     const result = await model.generateContent(prompt);
