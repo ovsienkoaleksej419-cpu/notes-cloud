@@ -15,10 +15,9 @@ exports.handler = async (event) => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // МЕНЯЕМ МОДЕЛЬ НА PRO ВЕРСИЮ (иногда она доступна быстрее на новых ключах)
-    // Либо оставляем flash, но с явным указанием версии
+   // Попробуй использовать просто "gemini-pro" — это самая стабильная точка входа
 const model = genAI.getGenerativeModel({ 
-  model: "gemini-1.5-flash" // Или "gemini-1.5-pro"
+  model: "gemini-1.5-flash-latest" // Добавь "-latest" в конец
 });
 
     const result = await model.generateContent(prompt);
