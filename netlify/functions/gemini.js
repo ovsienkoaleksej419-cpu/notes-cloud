@@ -17,9 +17,9 @@ exports.handler = async (event) => {
     
     // МЕНЯЕМ МОДЕЛЬ НА PRO ВЕРСИЮ (иногда она доступна быстрее на новых ключах)
     // Либо оставляем flash, но с явным указанием версии
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-pro" 
-    });
+const model = genAI.getGenerativeModel({ 
+  model: "gemini-1.5-flash" // Или "gemini-1.5-pro"
+});
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
