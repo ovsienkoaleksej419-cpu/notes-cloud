@@ -1,105 +1,98 @@
-/* 1. ОБЩИЕ ПЕРЕМЕННЫЕ (Тёмная тема) */
-:root {
-  --bg: radial-gradient(1200px 600px at 10% -10%, #1e293b 0%, #020617 60%);
-  --card: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-  --accent: #22c55e;
-  --radius: 16px;
-}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Овсиенко Алексей — личный сайт</title>
 
-* { box-sizing: border-box; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
-  background-attachment: fixed;
-  color: var(--text);
-  line-height: 1.6;
-}
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
 
-.wrap, .container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
-}
+    <header>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Школьник · начинающий разработчик</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#about" class="nav-link">Обо мне</a>
+        <a href="notes.html" class="nav-link nav-link-accent">Конспекты</a>
+        <a href="#projects" class="nav-link">Проекты</a>
+        <a href="#contact" class="nav-link">Контакты</a>
+      </nav>
+    </header>
 
-/* 2. ОБЩИЕ ЭЛЕМЕНТЫ (Карточки) */
-.card, .note {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 26px;
-  margin-bottom: 24px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
+    <section class="card hero" id="about">
+      <div>
+        <h1>Привет 👋</h1>
+        <p>
+          Меня зовут <b>Овсиенко Алексей</b>.  
+          Я учусь в школе, интересуюсь программированием, играми, серверами и веб-разработкой.
+        </p>
+        <p style="color:var(--muted)">
+          Этот сайт — моя личная платформа с проектами и конспектами.
+        </p>
+      </div>
+      <div class="avatar">👨‍💻</div>
+    </section>
 
-/* 3. НАВИГАЦИЯ (Для обеих страниц) */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-}
+    <section class="card" id="projects">
+      <h2>Проекты</h2>
+      <div class="grid">
 
-nav { display: flex; gap: 10px; }
+        <div class="project">
+          <h3>Minecraft-сервер «Tesseract»</h3>
+          <p style="color:var(--muted)">
+            Настройка серверов, плагины, управление хостингом.
+          </p>
+          <div class="tags">
+            <span class="tag">Minecraft</span>
+            <span class="tag">Server</span>
+          </div>
+        </div>
 
-.nav-link, .back-link {
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 600;
-  color: var(--muted);
-  text-decoration: none;
-}
+        <div class="project">
+          <h3>Unity-игра «Палач Online»</h3>
+          <p style="color:var(--muted)">
+            Онлайн-игра на Unity: логика, интерфейсы, C#.
+          </p>
+          <div class="tags">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">GameDev</span>
+          </div>
+        </div>
 
-.nav-link:hover, .back-link:hover {
-  background: rgba(255,255,255,0.05);
-  color: var(--text);
-}
+      </div>
+    </section>
 
-/* 4. СПЕЦИФИКА ДЛЯ NOTES.HTML (Поиск и сетка) */
-.search-input {
-  width: 100%;
-  padding: 14px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: white;
-  outline: none;
-  margin-bottom: 15px;
-}
+    <section class="card" id="contact">
+      <h2>Контакты</h2>
+      <p>Telegram для связи:</p>
+      <p>
+        <a href="https://t.me/alex_berlin_N1" style="color:var(--accent);font-weight:700;font-size:1.1rem">
+          @alex_berlin_N1
+        </a>
+      </p>
+    </section>
 
-.search-input:focus { border-color: var(--accent); }
+    <footer>
+      © <span id="year"></span> Овсиенко Алексей
+    </footer>
 
-.notes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 15px;
-}
+  </div>
 
-.note-item-wrapper {
-  transition: 0.3s;
-}
-
-.note-item-wrapper:hover {
-  transform: translateY(-3px);
-  background: rgba(255,255,255,0.1) !important;
-}
-
-/* 5. МОБИЛЬНАЯ АДАПТАЦИЯ */
-@media (max-width: 768px) {
-  header { flex-direction: column; align-items: flex-start; gap: 20px; }
-  nav {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .nav-link {
-    text-align: center;
-    background: var(--card);
-    border: 1px solid var(--border);
-  }
-}
+  <script>
+    // Автоматическое обновление года в футере
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
