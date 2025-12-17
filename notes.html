@@ -4,38 +4,163 @@
   <meta charset="utf-8">
   <title>Конспекты</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"> 
+
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --accent: #6366f1;
+      --secondary: #f59e0b;
+      --border: rgba(0, 0, 0, 0.08);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .dark-theme {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #a855f7;
+      --secondary: #fb923c;
+      --border: rgba(255, 255, 255, 0.1);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      transition: background 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      flex: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      width: 100%;
+    }
+
+    .note {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    header.note { border-left: 6px solid var(--accent); margin-top: 20px; }
+
+    h1 { margin: 0; font-size: 2rem; color: var(--accent); }
+    h2 { font-size: 1.5rem; margin: 30px 0 15px; }
+
+    .search-input {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    .search-input:focus { border-color: var(--accent); }
+
+    .back-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .back-link:hover { color: var(--secondary); }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+    }
+
+    .note-item-wrapper {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .note-item-wrapper:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+
+    .note-link {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      width: 100%;
+    }
+
+    .note-item-wrapper:hover .note-link { color: var(--secondary); }
+
+    .theme-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: var(--accent);
+      cursor: pointer;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .sun { display: block; }
+    .moon { display: none; }
+    .dark-theme .sun { display: none; }
+    .dark-theme .moon { display: block; }
+    .dark-theme .theme-btn { background: var(--secondary); }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
 <body>
 
-<button id="theme-toggle" class="theme-btn" title="Сменить тему">
+<button id="theme-toggle" class="theme-btn">
   <span class="sun">☀️</span>
   <span class="moon">🌙</span>
 </button>
 
 <div class="container"> 
-
-  <header class="note header-card">
+  <header class="note">
     <h1>📚 Конспекты</h1>
   </header>
 
-  <section class="note search-section">
-    <input
-      id="search"
-      placeholder="Поиск по конспектам..."
-      autocomplete="off"
-      class="search-input"
-    >
-    <a href="index.html" class="back-link">
-      ← На главную
-    </a>
+  <section class="note">
+    <input id="search" placeholder="Поиск по конспектам..." autocomplete="off" class="search-input">
+    <a href="index.html" class="back-link">← На главную</a>
   </section>
 
   <div id="notes"></div>
-
 </div>
 
 <footer>
@@ -43,69 +168,55 @@
     © <span id="year"></span> Овсиенко Алексей
   </div>
 </footer>
-
+</html>
 <script>
-/* ===== УПРАВЛЕНИЕ ТЕМОЙ ===== */
-const themeBtn = document.getElementById("theme-toggle");
-if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark-theme");
-}
-
-themeBtn.addEventListener("click", () => {
+/* ===== ТЕМА ===== */
+const btn = document.getElementById("theme-toggle");
+if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark-theme");
+btn.onclick = () => {
     document.body.classList.toggle("dark-theme");
-    const isDark = document.body.classList.contains("dark-theme");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-});
+    localStorage.setItem("theme", document.body.classList.contains("dark-theme") ? "dark" : "light");
+};
 
-/* ===== ГОД В ФУТЕРЕ ===== */
+/* ===== ГОД ===== */
 document.getElementById('year').textContent = new Date().getFullYear();
 
 let allNotes = {};
 
-/* ===== ЗАГРУЗКА ДАННЫХ ===== */
+/* ===== ЗАГРУЗКА ===== */
 fetch('/notes.json')
-  .then(response => {
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    return response.json();
-  })
+  .then(response => response.json())
   .then(data => {
     allNotes = data;
     renderNotes(data);
   })
   .catch(err => {
-    console.error('Ошибка загрузки:', err);
-    document.getElementById('notes').innerHTML = `
-      <p class="note error-msg">
-        ⚠️ Ошибка загрузки конспектов. Проверьте <b>notes.json</b>.
-      </p>
-    `;
+    console.error('Ошибка:', err);
+    document.getElementById('notes').innerHTML = <p class="note" style="color:red; text-align:center;">Ошибка загрузки notes.json</p>;
   });
 
-/* ===== ОТРИСОВКА КАРТОЧЕК ===== */
+/* ===== ОТРИСОВКА ===== */
 function renderNotes(data) {
   const container = document.getElementById('notes');
   container.innerHTML = '';
   let hasAny = false;
 
   for (const section in data) {
-    if (!data[section].length) continue;
+    if (!Array.isArray(data[section]) || data[section].length === 0) continue;
     hasAny = true;
 
     const sectionEl = document.createElement('div');
     sectionEl.className = 'section-block';
-    sectionEl.innerHTML = <h2>${section}</h2>;
+    sectionEl.innerHTML = <h2>${section}</h2>; // Исправлено: добавлены кавычки
 
     const grid = document.createElement('div');
     grid.className = 'notes-grid';
 
     data[section].forEach(note => {
+      if (!note.title || !note.file) return;
       const card = document.createElement('div');
       card.className = 'note-item-wrapper note';
-      card.innerHTML = `
-        <a href="${note.file}" class="note-link" target="_blank">
-          <span class="icon">📄</span> ${note.title}
-        </a>
-      `;
+      card.innerHTML = <a href="${note.file}" class="note-link" target="_blank">📄 ${note.title}</a>;
       grid.appendChild(card);
     });
 
@@ -114,7 +225,7 @@ function renderNotes(data) {
   }
 
   if (!hasAny) {
-    container.innerHTML = <p class="note empty-msg">Конспекты не найдены</p>;
+    container.innerHTML = <p class="note" style="text-align:center;">Конспекты не найдены</p>;
   }
 }
 
