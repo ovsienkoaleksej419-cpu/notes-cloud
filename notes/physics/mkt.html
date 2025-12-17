@@ -170,6 +170,17 @@
   <a href="../notes.html" class="back">← Назад к конспектам</a>
 
 </div>
+div>
+
+<script>
+function showGraph(id) {
+  document.querySelectorAll('.graph').forEach(g => g.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
 
 <script>
 function switchGraph(id, el) {
@@ -182,6 +193,7 @@ function switchGraph(id, el) {
   el.classList.add('active');
 }
 </script>
+
 
 </body>
 </html>
