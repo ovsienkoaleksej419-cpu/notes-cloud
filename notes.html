@@ -75,8 +75,8 @@ function renderNotes(data) {
 
   for (const section in data) {
     if (
-      !Object.prototype.hasOwnProperty.call(data, section) 
-      !Array.isArray(data[section]) 
+      !Object.prototype.hasOwnProperty.call(data, section) ||
+      !Array.isArray(data[section]) ||
       data[section].length === 0
     ) continue;
 
@@ -84,13 +84,13 @@ function renderNotes(data) {
 
     const sectionEl = document.createElement('div');
     sectionEl.className = 'section';
-    sectionEl.innerHTML = <h2>${section}</h2>;
+    sectionEl.innerHTML = `<h2>${section}</h2>`;
 
     const grid = document.createElement('div');
     grid.className = 'notes-grid';
 
     data[section].forEach(note => {
-      if (!note  !note.title  !note.file) return;
+      if (!note || !note.title || !note.file) return;
 
       const card = document.createElement('div');
       card.className = 'note-item-wrapper note';
