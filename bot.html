@@ -144,59 +144,57 @@
   </div>
 
   <script>
-    const chatBox = document.getElementById('chatBox');
-    const userInput = document.getElementById('userInput');
-    const typingIndicator = document.getElementById('typingIndicator');
+const chatBox = document.getElementById('chatBox');
+  const userInput = document.getElementById('userInput');
+  const typingIndicator = document.getElementById('typingIndicator');
 
-    // Функция обработки Enter
-    function handleKey(e) {
-      if (e.key === 'Enter') askGemini();
-    }
+  // Функция для обработки нажатия Enter
+  window.handleKey = function(e) {
+    if (e.key === 'Enter') askGemini();
+  };
 
-    async function askGemini() {
-      const text = userInput.value.trim();
-      if (!text) return;
+  // Основная функция отправки
+  window.askGemini = async function() {
+    const text = userInput.value.trim();
+    if (!text) return;
 
-      // 1. Добавляем сообщение пользователя
-      appendMessage(text, 'user');
-      userInput.value = '';
-      
-      // 2. Показываем индикатор печати
-      typingIndicator.style.
-display = 'block';
-      chatBox.scrollTop = chatBox.scrollHeight;
+    // Добавляем сообщение пользователя
+    appendMessage(text, 'user');
+    userInput.value = '';
+    
+    // Показываем анимацию загрузки
+    typingIndicator.style.display = 'block';
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-      try {
-        // 3. Запрос к нашей Netlify Function
-        const response = await fetch('/.netlify/functions/gemini', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: text })
-        });
+    try {
+      const response = await fetch('/.netlify/functions/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: text })
+      });
 
-        const data = await response.json();
+      const data = await response.json();
+      typingIndicator.style.display = 'none';
 
-        // 4. Убираем индикатор и добавляем ответ
-        typingIndicator.style.display = 'none';
-        if (data.text) {
-          appendMessage(data.text, 'bot');
-        } else {
-          throw new Error();
-        }
-
-      } catch (error) {
-        typingIndicator.style.display = 'none';
-        appendMessage("Извини, произошла ошибка при подключении к мозгу бота. Проверь настройки Netlify.", 'bot');
+      if (data.text) {
+        appendMessage(data.text, 'bot');
+      } else {
+        appendMessage("Ошибка: Бот прислал пустой ответ.", 'bot');
       }
+    } catch (error) {
+      typingIndicator.style.display = 'none';
+      appendMessage("Ошибка связи с сервером Netlify.", 'bot');
+      console.error(error);
     }
+  };
 
-    function appendMessage(text, side) {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = msg ${side};
-      msgDiv.innerText = text;
-      chatBox.appendChild(msgDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+  function appendMessage(text, side) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg ' + side;
+    msgDiv.innerText = text;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
   </script>
 </body>
 </html>
