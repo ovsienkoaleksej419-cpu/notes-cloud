@@ -4,18 +4,25 @@
   <meta charset="utf-8">
   <title>Конспекты</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
 
+<button id="theme-toggle" class="theme-btn" title="Сменить тему">
+  <span class="sun">☀️</span>
+  <span class="moon">🌙</span>
+</button>
+
 <div class="container"> 
 
-  <header class="note" style="margin-top:20px; margin-bottom: 20px;">
+  <header class="note header-card">
     <h1>📚 Конспекты</h1>
   </header>
 
-  <section class="note" style="margin-bottom: 20px;">
+  <section class="note search-section">
     <input
       id="search"
       placeholder="Поиск по конспектам..."
@@ -38,69 +45,67 @@
 </footer>
 
 <script>
-/* ===== ГОД ===== */
+/* ===== УПРАВЛЕНИЕ ТЕМОЙ ===== */
+const themeBtn = document.getElementById("theme-toggle");
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-theme");
+}
+
+themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-theme");
+    const isDark = document.body.classList.contains("dark-theme");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+});
+
+/* ===== ГОД В ФУТЕРЕ ===== */
 document.getElementById('year').textContent = new Date().getFullYear();
 
 let allNotes = {};
 
-/* ===== ЗАГРУЗКА notes.json ===== */
+/* ===== ЗАГРУЗКА ДАННЫХ ===== */
 fetch('/notes.json')
   .then(response => {
-    if (!response.ok) {
-      throw new Error('HTTP ' + response.status);
-    }
-    return response.text();
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    return response.json();
   })
-  .then(text => {
-    const data = JSON.parse(text);
+  .then(data => {
     allNotes = data;
     renderNotes(data);
   })
   .catch(err => {
     console.error('Ошибка загрузки:', err);
     document.getElementById('notes').innerHTML = `
-      <p class="note" style="color:#e3342f;text-align:center;">
-        Ошибка загрузки конспектов.<br>
-        Проверьте наличие <b>notes.json</b> в корне сайта.
+      <p class="note error-msg">
+        ⚠️ Ошибка загрузки конспектов. Проверьте <b>notes.json</b>.
       </p>
     `;
   });
 
-/* ===== ОТОБРАЖЕНИЕ ===== */
+/* ===== ОТРИСОВКА КАРТОЧЕК ===== */
 function renderNotes(data) {
   const container = document.getElementById('notes');
   container.innerHTML = '';
-
   let hasAny = false;
 
   for (const section in data) {
-    if (
-      !Object.prototype.hasOwnProperty.call(data, section) ||
-      !Array.isArray(data[section]) ||
-      data[section].length === 0
-    ) continue;
-
+    if (!data[section].length) continue;
     hasAny = true;
 
     const sectionEl = document.createElement('div');
-    sectionEl.className = 'section';
-    sectionEl.innerHTML = `<h2>${section}</h2>`;
+    sectionEl.className = 'section-block';
+    sectionEl.innerHTML = <h2>${section}</h2>;
 
     const grid = document.createElement('div');
     grid.className = 'notes-grid';
 
     data[section].forEach(note => {
-      if (!note || !note.title || !note.file) return;
-
       const card = document.createElement('div');
       card.className = 'note-item-wrapper note';
-
       card.innerHTML = `
         <a href="${note.file}" class="note-link" target="_blank">
-          📄 ${note.title}
+          <span class="icon">📄</span> ${note.title}
         </a>
       `;
-
       grid.appendChild(card);
     });
 
@@ -109,11 +114,7 @@ function renderNotes(data) {
   }
 
   if (!hasAny) {
-    container.innerHTML = `
-      <p class="note" style="text-align:center;">
-        Конспекты не найдены
-      </p>
-    `;
+    container.innerHTML = <p class="note empty-msg">Конспекты не найдены</p>;
   }
 }
 
@@ -121,15 +122,11 @@ function renderNotes(data) {
 document.getElementById('search').addEventListener('input', e => {
   const q = e.target.value.toLowerCase();
   const filtered = {};
-
   for (const section in allNotes) {
-    if (!Object.prototype.hasOwnProperty.call(allNotes, section)) continue;
-
     filtered[section] = allNotes[section].filter(note =>
       note.title.toLowerCase().includes(q)
     );
   }
-
   renderNotes(filtered);
 });
 </script>
