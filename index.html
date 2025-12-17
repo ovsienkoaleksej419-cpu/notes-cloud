@@ -1,240 +1,105 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Овсиенко Алексей — личный сайт</title>
+/* 1. ОБЩИЕ ПЕРЕМЕННЫЕ (Тёмная тема) */
+:root {
+  --bg: radial-gradient(1200px 600px at 10% -10%, #1e293b 0%, #020617 60%);
+  --card: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --accent: #22c55e;
+  --radius: 16px;
+}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+* { box-sizing: border-box; }
 
-  <style>
-    :root{
-      --bg: radial-gradient(1200px 600px at 10% -10%, #1e293b 0%, #020617 60%);
-      --card: rgba(255,255,255,0.06);
-      --border: rgba(255,255,255,0.08);
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --accent: #22c55e;
-      --radius: 16px;
-      --max-width: 1100px;
-    }
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  line-height: 1.6;
+}
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Inter,system-ui,Arial;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.6;
-    }
+.wrap, .container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
 
-    a{color:inherit;text-decoration:none}
-    h1,h2,h3{margin:0 0 12px}
+/* 2. ОБЩИЕ ЭЛЕМЕНТЫ (Карточки) */
+.card, .note {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
-    .wrap{
-      max-width:var(--max-width);
-      margin:auto;
-      padding:28px 20px 60px;
-    }
+/* 3. НАВИГАЦИЯ (Для обеих страниц) */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
 
-    /* HEADER */
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:32px;
-    }
+nav { display: flex; gap: 10px; }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-    }
+.nav-link, .back-link {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+}
 
-    .logo{
-      width:52px;height:52px;
-      border-radius:14px;
-      background:linear-gradient(135deg,#22c55e,#4ade80);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:800;
-      color:#022c22;
-      font-size:18px;
-    }
+.nav-link:hover, .back-link:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+}
 
-    nav a{
-      margin-left:18px;
-      font-weight:600;
-      color:var(--muted);
-    }
-    nav a:hover{color:var(--text)}
+/* 4. СПЕЦИФИКА ДЛЯ NOTES.HTML (Поиск и сетка) */
+.search-input {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: white;
+  outline: none;
+  margin-bottom: 15px;
+}
 
-    /* CARD */
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:26px;
-      margin-bottom:24px;
-      backdrop-filter: blur(14px);
-    }
+.search-input:focus { border-color: var(--accent); }
 
-    /* HERO */
-    .hero{
-      display:grid;
-      grid-template-columns: 1fr 260px;
-      gap:28px;
-      align-items:center;
-    }
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+}
 
-    .avatar{
-      width:220px;
-      height:220px;
-      border-radius:24px;
-      background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:64px;
-      color:var(--muted);
-      margin:auto;
-    }
+.note-item-wrapper {
+  transition: 0.3s;
+}
 
-    /* PROJECTS */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:18px;
-    }
+.note-item-wrapper:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.1) !important;
+}
 
-    .project{
-      padding:20px;
-      border-radius:14px;
-      background:rgba(255,255,255,0.05);
-      border:1px solid var(--border);
-      transition:.25s;
-    }
-
-    .project:hover{
-      transform:translateY(-4px);
-      background:rgba(255,255,255,0.08);
-    }
-
-    .tags{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .tag{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(34,197,94,.15);
-      color:#4ade80;
-      font-weight:600;
-    }
-
-    footer{
-      margin-top:40px;
-      text-align:center;
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    @media (max-width:768px){
-      .hero{grid-template-columns:1fr}
-      nav{display:none}
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-
-    <header>
-      <div class="brand">
-        <div class="logo">ОА</div>
-        <div>
-          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
-          <div style="font-size:13px;color:var(--muted)">Школьник · начинающий разработчик</div>
-        </div>
-      </div>
-      <nav>
-        <a href="#about">Обо мне</a>
-        <a href="notes.html">Конспекты</a>
-        <a href="#projects">Проекты</a>
-        <a href="#contact">Контакты</a>
-      </nav>
-    </header>
-
-    <section class="card hero" id="about">
-      <div>
-        <h1>Привет 👋</h1>
-        <p>
-          Меня зовут <b>Овсиенко Алексей</b>.  
-          Я учусь в школе, интересуюсь программированием, играми, серверами и веб-разработкой.
-        </p>
-        <p style="color:var(--muted)">
-          Этот сайт — моя личная платформа с проектами и конспектами.
-        </p>
-      </div>
-      <div class="avatar">👨‍💻</div>
-    </section>
-
-    <section class="card" id="projects">
-      <h2>Проекты</h2>
-      <div class="grid">
-
-        <div class="project">
-          <h3>Minecraft-сервер «Tesseract»</h3>
-          <p style="color:var(--muted)">
-            Настройка серверов, плагины, управление хостингом, концепции миров.
-          </p>
-          <div class="tags">
-            <span class="tag">Minecraft</span>
-            <span class="tag">Plugins</span>
-            <span class="tag">Server</span>
-          </div>
-        </div>
-
-        <div class="project">
-          <h3>Unity-игра «Палач Online»</h3>
-          <p style="color:var(--muted)">
-            Онлайн-игра на Unity: логика, интерфейсы, механики, C#.
-          </p>
-          <div class="tags">
-            <span class="tag">Unity</span>
-            <span class="tag">C#</span>
-            <span class="tag">GameDev</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="card" id="contact">
-      <h2>Контакты</h2>
-      <p>Telegram:</p>
-      <p>
-        <a href="https://t.me/alex_berlin_N1" style="color:var(--accent);font-weight:700">
-          @alex_berlin_N1
-        </a>
-      </p>
-    </section>
-
-    <footer>
-      © <span id="year"></span> Овсиенко Алексей
-    </footer>
-
-  </div>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
+/* 5. МОБИЛЬНАЯ АДАПТАЦИЯ */
+@media (max-width: 768px) {
+  header { flex-direction: column; align-items: flex-start; gap: 20px; }
+  nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .nav-link {
+    text-align: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+}
