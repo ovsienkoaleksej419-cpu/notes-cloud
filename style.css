@@ -1,130 +1,141 @@
-/* 1. ПРИНУДИТЕЛЬНЫЙ СВЕТЛЫЙ РЕЖИМ */
+/* 1. ПРИНУДИТЕЛЬНЫЙ СВЕТЛЫЙ РЕЖИМ ДЛЯ FIREFOX И SAFARI */
 :root {
-  color-scheme: light; /* Игнорирует темную тему телефона */
+  color-scheme: light !important;
 }
 
-/* 2. БАЗОВЫЕ СТИЛИ (БЕЛЫЙ И СЕРЫЙ) */
+/* 2. ГЛОБАЛЬНЫЙ СБРОС ФОНА */
 html, body {
-  background-color: #ffffff !important; /* Чисто белый фон */
-  color: #334155 !important;           /* Темно-серый текст */
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #334155 !important;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
 }
 
+/* 3. КОНТЕЙНЕР */
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 10px 20px;
+  box-sizing: border-box;
 }
 
-/* 3. КАРТОЧКИ (.note) */
+/* 4. КАРТОЧКИ (БЕЛЫЙ ФОН) */
 .note {
   background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important; /* Светло-серая рамка */
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(45, 212, 191, 0.05); /* Легкая мятная тень */
   margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(45, 212, 191, 0.08) !important;
   display: block;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
-/* 4. ШАПКА С МЯТНЫМ АКЦЕНТОМ */
+/* 5. ШАПКА С МЯТНЫМ АКЦЕНТОМ */
 header.note {
-  border-left: 6px solid #2dd4bf !important; /* Мятная полоса слева */
+  border-left: 6px solid #2dd4bf !important;
   background: linear-gradient(to right, #ffffff, #f0fdfa) !important;
 }
 
 h1 {
   margin: 0;
-  font-size: 24px;
-  color: #0d9488; /* Темная мята */
+  font-size: 1.6rem;
+  color: #0d9488 !important;
 }
 
-/* 5. ПОИСК */
+/* 6. ПОИСК */
 .search-input {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   border: 2px solid #e2e8f0;
   border-radius: 10px;
   font-size: 16px;
-  background: #f8fafc;
-  color: #334155;
+  background-color: #f8fafc !important;
+  color: #334155 !important;
   outline: none;
-  box-sizing: border-box; /* Важно для мобилок */
-  transition: all 0.2s;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
 .search-input:focus {
   border-color: #2dd4bf;
-  background: #ffffff;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.1);
 }
 
-/* 6. ЗАГОЛОВКИ СЕКЦИЙ (Физика, Информатика) */
+/* 7. ЗАГОЛОВКИ СЕКЦИЙ (ФИЗИКА, ИНФОРМАТИКА) */
 .section h2 {
-  font-size: 20px;
-  color: #64748b;
-  margin: 30px 0 15px;
-  padding-left: 8px;
+  font-size: 1.3rem;
+  color: #475569 !important;
+  margin: 35px 0 15px;
+  padding-left: 10px;
   border-left: 3px solid #99f6e4;
 }
 
-/* 7. СЕТКА И ССЫЛКИ НА КОНСПЕКТЫ */
+/* 8. СЕТКА И АНИМАЦИЯ */
 .notes-grid {
   display: grid;
-  grid-template-columns: 1fr; /* Одна колонка для мобилок */
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
 @media (min-width: 600px) {
   .notes-grid {
-    grid-template-columns: 1fr 1fr; /* Две колонки для ПК */
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-.note-item-wrapper {
-  text-decoration: none;
-  transition: all 0.2s;
-  animation: fadeIn 0.4s ease forwards;
-}
-
-@keyframes fadeIn {
+@keyframes slideIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.note-link {
+.note-item-wrapper {
   text-decoration: none;
-  color: #334155 !important;
-  font-weight: 600;
   display: flex;
   align-items: center;
+  transition: all 0.2s ease;
+  animation: slideIn 0.4s ease forwards;
 }
 
-/* Эффект при наведении */
+/* ССЫЛКИ НА ФАЙЛЫ */
+.note-link {
+  text-decoration: none !important;
+  color: #334155 !important;
+  font-weight: 600;
+  width: 100%;
+}
+
 .note-item-wrapper:hover {
-  border-color: #2dd4bf !important;
   background-color: #f0fdfa !important;
+  border-color: #2dd4bf !important;
   transform: translateY(-2px);
 }
 
+.note-item-wrapper:hover .note-link {
+  color: #14b8a6 !important;
+}
+
+/* 9. ВСПОМОГАТЕЛЬНЫЕ ЭЛЕМЕНТЫ */
 .back-link {
-  color: #94a3b8;
+  color: #94a3b8 !important;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 0.9rem;
   display: inline-block;
-  margin-top: 10px;
 }
 
 .back-link:hover {
-  color: #2dd4bf;
+  color: #2dd4bf !important;
 }
 
-/* 8. ФУТЕР */
 footer {
   text-align: center;
-  padding: 30px 0;
-  color: #cbd5e1;
-  border-top: 1px solid #f1f5f9;
+  padding: 40px 0;
+  color: #cbd5e1 !important;
+  background: transparent !important;
 }
