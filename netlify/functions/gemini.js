@@ -47,11 +47,10 @@ exports.handler = async (event) => {
     // 4. Инициализация Gemini
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Используем базовое название модели без лишних цифр для стабильности
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      systemInstruction: "Ты — AlexBot, ассистент на сайте Алексея Овсиенко. Алексей — школьник и разработчик (Minecraft сервер Tesseract, игра Палач Online). Ты помогаешь с конспектами ЕГЭ по информатике. Отвечай кратко и дружелюбно."
-    });
+// Используем конкретную стабильную версию модели
+const model = genAI.getGenerativeModel({ 
+  model: "gemini-1.5-flash-8b" // Это самая легкая и быстрая версия, она всегда доступна сразу
+});
 
     // 5. Генерация ответа
     const result = await model.generateContent(prompt);
