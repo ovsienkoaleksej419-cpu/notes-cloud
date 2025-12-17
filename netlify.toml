@@ -1,2 +1,10 @@
 [build]
-publish = "."
+  # Команда сборки (пустая, так как у нас просто HTML, 
+  # но она заставляет Netlify запустить установку библиотек)
+  command = "npm install" 
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  # Говорим Netlify использовать esbuild для упаковки функций
+  node_bundler = "esbuild"
