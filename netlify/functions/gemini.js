@@ -7,36 +7,42 @@ exports.handler = async (event) => {
     "Content-Type": "application/json"
   };
 
-  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: "" };
+  }
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) throw new Error("API_KEY_MISSING");
+
     const { prompt } = JSON.parse(event.body);
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    
-   // Используем самую базовую модель, которая доступна везде
-const model = genAI.getGenerativeModel({ 
-    model: "gemini-pro" 
-});
 
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction:
+        "Ты — AlexBot, помощник для сайта с конспектами ЕГЭ. Отвечай кратко и понятно."
+    });
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    
+
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ text: response.text() }),
+      body: JSON.stringify({ text: response.text() })
     };
+
   } catch (error) {
-    console.error(error);
+    console.error("Ошибка функции:", error);
+
     return {
-      statusCode: 200, // Возвращаем 200, чтобы фронтенд вывел текст ошибки красиво
+      statusCode: 500,
       headers,
-      body: JSON.stringify({ 
-        text: "Бот активируется. Попробуй еще раз через 5-10 минут. Ошибка: " + error.message 
-      }),
+      body: JSON.stringify({
+        text: "Ошибка бота: " + error.message
+      })
     };
   }
 };
