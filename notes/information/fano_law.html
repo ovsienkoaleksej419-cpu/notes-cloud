@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Закон Фано: Полное руководство — Овсиенко Алексей</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Дополнительные стили специально для этого конспекта */
+    .theory-block { margin-bottom: 40px; }
+    .example-box { 
+      border-left: 3px solid var(--accent); 
+      background: rgba(34, 197, 94, 0.05); 
+      padding: 20px; 
+      border-radius: 0 15px 15px 0;
+      margin: 15px 0;
+    }
+    .math-font { font-family: 'Courier New', monospace; color: var(--accent); font-weight: bold; }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .step-list { counter-reset: step; list-style: none; padding: 0; }
+    .step-list li { counter-increment: step; margin-bottom: 15px; display: flex; align-items: flex-start; }
+    .step-list li::before {
+      content: counter(step);
+      background: var(--accent);
+      color: #000;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-right: 15px; font-weight: bold; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Конспект: Теория кодирования</div>
+        </div>
+      </div>
+      <nav>
+        <a href="notes.html" class="nav-link">← К списку конспектов</a>
+      </nav>
+    </header>
+
+    <section class="card theory-block">
+      <span class="badge">Тема 1.1</span>
+      <h1>Закон Фано и префиксные коды</h1>
+      <p>В современной информатике Закон Фано является фундаментальным правилом, обеспечивающим возможность однозначного декодирования данных, переданных по каналам связи. Без этого условия компьютер не смог бы понять, где заканчивается один символ и начинается другой, если они имеют разную длину.</p>
+    </section>
+
+    <section class="card theory-block">
+      <h2>1. Прямое условие Фано</h2>
+      <p><b>Определение:</b> Код называется префиксным (или удовлетворяющим прямому условию Фано), если ни одно кодовое слово не совпадает с началом (префиксом) другого кодового слова.</p>
+      
+      <div class="example-box">
+        <strong>Важное следствие:</strong> Прямое условие Фано гарантирует <u>мгновенное декодирование</u>. Это значит, что символ можно распознать сразу после того, как получены все биты его кода, не дожидаясь конца сообщения.
+      </div>
+
+      <div class="notes-grid">
+        <div class="note-item-wrapper">
+          <h4>✅ Правильный код:</h4>
+          <ul>
+            <li>А: <span class="math-font">00</span></li>
+            <li>Б: <span class="math-font">01</span></li>
+            <li>В: <span class="math-font">11</span></li>
+          </ul>
+          <p><small>Никакое слово не является началом другого.</small></p>
+        </div>
+        <div class="note-item-wrapper" style="border-color: #ef4444;">
+          <h4>❌ Ошибочный код:</h4>
+          <ul>
+            <li>А: <span class="math-font">0</span></li>
+            <li>Б: <span class="math-font">01</span></li>
+          </ul>
+          <p><small>Слово "0" — это начало слова "01".</small></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card theory-block">
+      <h2>2. Построение двоичного дерева</h2>
+      <p>Самый надежный способ проверить условие Фано или подобрать коды для новых букв — это построение дерева.</p>
+      
+      <ul class="step-list">
+        <li>Рисуем корень дерева.</li>
+        <li>От каждой узла ведем две ветви: левая (0) и правая (1).</li>
+        <li>Размещаем буквы только на "листьях" (концевых ветках).</li>
+        <li><b>Главное правило:</b> Нельзя вешать букву на узел, если у него есть продолжение вниз.
+</li>
+      </ul>
+
+      <div class="note-item-wrapper" style="text-align: center; background: rgba(0,0,0,0.2);">
+        <p><i>Визуализация структуры дерева:</i></p>
+        <pre style="color: var(--accent); line-height: 1.2; font-size: 14px;">
+             [Корень]
+             /      \
+            0        1
+           / \      / \
+          A   B    C  ( ) <-- Свободное место
+        </pre>
+      </div>
+    </section>
+
+    <section class="card theory-block">
+      <h2>3. Обратное условие Фано</h2>
+      <p>Иногда в задачах (особенно в ЕГЭ) требуется проверить обратное условие.</p>
+      <p><b>Определение:</b> Ни одно кодовое слово не является окончанием (суффиксом) другого кодового слова.</p>
+      
+      <div class="example-box">
+        Обратное условие также позволяет декодировать сообщение однозначно, но процесс разбора идет <b>с конца сообщения к началу</b>.
+      </div>
+    </section>
+
+    <section class="card theory-block">
+      <h2>4. Разбор типовой задачи</h2>
+      <p><i>Условие:</i> Для кодирования букв А, Б, В используются коды 00, 01. Какой кратчайший код можно присвоить букве Г, чтобы соблюдалось условие Фано?</p>
+      
+      <div class="note-item-wrapper">
+        <strong>Решение:</strong>
+        <ol>
+          <li>Ветки 00 и 01 уже заняты (А и Б).</li>
+          <li>Вся большая ветка, начинающаяся с 0, заблокирована.</li>
+          <li>Свободна ветка, начинающаяся с 1.</li>
+          <li>Кратчайший свободный код в этой ветке — это просто <b>1</b>.</li>
+        </ol>
+        <p><b>Ответ: 1</b></p>
+      </div>
+    </section>
+
+    <section class="card theory-block">
+      <h2>5. Шпаргалка для подготовки</h2>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <tr style="border-bottom: 1px solid var(--border);">
+          <th style="text-align: left; padding: 10px;">Свойство</th>
+          <th style="text-align: left; padding: 10px;">Прямое Фано</th>
+          <th style="text-align: left; padding: 10px;">Обратное Фано</th>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 10px;">Запрет на</td>
+          <td style="padding: 10px;">Начало слова</td>
+          <td style="padding: 10px;">Конец слова</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px;">Декодирование</td>
+          <td style="padding: 10px;">С начала (сразу)</td>
+          <td style="padding: 10px;">С конца сообщения</td>
+        </tr>
+      </table>
+    </section>
+
+    <footer style="margin-top: 60px; border-top: 1px solid var(--border); padding-top: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+        <p style="color: var(--muted); margin: 0;">© 2024 Овсиенко Алексей — Учебные материалы</p>
+        <div>
+          <a href="#" class="nav-link" style="font-size: 12px;">Вверх ↑</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Плавное появление блоков при прокрутке
+    const cards = document.querySelectorAll('.card, .note-item-wrapper');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => {
+      card.style.opacity = 0;
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'all 0.6s ease-out';
+      observer.observe(card);
+    });
+  </script>
+</body>
+</html>
