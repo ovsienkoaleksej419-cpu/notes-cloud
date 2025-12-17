@@ -198,3 +198,41 @@ footer {
   color: var(--text-muted);
   font-size: 14px;
 }
+/* --- Исправления только для мобильных устройств (экраны меньше 768px) --- */
+@media (max-width: 768px) {
+    /* Исправляем блоки кода в конспектах */
+    pre, code {
+        white-space: pre-wrap !important; /* Принудительный перенос строк */
+        word-wrap: break-word !important;  /* Разрыв слишком длинных слов */
+        font-size: 14px;                 /* Чуть уменьшаем шрифт кода для мобилок */
+        overflow-x: hidden;              /* Убираем лишнюю прокрутку */
+    }
+
+    /* Исправляем контейнеры, чтобы не было горизонтального скролла */
+    .wrap, .container, .card, .note {
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important; 
+        padding-left: 15px !important;   /* Небольшие отступы по бокам */
+        padding-right: 15px !important;
+    }
+
+    /* Таблицы (например в 7 или 14 задании) */
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto; /* Разрешаем листать только таблицу, а не весь сайт */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Изображения внутри конспектов */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Сетка в списке конспектов */
+    .notes-grid {
+        grid-template-columns: 1fr !important; /* На телефоне карточки в один ряд */
+    }
+}
