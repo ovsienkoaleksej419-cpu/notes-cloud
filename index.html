@@ -10,6 +10,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Дополнительный стиль для выделения кнопки бота */
+    .btn-bot {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #3b82f6; /* Синий цвет для контраста с зеленым */
+      color: #fff !important;
+      padding: 12px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+    .btn-bot:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+    }
+    /* Плавающая кнопка для мобильных */
+    .floating-bot {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: var(--accent);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      z-index: 1000;
+      transition: 0.3s;
+    }
+    .floating-bot:hover { transform: scale(1.1); }
+  </style>
 </head>
 <body>
   <div class="wrap">
@@ -24,7 +63,8 @@
       </div>
       <nav>
         <a href="#about" class="nav-link">Обо мне</a>
-        <a href="notes.html" class="nav-link">Конспекты</a>
+        <a href="notes.html" class="nav-link nav-link-accent">Конспекты</a>
+        <a href="bot.html" class="nav-link" style="color: #3b82f6; font-weight: bold;">AI Бот</a>
         <a href="#projects" class="nav-link">Проекты</a>
         <a href="#contact" class="nav-link">Контакты</a>
       </nav>
@@ -38,8 +78,12 @@
           Я учусь в школе, интересуюсь программированием, играми, серверами и веб-разработкой.
         </p>
         <p style="color:var(--muted)">
-          Этот сайт — моя личная платформа с проектами и конспектами.
+          Этот сайт — моя личная платформа с проектами и конспектами по ЕГЭ.
         </p>
+        
+        <a href="bot.html" class="btn-bot">
+          <span>🤖</span> Спросить у AI-помощника
+        </a>
       </div>
       <div class="avatar">👨‍💻</div>
     </section>
@@ -51,7 +95,7 @@
         <div class="project">
           <h3>Minecraft-сервер «Tesseract»</h3>
           <p style="color:var(--muted)">
-            Настройка серверов, плагины, управление хостингом.
+            Настройка серверов, плагины, управление хостингом. Работа с комьюнити.
           </p>
           <div class="tags">
             <span class="tag">Minecraft</span>
@@ -62,7 +106,7 @@
         <div class="project">
           <h3>Unity-игра «Палач Online»</h3>
           <p style="color:var(--muted)">
-            Онлайн-игра на Unity: логика, интерфейсы, C#.
+            Онлайн-игра на Unity: игровая логика, интерфейсы, сетевое взаимодействие на C#.
           </p>
           <div class="tags">
             <span class="tag">Unity</span>
@@ -76,23 +120,12 @@
 
     <section class="card" id="contact">
       <h2>Контакты</h2>
-      <p>Telegram для связи:</p>
-      <p>
-        <a href="https://t.me/alex_berlin_N1" style="color:var(--accent);font-weight:700;font-size:1.1rem">
+      <p>Свяжитесь со мной напрямую в Telegram:</p>
+      <p style="margin-top: 10px;">
+        <a href="https://t.me/alex_berlin_N1" style="color:var(--accent);font-weight:700;font-size:1.1rem;text-decoration:none">
           @alex_berlin_N1
         </a>
       </p>
     </section>
 
     <footer>
-      © <span id="year"></span> Овсиенко Алексей
-    </footer>
-
-  </div>
-
-  <script>
-    // Автоматическое обновление года в футере
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
