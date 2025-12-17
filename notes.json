@@ -22,5 +22,25 @@
       "title": "Системы исчисления (задание 12)",
       "file": " notes/information/zad12.html"
     }
+        {
+      "title": "Комбинаторика (задание 8)",
+      "file": "notes/information/infzad8.html"
+    },
+    {
+      "title": "Анфлиз алгоритмов (задание 5)",
+      "file": "notes/information/infzad5.html"
+    },
+    {
+      "title": "Обработка тобличных днных (задание 9)",
+      "file": "notes/information/infzad9.html"
+    },
+        {
+      "title": "Кодирование информации (задание 7)",
+      "file": "notes/information/infzad7.html"
+        },
+        {
+      "title": " Выигрышные и проигрышные позиции(задание 19-21)",
+      "file": "notes/information/infzad19.html"
+        }
   ]
 }
