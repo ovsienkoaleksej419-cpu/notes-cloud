@@ -15,10 +15,11 @@ exports.handler = async (event) => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-   // Попробуй использовать просто "gemini-pro" — это самая стабильная точка входа
+   // Используем самую базовую модель, которая доступна везде
 const model = genAI.getGenerativeModel({ 
-  model: "gemini-1.5-flash-latest" // Добавь "-latest" в конец
+    model: "gemini-pro" 
 });
+
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
