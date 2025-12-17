@@ -143,63 +143,60 @@
     </footer>
   </div>
 
-<script>
-    // Используем обычные функции, чтобы избежать SyntaxError
+  <script>
     const chatBox = document.getElementById('chatBox');
     const userInput = document.getElementById('userInput');
     const typingIndicator = document.getElementById('typingIndicator');
 
+    // Функция обработки Enter
     function handleKey(e) {
-        if (e.key === 'Enter') askGemini();
+      if (e.key === 'Enter') askGemini();
     }
 
     async function askGemini() {
-        const text = userInput.value.trim();
-        if (!text) return;
+      const text = userInput.value.trim();
+      if (!text) return;
 
-        // Отображаем сообщение пользователя
-        appendMessage(text, 'user');
-        userInput.value = '';
-        
-        // Показываем индикатор загрузки
-        typingIndicator.style.display = 'block';
-        chatBox.scrollTop = chatBox.scrollHeight;
+      // 1. Добавляем сообщение пользователя
+      appendMessage(text, 'user');
+      userInput.value = '';
+      
+      // 2. Показываем индикатор печати
+      typingIndicator.style.
+display = 'block';
+      chatBox.scrollTop = chatBox.scrollHeight;
 
-        try {
-            // Вызываем твою Netlify Function
-            const response = await fetch('/.netlify/functions/gemini', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: text })
-            });
+      try {
+        // 3. Запрос к нашей Netlify Function
+        const response = await fetch('/.netlify/functions/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: text })
+        });
 
-            if (!response.ok) {
-                throw new Error('Ошибка сервера');
-            }
+        const data = await response.json();
 
-            const data = await response.json();
-            typingIndicator.style.display = 'none';
-
-            if (data.text) {
-                appendMessage(data.text, 'bot');
-            } else {
-                appendMessage("Бот получил пустой ответ.", 'bot');
-            }
-
-        } catch (error) {
-            console.error(error);
-            typingIndicator.style.display = 'none';
-            appendMessage("Ошибка: не удалось связаться с ИИ. Проверь деплой на Netlify.", 'bot');
+        // 4. Убираем индикатор и добавляем ответ
+        typingIndicator.style.display = 'none';
+        if (data.text) {
+          appendMessage(data.text, 'bot');
+        } else {
+          throw new Error();
         }
+
+      } catch (error) {
+        typingIndicator.style.display = 'none';
+        appendMessage("Извини, произошла ошибка при подключении к мозгу бота. Проверь настройки Netlify.", 'bot');
+      }
     }
 
     function appendMessage(text, side) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = msg ${side};
-        msgDiv.innerText = text;
-        chatBox.appendChild(msgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
+      const msgDiv = document.createElement('div');
+      msgDiv.className = msg ${side};
+      msgDiv.innerText = text;
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
-</script>
+  </script>
 </body>
 </html>
