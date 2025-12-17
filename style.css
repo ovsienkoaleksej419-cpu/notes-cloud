@@ -1,146 +1,138 @@
-/* Базовые настройки страницы */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f8fafc; /* Светло-серый фон */
-  color: #334155;           /* Темно-серый текст */
-  margin: 0;
-  line-height: 1.5;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Конспекты</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  
+  <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
 
-/* Контейнер */
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
+<div class="container"> 
 
-/* Карточки (основной элемент) */
-.note {
-  background: #ffffff;      /* Белый фон */
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0; /* Светло-серая рамка */
-  box-shadow: 0 4px 12px rgba(45, 212, 191, 0.08); /* Мятная тень */
-  box-sizing: border-box;
-}
+  <header class="note" style="margin-top:20px; margin-bottom: 20px;">
+    <h1>📚 Конспекты</h1>
+  </header>
 
-/* Шапка с мятным акцентом */
-header.note {
-  border-left: 5px solid #2dd4bf; /* Мятная полоса */
-  background: linear-gradient(to right, #ffffff, #f0fdfa);
-}
+  <section class="note" style="margin-bottom: 20px;">
+    <input
+      id="search"
+      placeholder="Поиск по конспектам..."
+      autocomplete="off"
+      class="search-input"
+    >
+    <a href="index.html" class="back-link">
+      ← На главную
+    </a>
+  </section>
 
-header.note h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: #2dd4bf;
-}
+  <div id="notes"></div>
 
-/* Стили заголовков разделов (Физика, Информатика) */
-.section h2 {
-  font-size: 1.4rem;
-  margin: 30px 0 15px;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-}
+</div>
 
-.section h2::after {
-  content: "";
-  flex: 1;
-  height: 2px;
-  background: #e2e8f0;
-  margin-left: 15px;
-}
+<footer>
+  <div class="container">
+    © <span id="year"></span> Овсиенко Алексей
+  </div>
+</footer>
 
-/* Поле поиска */
-.search-input {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 2px solid #e2e8f0;
-  background: #ffffff;
-  color: #334155;
-  outline: none;
-  transition: all 0.2s;
-  box-sizing: border-box;
-  margin-bottom: 15px;
-}
+<script>
+/* ===== ГОД ===== */
+document.getElementById('year').textContent = new Date().getFullYear();
 
-.search-input:focus {
-  border-color: #2dd4bf;
-  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.15);
-}
+let allNotes = {};
 
-/* Ссылка "Назад" */
-.back-link {
-  color: #64748b;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
+/* ===== ЗАГРУЗКА notes.json ===== */
+fetch('/notes.json')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+    return response.text();
+  })
+  .then(text => {
+    const data = JSON.parse(text);
+    allNotes = data;
+    renderNotes(data);
+  })
+  .catch(err => {
+    console.error('Ошибка загрузки:', err);
+    document.getElementById('notes').innerHTML = `
+      <p class="note" style="color:#e3342f;text-align:center;">
+        Ошибка загрузки конспектов.<br>
+        Проверьте наличие <b>notes.json</b> в корне сайта.
+      </p>
+    `;
+  });
 
-.back-link:hover {
-  color: #2dd4bf;
-}
+/* ===== ОТОБРАЖЕНИЕ ===== */
+function renderNotes(data) {
+  const container = document.getElementById('notes');
+  container.innerHTML = '';
 
-/* Сетка карточек */
-.notes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 15px;
-}
+  let hasAny = false;
 
-/* Анимация появления карточек */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+  for (const section in data) {
+    if (
+      !Object.prototype.hasOwnProperty.call(data, section) 
+      !Array.isArray(data[section]) 
+      data[section].length === 0
+    ) continue;
+
+    hasAny = true;
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'section';
+    sectionEl.innerHTML = <h2>${section}</h2>;
+
+    const grid = document.createElement('div');
+    grid.className = 'notes-grid';
+
+    data[section].forEach(note => {
+      if (!note  !note.title  !note.file) return;
+
+      const card = document.createElement('div');
+      card.className = 'note-item-wrapper note';
+
+      card.innerHTML = `
+        <a href="${note.file}" class="note-link" target="_blank">
+          📄 ${note.title}
+        </a>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    sectionEl.appendChild(grid);
+    container.appendChild(sectionEl);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  if (!hasAny) {
+    container.innerHTML = `
+      <p class="note" style="text-align:center;">
+        Конспекты не найдены
+      </p>
+    `;
   }
 }
 
-/* Карточки конспектов */
-.note-item-wrapper {
-  display: flex;
-  align-items: center;
-  transition: all 0.3s ease;
-  animation: fadeInUp 0.4s ease forwards;
-}
+/* ===== ПОИСК ===== */
+document.getElementById('search').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  const filtered = {};
 
-.note-item-wrapper:hover {
-  transform: translateY(-3px);
-  border-color: #2dd4bf;
-  box-shadow: 0 8px 20px rgba(45, 212, 191, 0.15);
-}
+  for (const section in allNotes) {
+    if (!Object.prototype.hasOwnProperty.call(allNotes, section)) continue;
 
-.note-link {
-  text-decoration: none;
-  color: #334155;
-  font-weight: 600;
-  display: block;
-  width: 100%;
-}
+    filtered[section] = allNotes[section].filter(note =>
+      note.title.toLowerCase().includes(q)
+    );
+  }
 
-.note-item-wrapper:hover .note-link {
-  color: #14b8a6; /* Цвет текста при наведении */
-}
+  renderNotes(filtered);
+});
+</script>
 
-/* Футер */
-footer {
-  margin-top: auto;
-  padding: 25px 0;
-  text-align: center;
-  border-top: 1px solid #e2e8f0;
-  color: #94a3b8;
-  font-size: 0.9rem;
-}
+</body>
+</html>
