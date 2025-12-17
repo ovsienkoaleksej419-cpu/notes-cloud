@@ -144,27 +144,20 @@
   </div>
 
   <script>
-const chatBox = document.getElementById('chatBox');
-  const userInput = document.getElementById('userInput');
-  const typingIndicator = document.getElementById('typingIndicator');
-
-  // Функция для обработки нажатия Enter
-  window.handleKey = function(e) {
-    if (e.key === 'Enter') askGemini();
-  };
-
-  // Основная функция отправки
+<script>
   window.askGemini = async function() {
-    const text = userInput.value.trim();
+    const input = document.getElementById('userInput');
+    const box = document.getElementById('chatBox');
+    const text = input.value.trim();
+    
     if (!text) return;
 
     // Добавляем сообщение пользователя
-    appendMessage(text, 'user');
-    userInput.value = '';
-    
-    // Показываем анимацию загрузки
-    typingIndicator.style.display = 'block';
-    chatBox.scrollTop = chatBox.scrollHeight;
+    const uMsg = document.createElement('div');
+    uMsg.className = 'msg user';
+    uMsg.innerText = text;
+    box.appendChild(uMsg);
+    input.value = '';
 
     try {
       const response = await fetch('/.netlify/functions/gemini', {
@@ -174,27 +167,24 @@ const chatBox = document.getElementById('chatBox');
       });
 
       const data = await response.json();
-      typingIndicator.style.display = 'none';
-
-      if (data.text) {
-        appendMessage(data.text, 'bot');
-      } else {
-        appendMessage("Ошибка: Бот прислал пустой ответ.", 'bot');
-      }
-    } catch (error) {
-      typingIndicator.style.display = 'none';
-      appendMessage("Ошибка связи с сервером Netlify.", 'bot');
-      console.error(error);
+      
+      const bMsg = document.createElement('div');
+      bMsg.className = 'msg bot';
+      // Если пришла ошибка от Google, выводим её текст
+      bMsg.innerText = data.text || "Ошибка API. Проверь логи в Netlify.";
+      box.appendChild(bMsg);
+      
+    } catch (e) {
+      console.error(e);
     }
+    box.scrollTop = box.scrollHeight;
   };
 
-  function appendMessage(text, side) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'msg ' + side;
-    msgDiv.innerText = text;
-    chatBox.appendChild(msgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
+  // Чтобы Enter работал
+  window.handleKey = function(e) {
+    if (e.key === 'Enter') window.askGemini();
+  };
+</script>
   </script>
 </body>
 </html>
