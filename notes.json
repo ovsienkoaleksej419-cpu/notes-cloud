@@ -1,21 +1,21 @@
 {
   "Физика": [
     {
-      "title": "МКТ — молекулярно-кинетическая теория",
+      "title": "МКТ — молекулярно-кинетическая теория (задание 8)",
       "file": "notes/physics/mkt.html"
     }
   ],
   "Информатика": [
     {
-      "title": "Импликация и Эквиваленция",
+      "title": "Импликация и Эквиваленция (задание 2)",
       "file": "notes/information/imp and ekv.html"
     },
     {
-      "title": "Закон фано",
+      "title": "Закон фано (задание 4)",
       "file": "notes/information/fano_law.html"
     },
     {
-      "title": "16 задание",
+      "title": "Рекурсивные Алгоритмы (задание 16)",
       "file": "notes/information/16zadania.html"
     }
   ]
