@@ -102,50 +102,57 @@
   </div>
 
   <div class="note">
-    <h2>📊 Газовые законы</h2>
+  <h2>📊 Газовые процессы</h2>
 
-    <div class="tabs">
-      <span class="tab active" onclick="showGraph('isoT')">Изотермический</span>
-      <span class="tab" onclick="showGraph('isoV')">Изохорный</span>
-      <span class="tab" onclick="showGraph('isoP')">Изобарный</span>
+  <div class="graph-window">
+
+    <div class="graph-header">
+      <span class="graph-tab active" onclick="switchGraph('g1', this)">Изотермический</span>
+      <span class="graph-tab" onclick="switchGraph('g2', this)">Изохорный</span>
+      <span class="graph-tab" onclick="switchGraph('g3', this)">Изобарный</span>
     </div>
 
     <!-- ИЗОТЕРМА -->
-    <div id="isoT" class="graph active">
-      <p><b>T = const</b> → <code>p·V = const</code></p>
-      <svg width="300" height="220">
-        <line x1="40" y1="10" x2="40" y2="200" stroke="#000"/>
-        <line x1="40" y1="200" x2="290" y2="200" stroke="#000"/>
-        <path d="M 60 40 Q 200 160 280 190" stroke="#4f46e5" fill="none" stroke-width="2"/>
-        <text x="10" y="20">p</text>
-        <text x="270" y="215">V</text>
+    <div id="g1" class="graph-box active">
+      <div class="graph-title">T = const → p · V = const</div>
+      <svg width="320" height="220">
+        <line x1="40" y1="20" x2="40" y2="190" stroke="#111"/>
+        <line x1="40" y1="190" x2="300" y2="190" stroke="#111"/>
+        <path d="M60 40 C140 140 220 170 290 185"
+              stroke="#6366f1" stroke-width="3" fill="none"/>
+        <text x="10" y="25">p</text>
+        <text x="290" y="210">V</text>
       </svg>
     </div>
 
     <!-- ИЗОХОРА -->
-    <div id="isoV" class="graph">
-      <p><b>V = const</b> → <code>p / T = const</code></p>
-      <svg width="300" height="220">
-        <line x1="40" y1="10" x2="40" y2="200" stroke="#000"/>
-        <line x1="40" y1="200" x2="290" y2="200" stroke="#000"/>
-        <line x1="150" y1="200" x2="150" y2="40" stroke="#4f46e5" stroke-width="2"/>
-        <text x="10" y="20">p</text>
-        <text x="270" y="215">T</text>
+    <div id="g2" class="graph-box">
+      <div class="graph-title">V = const → p / T = const</div>
+      <svg width="320" height="220">
+        <line x1="40" y1="20" x2="40" y2="190" stroke="#111"/>
+        <line x1="40" y1="190" x2="300" y2="190" stroke="#111"/>
+        <line x1="160" y1="190" x2="160" y2="40"
+              stroke="#6366f1" stroke-width="3"/>
+        <text x="10" y="25">p</text>
+        <text x="290" y="210">T</text>
       </svg>
     </div>
 
     <!-- ИЗОБАРА -->
-    <div id="isoP" class="graph">
-      <p><b>p = const</b> → <code>V / T = const</code></p>
-      <svg width="300" height="220">
-        <line x1="40" y1="10" x2="40" y2="200" stroke="#000"/>
-        <line x1="40" y1="200" x2="290" y2="200" stroke="#000"/>
-        <line x1="40" y1="120" x2="280" y2="120" stroke="#4f46e5" stroke-width="2"/>
-        <text x="10" y="20">V</text>
-        <text x="270" y="215">T</text>
+    <div id="g3" class="graph-box">
+      <div class="graph-title">p = const → V / T = const</div>
+      <svg width="320" height="220">
+        <line x1="40" y1="20" x2="40" y2="190" stroke="#111"/>
+        <line x1="40" y1="190" x2="300" y2="190" stroke="#111"/>
+        <line x1="40" y1="110" x2="290" y2="110"
+              stroke="#6366f1" stroke-width="3"/>
+        <text x="10" y="25">V</text>
+        <text x="290" y="210">T</text>
       </svg>
     </div>
+
   </div>
+</div>
 
   <div class="note">
     <h2>🔥 Внутренняя энергия</h2>
@@ -165,12 +172,14 @@
 </div>
 
 <script>
-function showGraph(id) {
-  document.querySelectorAll('.graph').forEach(g => g.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+function switchGraph(id, el) {
+  document.querySelectorAll('.graph-box')
+    .forEach(g => g.classList.remove('active'));
+  document.querySelectorAll('.graph-tab')
+    .forEach(t => t.classList.remove('active'));
 
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  el.classList.add('active');
 }
 </script>
 
