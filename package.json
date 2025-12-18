@@ -1,7 +1,10 @@
 {
-  "name": "alex-site",
+  "name": "alex-bot-project",
   "version": "1.0.0",
-  "dependencies": {
-    
-  }
+  "description": "Бот для конспектов ЕГЭ",
+  "main": "index.js",
+  "dependencies": {},
+  "author": "Alex",
+  "license": "ISC"
 }
+
