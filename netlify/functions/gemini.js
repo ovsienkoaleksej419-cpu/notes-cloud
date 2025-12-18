@@ -5,21 +5,25 @@ exports.handler = async (event) => {
     "Content-Type": "application/json"
   };
 
-  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: "" };
+  }
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    const body = JSON.parse(event.body);
-    const userPrompt = body.prompt || "Привет";
+    if (!apiKey) throw new Error("API KEY NOT FOUND");
 
-    // ИСПРАВЛЕНО: v1 вместо v1beta
-    const url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey;
+    const { prompt } = JSON.parse(event.body || "{}");
+
+    const url =
+      "https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro:generateContent?key=" +
+      apiKey;
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: userPrompt }] }]
+        contents: [{ parts: [{ text: prompt || "Привет" }] }]
       })
     });
 
@@ -29,23 +33,26 @@ exports.handler = async (event) => {
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ reply: "Ошибка Google: " + (data.error?.message || "неизвестно") })
+        body: JSON.stringify({
+          reply: "Ошибка Google: " + (data.error?.message || "неизвестно")
+        })
       };
     }
 
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Бот промолчал";
-
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: resultText })
+      body: JSON.stringify({
+        reply:
+          data.candidates?.[0]?.content?.parts?.[0]?.text ||
+          "Ответ пустой"
+      })
     };
-
-  } catch (error) {
+  } catch (e) {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: "Ошибка функции: " + error.message })
+      body: JSON.stringify({ reply: "Ошибка функции: " + e.message })
     };
   }
 };
