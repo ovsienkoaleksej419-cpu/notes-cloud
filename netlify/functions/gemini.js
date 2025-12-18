@@ -13,8 +13,8 @@ export async function handler(event) {
 
     const { prompt } = JSON.parse(event.body);
 
-    // Используем САМУЮ СТАБИЛЬНУЮ модель, которая есть у всех
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+    // ВАЖНО: Используем 1.5-flash и версию v1beta
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
@@ -22,7 +22,7 @@ export async function handler(event) {
       body: JSON.stringify({
         contents: [{
           parts: [{ 
-            text: "Ты — AlexBot, ассистент Алексея. Отвечай кратко. Вопрос: " + prompt 
+            text: "Ты — AlexBot, ассистент на сайте Алексея. Помогаешь с конспектами ЕГЭ по информатике. Отвечай кратко. Вопрос: " + prompt 
           }]
         }]
       })
@@ -31,8 +31,8 @@ export async function handler(event) {
     const data = await response.json();
 
     if (!response.ok) {
-      // Если даже gemini-pro выдает 404, значит ключ еще не прошел активацию
-      throw new Error(data.error?.message || "Google еще не активировал ваш проект.");
+      console.error("Google API Error:", data);
+      throw new Error(data.error?.message || "Ошибка модели");
     }
 
     return {
@@ -51,4 +51,5 @@ export async function handler(event) {
     };
   }
 }
+
 
