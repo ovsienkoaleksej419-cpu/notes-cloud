@@ -13,17 +13,17 @@ export async function handler(event) {
 
     const { prompt } = JSON.parse(event.body);
 
-    // Самый надежный URL на декабрь 2025 года
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-
-    const instruction = "Ты — AlexBot, ассистент Алексея. Помогаешь с конспектами ЕГЭ. Отвечай кратко. Вопрос: ";
+    // Используем САМУЮ СТАБИЛЬНУЮ модель, которая есть у всех
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{
-          parts: [{ text: instruction + prompt }]
+          parts: [{ 
+            text: "Ты — AlexBot, ассистент Алексея. Отвечай кратко. Вопрос: " + prompt 
+          }]
         }]
       })
     });
@@ -31,13 +31,16 @@ export async function handler(event) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || "Модель еще просыпается...");
+      // Если даже gemini-pro выдает 404, значит ключ еще не прошел активацию
+      throw new Error(data.error?.message || "Google еще не активировал ваш проект.");
     }
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ text: data.candidates[0].content.parts[0].text })
+      body: JSON.stringify({ 
+        text: data.candidates[0].content.parts[0].text 
+      })
     };
 
   } catch (err) {
@@ -48,5 +51,4 @@ export async function handler(event) {
     };
   }
 }
-
 
