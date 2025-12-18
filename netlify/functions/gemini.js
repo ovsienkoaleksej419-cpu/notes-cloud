@@ -11,7 +11,8 @@ exports.handler = async (event) => {
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    const { prompt } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
+    const userPrompt = body.prompt || "Привет";
 
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
 
@@ -19,30 +20,31 @@ exports.handler = async (event) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Ты AlexBot. Ответь кратко: " + prompt }] }]
+        contents: [{ parts: [{ text: userPrompt }] }]
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-        return {
-          statusCode: response.status,
-          headers,
-          body: JSON.stringify({ reply: "Ошибка API: " + (data.error?.message || "Неизвестно") })
-        };
+      return {
+        statusCode: response.status,
+        headers,
+        body: JSON.stringify({ reply: "Ошибка API: " + (data.error?.message || "Неизвестно") })
+      };
     }
 
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Нет ответа от API";
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Пустой ответ";
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({ reply: resultText })
     };
+
   } catch (error) {
     return {
-      statusCode: 500, // Была запятая, теперь число 500
+      statusCode: 500,
       headers,
       body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
     };
