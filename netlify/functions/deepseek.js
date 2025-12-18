@@ -1,84 +1,59 @@
-export async function handler(event) {
+exports.handler = async (event) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
     "Content-Type": "application/json"
   };
 
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
-  }
+  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
 
   try {
     const body = JSON.parse(event.body || "{}");
     const prompt = body.prompt?.trim();
+    // В Netlify переименуй переменную или используй эту
+    const apiKey = process.env.DEEPSEEK_API_KEY; 
 
-    if (!prompt) {
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ reply: "Ты ничего не написал 🙂" })
-      };
-    }
+    if (!apiKey) throw new Error("API ключ не найден в Netlify");
 
-    const apiKey = process.env.DEEPSEEK_API_KEY;
-    if (!apiKey) throw new Error("DEEPSEEK_API_KEY не задан");
-
-    const response = await fetch("https://api.deepseek.com/chat/completions", {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": Bearer ${apiKey},
+        "HTTP-Referer": "https://alexberlib6.netlify.app", // Твой сайт для OpenRouter
+        "X-Title": "AlexBot",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
-        messages: [
-          {
-            role: "system",
-            content: "Ты — AlexBot. Помогаешь с конспектами ЕГЭ. Отвечай кратко и по делу."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.6
+        "model": "deepseek/deepseek-chat", // Важно: путь модели в OpenRouter
+        "messages": [
+          { "role": "user", "content": prompt || "Привет" }
+        ]
       })
     });
 
     const data = await response.json();
 
-    // 👇 ЛОГ ДЛЯ NETLIFY (очень важно)
-    console.log("DeepSeek raw response:", JSON.stringify(data));
-
-    if (!response.ok  !data.choices  !data.choices.length) {
+    if (!response.ok) {
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({
-          reply: "DeepSeek не вернул ответ. Проверь лимиты или API-ключ."
-        })
+        body: JSON.stringify({ reply: "OpenRouter Error: " + (data.error?.message || "ошибка запроса") })
       };
     }
 
-    const text = data.choices[0].message?.content;
+    const text = data.choices?.[0]?.message?.content || "Пустой ответ";
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({
-        reply: text || "Ответ пустой 🤷"
-      })
+      body: JSON.stringify({ reply: text })
     };
 
   } catch (error) {
-    console.error("Ошибка DeepSeek:", error);
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({
-        reply: "Ошибка бота: " + error.message
-      })
+      body: JSON.stringify({ reply: "Ошибка: " + error.message })
     };
   }
-}
+};
