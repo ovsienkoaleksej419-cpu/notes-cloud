@@ -5,9 +5,7 @@ export async function handler(event) {
     "Content-Type": "application/json"
   };
 
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
-  }
+  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
@@ -15,54 +13,41 @@ export async function handler(event) {
 
     const { prompt } = JSON.parse(event.body);
 
-    // Используем v1beta и правильный формат полей (system_// Попробуем версию v1, она часто стабильнее для новых ключей
-const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Используем v1, она самая стабильная
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    // Переносим инструкцию прямо в prompt, чтобы API не ругалось на неизвестные поля
+    const instruction = "Ты — AlexBot, ассистент Алексея. Помогаешь с конспектами ЕГЭ. Отвечай кратко. Вопрос пользователя: ";
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }]
-          }
-        ],
-        system_instruction: {
-          parts: [{
-            text: "Ты — AlexBot, ассистент на сайте Алексея Овсиенко. Твоя задача: помогать с конспектами ЕГЭ по информатике и отвечать на вопросы о проектах Алексея (Tesseract, Палач Online). Отвечай кратко и только на русском языке."
-          }]
-        },
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 800
-        }
+        contents: [{
+          parts: [{ text: instruction + prompt }]
+        }]
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Google API Error:", data);
       throw new Error(data.error?.message || "Ошибка API");
     }
-
-    const botAnswer = data.candidates?.[0]?.content?.parts?.[0]?.text || "Извини, я не смог придумать ответ.";
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ text: botAnswer })
+      body: JSON.stringify({
+        text: data.candidates[0].content.parts[0].text
+      })
     };
 
   } catch (err) {
-    console.error("Function error:", err);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({
-        text: "Ошибка: " + err.message
-      })
+      body: JSON.stringify({ text: "Ошибка: " + err.message })
     };
   }
 }
