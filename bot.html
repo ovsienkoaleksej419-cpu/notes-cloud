@@ -37,12 +37,12 @@
     const sendBtn = document.getElementById('sendBtn');
 
     function addMessage(text, type) {
-        const div = document.createElement('div');
-        div.className = msg ${type};
-        div.innerText = text;
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
+    const div = document.createElement('div');
+    div.className = msg ${type};
+    div.innerText = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
 
     async function handleSend() {
         const message = userInput.value.trim();
