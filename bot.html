@@ -1,188 +1,102 @@
-<!doctype html>
+ <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AlexBot — Интеллектуальный помощник</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Стили специально для интерфейса чата */
-    .chat-wrapper {
-      display: flex;
-      flex-direction: column;
-      height: 70vh;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlexBot — Помощник по конспектам</title>
+    
+    <link rel="stylesheet" href="../../style.css">
 
-    #chatBox {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .msg {
-      padding: 12px 16px;
-      border-radius: 15px;
-      max-width: 80%;
-      font-size: 15px;
-      line-height: 1.4;
-      word-wrap: break-word;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .bot {
-      background: var(--border);
-      color: var(--text);
-      align-self: flex-start;
-      border-bottom-left-radius: 2px;
-    }
-
-    .user {
-      background: var(--accent);
-      color: #000;
-      align-self: flex-end;
-      border-bottom-right-radius: 2px;
-      font-weight: 500;
-    }
-
-    .input-area {
-      display: flex;
-      gap: 10px;
-      padding: 20px;
-      background: rgba(0,0,0,0.2);
-      border-top: 1px solid var(--border);
-    }
-
-    input#userInput {
-      flex: 1;
-      background: #010409;
-      border: 1px solid var(--border);
-      color: white;
-      padding: 12px;
-      border-radius: 8px;
-      outline: none;
-    }
-
-    input#userInput:focus {
-      border-color: var(--accent);
-    }
-
-    .send-btn {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 0 20px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .send-btn:hover {
-      opacity: 0.8;
-    }
-
-    .typing {
-      font-style: italic;
-      color: var(--muted);
-      font-size: 13px;
-      display: none;
-      margin-left: 20px;
-      margin-bottom: 10px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Адаптация для мобилок */
-    @media (max-width: 768px) {
-      .chat-wrapper { height: 80vh; }
-      .msg { max-width: 90%; font-size: 14px; }
-    }
-  </style>
+    <style>
+        /* Базовая верстка, чтобы чат работал корректно */
+        body { font-family: sans-serif; background-color: #f4f4f4; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .chat-container { width: 100%; max-width: 500px; height: 80vh; background: white; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
+        
+        #chatBox { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: #fafafa; }
+        
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 15px; line-height: 1.4; font-size: 15px; word-wrap: break-word; }
+        .user { align-self: flex-end; background-color: #007bff; color: white; border-bottom-right-radius: 2px; }
+        .bot { align-self: flex-start; background-color: #e9e9eb; color: #333; border-bottom-left-radius: 2px; }
+        
+        .input-area { display: flex; padding: 15px; border-top: 1px solid #eee; background: white; }
+        #userInput { flex: 1; border: 1px solid #ddd; padding: 10px 15px; border-radius: 25px; outline: none; transition: border 0.3s; }
+        #userInput:focus { border-color: #007bff; }
+        
+        #sendBtn { background: #007bff; color: white; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 25px; cursor: pointer; transition: background 0.3s; }
+        #sendBtn:hover { background: #0056b3; }
+        
+        .typing { font-size: 12px; color: #888; margin-bottom: 10px; display: none; padding-left: 20px; }
+    </style>
 </head>
 <body>
 
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo">🤖</div>
-        <div>
-          <div style="font-weight:800;font-size:18px">AlexBot</div>
-          <div style="font-size:13px;color:var(--muted)">На базе Gemini AI</div>
-        </div>
-      </div>
-      <nav>
-        <a href="index.html" class="nav-link">На главную</a>
-      </nav>
-    </header>
-
-    <div class="chat-wrapper">
-      <div id="chatBox">
-        <div class="msg bot"> Привет! Я умный ассистент Алексея. Я знаю всё о его проектах (Tesseract, Палач Online) и могу помочь с конспектами ЕГЭ. Что тебя интересует?</div>
-      </div>
-      
-      <div id="typingIndicator" class="typing">Бот печатает...</div>
-
-      <div class="input-area">
-        <input type="text" id="userInput" placeholder="Спроси что-нибудь..." onkeypress="handleKey(event)">
-        <button class="send-btn" onclick="askGemini()">Отправить</button>
-      </div>
+<div class="chat-container">
+    <div id="chatBox">
+        <div class="msg bot">Привет! Я AlexBot. Чем могу помочь с конспектами по информатике?</div>
     </div>
-
-    <footer style="margin-top: 20px; text-align: center; color: var(--muted); font-size: 12px;">
-      Работает через Netlify Functions & Google Gemini API
-    </footer>
-  </div>
-
-  <script>
-  window.askGemini = async function() {
-    const input = document.getElementById('userInput');
-    const box = document.getElementById('chatBox');
-    const text = input.value.trim();
     
-    if (!text) return;
+    <div id="typingIndicator" class="typing">AlexBot печатает...</div>
 
-    // Добавляем сообщение пользователя
-    const uMsg = document.createElement('div');
-    uMsg.className = 'msg user';
-    uMsg.innerText = text;
-    box.appendChild(uMsg);
-    input.value = '';
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Напишите сообщение..." autocomplete="off">
+        <button id="sendBtn" onclick="sendToBot()">Отправить</button>
+    </div>
+</div>
 
-    try {
-      const response = await fetch('/.netlify/functions/gemini', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: text })
-      });
+<script>
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    const typingIndicator = document.getElementById('typingIndicator');
 
-      const data = await response.json();
-      
-      const bMsg = document.createElement('div');
-      bMsg.className = 'msg bot';
-      // Если пришла ошибка от Google, выводим её текст
-      bMsg.innerText = data.text || "Ошибка API. Проверь логи в Netlify.";
-      box.appendChild(bMsg);
-      
-    } catch (e) {
-      console.error(e);
+    // Функция для добавления сообщений в чат
+    function appendMessage(text, role) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `msg ${role}`;
+        msgDiv.innerText = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
-    box.scrollTop = box.scrollHeight;
-  };
 
-  // Чтобы Enter работал
-  window.handleKey = function(e) {
-    if (e.key === 'Enter') window.askGemini();
-  };
-  </script>
+    async function sendToBot() {
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        // Отображаем сообщение пользователя
+        appendMessage(text, 'user');
+        userInput.value = '';
+        
+        // Показываем индикатор загрузки
+        typingIndicator.style.display = 'block';
+
+        try {
+            const response = await fetch('/.netlify/functions/gemini', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: text })
+            });
+
+            const data = await response.json();
+            
+            typingIndicator.style.display = 'none';
+
+            if (data.text) {
+                appendMessage(data.text, 'bot');
+            } else {
+                appendMessage("Ошибка: Бот прислал пустой ответ.", 'bot');
+            }
+        } catch (err) {
+            typingIndicator.style.display = 'none';
+            appendMessage("Ошибка связи с сервером.", 'bot');
+            console.error(err);
+        }
+    }
+
+    // Отправка по нажатию Enter
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendToBot();
+    });
+</script>
+
 </body>
 </html>
+
