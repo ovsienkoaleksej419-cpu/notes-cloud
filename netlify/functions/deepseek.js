@@ -1,4 +1,4 @@
-exports.handler = async (event) => {
+export async function handler(event) {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
@@ -24,7 +24,6 @@ exports.handler = async (event) => {
     const apiKey = process.env.DEEPSEEK_API_KEY;
     if (!apiKey) throw new Error("DEEPSEEK_API_KEY не задан в настройках Netlify");
 
-    // Используем встроенный fetch и правильные обратные кавычки для Bearer
     const response = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
       headers: {
@@ -34,7 +33,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: "deepseek-chat",
         messages: [
-          { role: "system", content: "Ты — AlexBot. Помогаешь с конспектами ЕГЭ. Отвечай кратко и по делу." },
+          { role: "system", content: "Ты — AlexBot. Помогаешь с конспектами ЕГЭ. Отвечай кратко." },
           { role: "user", content: prompt }
         ],
         temperature: 0.6
@@ -44,14 +43,15 @@ exports.handler = async (event) => {
     const data = await response.json();
 
     if (!response.ok) {
+      // Если ошибка в ключе или балансе, бот сам об этом напишет
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ reply: "DeepSeek Error: " + (data.error?.message || "ошибка лимитов") })
+        body: JSON.stringify({ reply: "Ошибка DeepSeek: " + (data.error?.message || "проверь баланс API") })
       };
     }
 
-    const text = data.choices?.[0]?.message?.content || "Ответ пустой 🤷";
+    const text = data.choices?.[0]?.message?.content || "Бот прислал пустой ответ 🤷";
 
     return {
       statusCode: 200,
@@ -63,7 +63,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: "Ошибка бота: " + error.message })
+      body: JSON.stringify({ reply: "Ошибка функции: " + error.message })
     };
   }
-};
+}
