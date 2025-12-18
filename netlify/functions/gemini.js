@@ -5,57 +5,54 @@ exports.handler = async (event) => {
     "Content-Type": "application/json"
   };
 
+  // Обработка предзапроса (CORS)
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
   }
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) throw new Error("API_KEY_MISSING");
+    if (!apiKey) throw new Error("API_KEY_MISSING: Проверьте переменные в Netlify");
 
     const { prompt } = JSON.parse(event.body);
 
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: prompt }]
-            }
-          ]
-        })
-      }
-    );
+    // Используем v1beta — это решит проблему с 404
+    const url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey};
 
-    if (!response.ok) {
-      const errText = await response.text();
-      throw new Error(errText);
-    }
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: "Ты — AlexBot, ассистент по конспектам. Отвечай кратко и по делу. Вопрос: " + prompt }]
+          }
+        ]
+      })
+    });
 
     const data = await response.json();
 
-    const text =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "Нет ответа от модели.";
+    if (!response.ok) {
+      // Выводим детальную ошибку от Google, если она будет
+      throw new Error(data.error?.message || JSON.stringify(data));
+    }
+
+    const botMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || "Извини, я не смог сформулировать ответ.";
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ text })
+      body: JSON.stringify({ text: botMessage })
     };
 
   } catch (error) {
-    console.error("Gemini error:", error);
-
+    console.error("Gemini Error:", error.message);
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        text: "Ошибка бота: " + error.message
+        text: "Ошибка: " + error.message
       })
     };
   }
