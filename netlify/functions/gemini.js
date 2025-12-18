@@ -15,40 +15,44 @@ export async function handler(event) {
 
     const { prompt } = JSON.parse(event.body);
 
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: prompt }]
-            }
-          ],
-          systemInstruction: {
-            parts: [{
-              text: "Ты — AlexBot, ассистент на сайте Алексея. Помогаешь с конспектами ЕГЭ по информатике. Отвечай кратко и понятно."
-            }]
+    // Используем v1beta и правильный формат полей (system_instruction)
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }]
           }
-        })
-      }
-    );
+        ],
+        system_instruction: {
+          parts: [{
+            text: "Ты — AlexBot, ассистент на сайте Алексея Овсиенко. Твоя задача: помогать с конспектами ЕГЭ по информатике и отвечать на вопросы о проектах Алексея (Tesseract, Палач Online). Отвечай кратко и только на русском языке."
+          }]
+        },
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 800
+        }
+      })
+    });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini error:", data);
-      throw new Error(data.error?.message || "Gemini API error");
+      console.error("Google API Error:", data);
+      throw new Error(data.error?.message || "Ошибка API");
     }
+
+    const botAnswer = data.candidates?.[0]?.content?.parts?.[0]?.text || "Извини, я не смог придумать ответ.";
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({
-        text: data.candidates[0].content.parts[0].text
-      })
+      body: JSON.stringify({ text: botAnswer })
     };
 
   } catch (err) {
@@ -57,8 +61,9 @@ export async function handler(event) {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        text: "Ошибка бота: " + err.message
+        text: "Ошибка: " + err.message
       })
     };
   }
 }
+
