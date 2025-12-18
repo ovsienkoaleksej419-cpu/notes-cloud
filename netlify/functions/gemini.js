@@ -14,13 +14,13 @@ exports.handler = async (event) => {
     const body = JSON.parse(event.body);
     const prompt = body.prompt || "Привет";
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey};
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Ты — AlexBot, помощник Алексея. Отвечай кратко на вопрос: " + prompt }] }]
+        contents: [{ parts: [{ text: "Ты — AlexBot. Отвечай кратко: " + prompt }] }]
       })
     });
 
@@ -48,5 +48,5 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
     };
-  }
-};
+  } // <-- Вот эта скобка закрывает catch
+}; // <-- А эта закрывает exports.handler
