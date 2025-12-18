@@ -1,17 +1,40 @@
 const fetch = require('node-fetch');
+
 exports.handler = async (event) => {
-  const headers = { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" };
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json"
+  };
+
+  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
+
   try {
+    const apiKey = process.env.GEMINI_API_KEY;
     const body = JSON.parse(event.body);
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.GEMINI_API_KEY, {
+    const prompt = body.prompt || "Привет";
+
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts: [{ text: body.prompt }] }] })
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+      })
     });
+
     const data = await response.json();
-    return { statusCode: 200, headers, body: JSON.stringify({ reply: data.candidates?.[0]?.content?.parts?.[0]?.text || "Ошибка API" }) };
-  } catch (e) {
-    return { statusCode: 500, headers, body: JSON.stringify({ reply: "Ошибка: " + e.message }) };
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Нет ответа";
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ reply: resultText })
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ reply: "Ошибка: " + error.message })
+    };
   }
 };
-
