@@ -48,5 +48,5 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
     };
-  } // <-- Вот эта скобка закрывает catch
-}; // <-- А эта закрывает exports.handler
+  }
+};
