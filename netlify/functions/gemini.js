@@ -42,11 +42,12 @@ exports.handler = async (event) => {
       body: JSON.stringify({ reply: resultText })
     };
 
-  } catch (error) {
+} catch (error) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
+      body: JSON.stringify({ reply: "Ошибка: " + error.message })
     };
   }
 };
+
