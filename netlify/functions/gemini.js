@@ -13,11 +13,10 @@ export async function handler(event) {
 
     const { prompt } = JSON.parse(event.body);
 
-    // Используем v1, она самая стабильная
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Самый надежный URL на декабрь 2025 года
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
-    // Переносим инструкцию прямо в prompt, чтобы API не ругалось на неизвестные поля
-    const instruction = "Ты — AlexBot, ассистент Алексея. Помогаешь с конспектами ЕГЭ. Отвечай кратко. Вопрос пользователя: ";
+    const instruction = "Ты — AlexBot, ассистент Алексея. Помогаешь с конспектами ЕГЭ. Отвечай кратко. Вопрос: ";
 
     const response = await fetch(url, {
       method: "POST",
@@ -32,15 +31,13 @@ export async function handler(event) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || "Ошибка API");
+      throw new Error(data.error?.message || "Модель еще просыпается...");
     }
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({
-        text: data.candidates[0].content.parts[0].text
-      })
+      body: JSON.stringify({ text: data.candidates[0].content.parts[0].text })
     };
 
   } catch (err) {
@@ -51,4 +48,5 @@ export async function handler(event) {
     };
   }
 }
+
 
