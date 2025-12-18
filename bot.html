@@ -46,13 +46,14 @@
         userInput.value = '';
         sendBtn.disabled = true;
         try {
-            const response = await fetch('/.netlify/functions/gemini', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: message })
-            });
-            const data = await response.json();
-            addMsg(data.reply || "Нет ответа", 'bot');
+        const response = await fetch('/.netlify/functions/deepseek', {
+         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: message })
+        });
+
+const data = await response.json();
+addMsg(data.reply || "Нет ответа", 'bot');;
         } catch (err) {
             addMsg("Ошибка связи", 'bot');
         } finally {
