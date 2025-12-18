@@ -11,37 +11,41 @@ exports.handler = async (event) => {
     const apiKey = process.env.GEMINI_API_KEY;
     const { prompt } = JSON.parse(event.body);
 
-    // Используем v1beta и модель 1.5-flash
+    // Используем v1beta и твой новый ключ
     const url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey};
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: "Ты — AlexBot, помощник Алексея. Отвечай кратко на вопрос: " + prompt }] }]
+        contents: [{ parts: [{ text: prompt }] }]
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || "Ошибка Google API");
+      return {
+        statusCode: response.status,
+        headers,
+        body: JSON.stringify({ text: "Ошибка API: " + (data.error?.message || "Неизвестно") })
+      };
     }
 
-    // Извлекаем текст правильно
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Извини, не смог придумать ответ.";
+    // Извлекаем текст. Это самая важная часть!
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Модель не прислала текст.";
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ text: resultText }) // Возвращаем объект с полем text
+      body: JSON.stringify({ text: resultText }) // Поле должно называться 'text'
     };
 
   } catch (error) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ text: "Ошибка: " + error.message })
+      body: JSON.stringify({ text: "Ошибка сервера: " + error.message })
     };
   }
 };
