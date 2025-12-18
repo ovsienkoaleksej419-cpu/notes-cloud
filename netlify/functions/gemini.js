@@ -1,67 +1,62 @@
-export async function handler(event) {
+exports.handler = async (event) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
     "Content-Type": "application/json"
   };
 
-  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: "" };
+  }
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) throw new Error("API_KEY_MISSING");
 
     const { prompt } = JSON.parse(event.body);
-    
-    // Список моделей для проверки (от самой новой к старой)
-    const models = [
-      "gemini-2.0-flash-exp",
-      "gemini-1.5-flash"
-    ];
 
-    let lastError = "";
-    
-    for (const modelName of models) {
-      try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-        
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{ text: "Ты — AlexBot, ассистент Алексея. Отвечай кратко. Вопрос: " + prompt }]
-            }]
-          })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify({ text: data.candidates[0].content.parts[0].text })
-          };
-        } else {
-          lastError = data.error?.message || "Unknown error";
-          console.log(`Model ${modelName} failed: ${lastError}`);
-        }
-      } catch (e) {
-        lastError = e.message;
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: prompt }]
+            }
+          ]
+        })
       }
+    );
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(errText);
     }
 
-    throw new Error("Ни одна модель не ответила. Последняя ошибка: " + lastError);
+    const data = await response.json();
 
-  } catch (err) {
+    const text =
+      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "Нет ответа от модели.";
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ text })
+    };
+
+  } catch (error) {
+    console.error("Gemini error:", error);
+
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ text: "Ошибка: " + err.message })
+      body: JSON.stringify({
+        text: "Ошибка бота: " + error.message
+      })
     };
   }
-}
-
-
-
+};
