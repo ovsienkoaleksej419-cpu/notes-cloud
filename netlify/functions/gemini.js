@@ -9,16 +9,16 @@ exports.handler = async (event) => {
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    const { prompt } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
+    const prompt = body.prompt || body.message; // Поддержка обоих имен
 
-    // Используем v1beta и твой новый ключ
     const url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey};
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
+        contents: [{ parts: [{ text: "Ты — AlexBot. Отвечай кратко на вопрос: " + prompt }] }]
       })
     });
 
@@ -28,24 +28,23 @@ exports.handler = async (event) => {
       return {
         statusCode: response.status,
         headers,
-        body: JSON.stringify({ text: "Ошибка API: " + (data.error?.message || "Неизвестно") })
+        body: JSON.stringify({ reply: "Ошибка API: " + (data.error?.message || "Неизвестно") })
       };
     }
 
-    // Извлекаем текст. Это самая важная часть!
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Модель не прислала текст.";
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Нет ответа.";
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ text: resultText }) // Поле должно называться 'text'
+      body: JSON.stringify({ reply: resultText }) // Поле 'reply' — теперь и в HTML будем искать его
     };
 
   } catch (error) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ text: "Ошибка сервера: " + error.message })
+      body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
     };
   }
 };
