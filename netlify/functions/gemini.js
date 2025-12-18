@@ -5,55 +5,43 @@ exports.handler = async (event) => {
     "Content-Type": "application/json"
   };
 
-  // Обработка предзапроса (CORS)
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
-  }
+  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) throw new Error("API_KEY_MISSING: Проверьте переменные в Netlify");
-
     const { prompt } = JSON.parse(event.body);
 
-    // Используем v1beta — это решит проблему с 404
+    // Используем v1beta и модель 1.5-flash
     const url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey};
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: "Ты — AlexBot, ассистент по конспектам. Отвечай кратко и по делу. Вопрос: " + prompt }]
-          }
-        ]
+        contents: [{ parts: [{ text: "Ты — AlexBot, помощник Алексея. Отвечай кратко на вопрос: " + prompt }] }]
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      // Выводим детальную ошибку от Google, если она будет
-      throw new Error(data.error?.message || JSON.stringify(data));
+      throw new Error(data.error?.message || "Ошибка Google API");
     }
 
-    const botMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || "Извини, я не смог сформулировать ответ.";
+    // Извлекаем текст правильно
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Извини, не смог придумать ответ.";
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ text: botMessage })
+      body: JSON.stringify({ text: resultText }) // Возвращаем объект с полем text
     };
 
   } catch (error) {
-    console.error("Gemini Error:", error.message);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({
-        text: "Ошибка: " + error.message
-      })
+      body: JSON.stringify({ text: "Ошибка: " + error.message })
     };
   }
 };
