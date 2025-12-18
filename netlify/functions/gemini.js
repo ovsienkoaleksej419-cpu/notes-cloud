@@ -1,52 +1,17 @@
 const fetch = require('node-fetch');
-
 exports.handler = async (event) => {
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Content-Type": "application/json"
-  };
-
-  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
-
+  const headers = { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json" };
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
     const body = JSON.parse(event.body);
-    const userPrompt = body.prompt || "Привет";
-
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
-
-    const response = await fetch(url, {
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + process.env.GEMINI_API_KEY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: userPrompt }] }]
-      })
+      body: JSON.stringify({ contents: [{ parts: [{ text: body.prompt }] }] })
     });
-
     const data = await response.json();
-
-    if (!response.ok) {
-      return {
-        statusCode: response.status,
-        headers,
-        body: JSON.stringify({ reply: "Ошибка API: " + (data.error?.message || "Неизвестно") })
-      };
-    }
-
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Пустой ответ";
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ reply: resultText })
-    };
-
-  } catch (error) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
-    };
+    return { statusCode: 200, headers, body: JSON.stringify({ reply: data.candidates?.[0]?.content?.parts?.[0]?.text || "Ошибка API" }) };
+  } catch (e) {
+    return { statusCode: 500, headers, body: JSON.stringify({ reply: "Ошибка: " + e.message }) };
   }
 };
+
