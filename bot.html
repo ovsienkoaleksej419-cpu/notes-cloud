@@ -17,14 +17,13 @@
         .input-area { border-top: 1px solid #eee; padding: 15px; display: flex; }
         #userInput { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
         #sendBtn { margin-left: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; }
-        #sendBtn:disabled { background: #ccc; }
     </style>
 </head>
 <body>
 
 <div class="chat-container">
     <div id="chatBox">
-        <div class="msg bot">Привет! Я AlexBot. Теперь всё точно работает. Спрашивай!</div>
+        <div class="msg bot">Привет! Я AlexBot. Теперь всё должно работать. Спрашивай!</div>
     </div>
     <div class="input-area">
         <input type="text" id="userInput" placeholder="Ваш вопрос..." autocomplete="off">
@@ -39,8 +38,7 @@
 
     function addMessage(text, type) {
         const div = document.createElement('div');
-        // Исправлено: добавлены обратные кавычки
-        div.className = `msg ${type}`; 
+        div.className = msg ${type};
         div.innerText = text;
         chatBox.appendChild(div);
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -62,6 +60,8 @@
             });
 
             const data = await response.json();
+            
+            // ВАЖНО: берем поле 'reply', как в твоем коде функции
             addMessage(data.reply || "Ошибка: ответ не пришел", 'bot');
             
         } catch (err) {
