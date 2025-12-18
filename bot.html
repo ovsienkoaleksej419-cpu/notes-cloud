@@ -44,31 +44,32 @@
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-    async function handleSend() {
+async function send() {
         const message = userInput.value.trim();
         if (!message) return;
 
-        addMessage(message, 'user');
+        addMsg(message, 'user');
         userInput.value = '';
         sendBtn.disabled = true;
 
+        console.log("Отправка сообщения:", message); // Для проверки в F12
+
         try {
-            const response = await fetch('/netlify/functions/gemini', {
+            const response = await fetch('/.netlify/functions/gemini', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt: message })
             });
-
             const data = await response.json();
-            
-            // ВАЖНО: берем поле 'reply', как в твоем коде функции
-            addMessage(data.reply || "Ошибка: ответ не пришел", 'bot');
-            
+            console.log("Ответ от сервера:", data); // Для проверки в F12
+            addMsg(data.reply || "Нет ответа от бота", 'bot');
         } catch (err) {
-            addMessage("Ошибка связи: " + err.message, 'bot');
+            console.error("Ошибка:", err);
+            addMsg("Ошибка связи: " + err.message, 'bot');
         } finally {
             sendBtn.disabled = false;
         }
+        
     }
 
     sendBtn.onclick = handleSend;
