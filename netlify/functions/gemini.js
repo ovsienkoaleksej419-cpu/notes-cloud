@@ -11,8 +11,7 @@ exports.handler = async (event) => {
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
-    const body = JSON.parse(event.body);
-    const prompt = body.prompt || "Привет";
+    const { prompt } = JSON.parse(event.body);
 
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
 
@@ -25,7 +24,16 @@ exports.handler = async (event) => {
     });
 
     const data = await response.json();
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Нет ответа от Google API";
+
+    if (!response.ok) {
+        return {
+          statusCode: response.status,
+          headers,
+          body: JSON.stringify({ reply: "Ошибка API: " + (data.error?.message || "Неизвестно") })
+        };
+    }
+
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Нет ответа от API";
 
     return {
       statusCode: 200,
@@ -34,7 +42,7 @@ exports.handler = async (event) => {
     };
   } catch (error) {
     return {
-      statusCode: 500,
+      statusCode: 500, // Была запятая, теперь число 500
       headers,
       body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
     };
