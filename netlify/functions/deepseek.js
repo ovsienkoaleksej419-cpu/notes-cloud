@@ -10,12 +10,19 @@ export async function handler(event) {
   }
 
   try {
-    const { prompt } = JSON.parse(event.body || "{}");
-    const apiKey = process.env.DEEPSEEK_API_KEY;
+    const body = JSON.parse(event.body || "{}");
+    const prompt = body.prompt?.trim();
 
-    if (!apiKey) {
-      throw new Error("DEEPSEEK_API_KEY not set");
+    if (!prompt) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ reply: "Ты ничего не написал 🙂" })
+      };
     }
+
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+    if (!apiKey) throw new Error("DEEPSEEK_API_KEY не задан");
 
     const response = await fetch("https://api.deepseek.com/chat/completions", {
       method: "POST",
@@ -28,11 +35,11 @@ export async function handler(event) {
         messages: [
           {
             role: "system",
-            content: "Ты — AlexBot, помощник сайта с конспектами ЕГЭ. Отвечай кратко, понятно и по теме."
+            content: "Ты — AlexBot. Помогаешь с конспектами ЕГЭ. Отвечай кратко и по делу."
           },
           {
             role: "user",
-            content: prompt || "Привет"
+            content: prompt
           }
         ],
         temperature: 0.6
@@ -41,24 +48,37 @@ export async function handler(event) {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error?.message || "DeepSeek error");
+    // 👇 ЛОГ ДЛЯ NETLIFY (очень важно)
+    console.log("DeepSeek raw response:", JSON.stringify(data));
+
+    if (!response.ok  !data.choices  !data.choices.length) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          reply: "DeepSeek не вернул ответ. Проверь лимиты или API-ключ."
+        })
+      };
     }
 
-    const text = data.choices?.[0]?.message?.content || "Нет ответа";
+    const text = data.choices[0].message?.content;
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: text })
+      body: JSON.stringify({
+        reply: text || "Ответ пустой 🤷"
+      })
     };
 
   } catch (error) {
-    console.error("DeepSeek error:", error);
+    console.error("Ошибка DeepSeek:", error);
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: "Ошибка бота: " + error.message })
+      body: JSON.stringify({
+        reply: "Ошибка бота: " + error.message
+      })
     };
   }
 }
