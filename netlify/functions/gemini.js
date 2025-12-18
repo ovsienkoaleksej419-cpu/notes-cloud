@@ -10,16 +10,16 @@ exports.handler = async (event) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     const body = JSON.parse(event.body);
-    const prompt = body.prompt || "Привет";
+    const userPrompt = body.prompt || "Привет";
 
-    // ИСПРАВЛЕННЫЙ URL (v1 вместо v1beta)
+    // ИСПРАВЛЕНО: v1 вместо v1beta
     const url = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey;
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
+        contents: [{ parts: [{ text: userPrompt }] }]
       })
     });
 
@@ -40,11 +40,12 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({ reply: resultText })
     };
+
   } catch (error) {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: "Ошибка сервера: " + error.message })
+      body: JSON.stringify({ reply: "Ошибка функции: " + error.message })
     };
   }
 };
