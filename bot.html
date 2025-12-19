@@ -1,67 +1,174 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlexBot — Помощник</title>
-    <link rel="stylesheet" href="../../style.css">
-    <style>
-        body { font-family: sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding: 20px; margin: 0; }
-        .chat-container { width: 100%; max-width: 500px; height: 90vh; background: white; border-radius: 15px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
-        #chatBox { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
-        .user { align-self: flex-end; background: #007bff; color: white; }
-        .bot { align-self: flex-start; background: #eee; color: #333; }
-        .input-area { border-top: 1px solid #ddd; padding: 15px; display: flex; background: white; }
-        #userInput { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
-        #sendBtn { margin-left: 10px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 20px; cursor: pointer; }
-        #sendBtn:disabled { background: #ccc; }
-    </style>
+  <meta charset="UTF-8">
+  <title>AlexBot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ТВОЙ ОБЩИЙ CSS -->
+  <link rel="stylesheet" href="../../style.css">
+
+  <style>
+    .chat-wrap {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .chat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      height: 75vh;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 20px;
+      font-weight: 800;
+      font-size: 20px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    #chatBox {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      max-width: 75%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 15px;
+      line-height: 1.5;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: var(--text-main);
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      padding: 20px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: rgba(15,23,42,0.8);
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .chat-input input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+    }
+
+    .chat-input button {
+      padding: 14px 22px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      background: var(--accent);
+      color: #022c22;
+      transition: 0.2s;
+    }
+
+    .chat-input button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+  </style>
 </head>
 <body>
-<div class="chat-container">
-    <div id="chatBox"><div class="msg bot">Привет! Напиши мне что-нибудь.</div></div>
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Сообщение..." autocomplete="off">
-        <button id="sendBtn">Отправить</button>
+
+<div class="chat-wrap">
+  <div class="chat-card">
+
+    <div class="chat-header">
+      🤖 AlexBot — помощник по ЕГЭ
     </div>
+
+    <div id="chatBox">
+      <div class="msg bot">
+        Привет! Я AlexBot. Могу помочь с конспектами и заданиями ЕГЭ 👋
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input id="userInput" placeholder="Напиши вопрос..." autocomplete="off">
+      <button id="sendBtn">Отправить</button>
+    </div>
+
+  </div>
 </div>
+
 <script>
-    const chatBox = document.getElementById('chatBox');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
+  const chatBox = document.getElementById('chatBox');
+  const userInput = document.getElementById('userInput');
+  const sendBtn = document.getElementById('sendBtn');
 
-    function addMsg(text, type) {
-        const div = document.createElement('div');
-        div.className = 'msg ' + type; 
-        div.innerText = text;
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight;
+  function addMsg(text, type) {
+    const div = document.createElement('div');
+    div.className = 'msg ' + type;
+    div.innerText = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function send() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    addMsg(text, 'user');
+    userInput.value = '';
+    sendBtn.disabled = true;
+
+    try {
+      const res = await fetch('/.netlify/functions/openrouter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: text })
+      });
+      const data = await res.json();
+      addMsg(data.reply || 'Нет ответа', 'bot');
+    } catch {
+      addMsg('Ошибка связи', 'bot');
+    } finally {
+      sendBtn.disabled = false;
     }
+  }
 
-    async function send() {
-        const message = userInput.value.trim();
-        if (!message) return;
-        addMsg(message, 'user');
-        userInput.value = '';
-        sendBtn.disabled = true;
-        try {
-        const response = await fetch('/.netlify/functions/openrouter', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ prompt: message })
-});
-
-const data = await response.json();
-addMsg(data.reply || "Нет ответа", 'bot');;
-        } catch (err) {
-            addMsg("Ошибка связи", 'bot');
-        } finally {
-            sendBtn.disabled = false;
-        }
-    }
-    sendBtn.onclick = send;
-    userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') send(); });
+  sendBtn.onclick = send;
+  userInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') send();
+  });
 </script>
+
 </body>
 </html>
