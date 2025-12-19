@@ -1,45 +1,35 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>AlexBot</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>AlexBot — помощник</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ТВОЙ ОБЩИЙ CSS -->
-  <link rel="stylesheet" href="../../style.css">
+  <!-- Общий стиль сайта -->
+  <link rel="stylesheet" href="../style.css">
 
   <style>
-    .chat-wrap {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
     .chat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      backdrop-filter: blur(16px);
+      max-width: 900px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      height: 75vh;
-      overflow: hidden;
+      height: 80vh;
     }
 
-    .chat-header {
-      padding: 20px;
-      font-weight: 800;
-      font-size: 20px;
-      border-bottom: 1px solid var(--card-border);
+    .mode-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
-    #chatBox {
+    .chat-box {
       flex: 1;
-      padding: 20px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      padding-right: 5px;
     }
 
     .msg {
@@ -48,90 +38,127 @@
       border-radius: 16px;
       font-size: 15px;
       line-height: 1.5;
-      animation: fadeInUp 0.3s ease;
+      animation: fadeInUp 0.25s ease;
     }
 
     .msg.user {
       align-self: flex-end;
       background: rgba(34,197,94,0.15);
-      border: 1px solid rgba(34,197,94,0.3);
+      border: 1px solid rgba(34,197,94,0.4);
       color: var(--text-main);
     }
 
     .msg.bot {
       align-self: flex-start;
-      background: rgba(15,23,42,0.8);
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text-main);
     }
 
-    .chat-input {
+    .input-area {
       display: flex;
-      gap: 10px;
-      padding: 20px;
-      border-top: 1px solid var(--card-border);
+      gap: 12px;
+      margin-top: 16px;
     }
 
-    .chat-input input {
+    .input-area input {
       flex: 1;
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-radius: 14px;
       border: 1px solid var(--card-border);
-      background: rgba(15,23,42,0.8);
+      background: rgba(15,23,42,0.7);
       color: #fff;
-      font-size: 15px;
+      font-size: 16px;
       outline: none;
     }
 
-    .chat-input input:focus {
+    .input-area input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.1);
     }
 
-    .chat-input button {
+    .send-btn {
       padding: 14px 22px;
       border-radius: 14px;
-      border: none;
-      cursor: pointer;
+      border: 1px solid rgba(34,197,94,0.4);
+      background: rgba(34,197,94,0.15);
+      color: var(--accent);
       font-weight: 700;
-      background: var(--accent);
-      color: #022c22;
+      cursor: pointer;
       transition: 0.2s;
     }
 
-    .chat-input button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 15px var(--accent-glow);
+    .send-btn:hover {
+      background: rgba(34,197,94,0.25);
     }
   </style>
 </head>
 <body>
 
-<div class="chat-wrap">
-  <div class="chat-card">
+<div class="container">
 
-    <div class="chat-header">
-      🤖 AlexBot — помощник по ЕГЭ
-    </div>
-
-    <div id="chatBox">
-      <div class="msg bot">
-        Привет! Я AlexBot. Могу помочь с конспектами и заданиями ЕГЭ 👋
+  <header>
+    <div class="brand">
+      <div class="logo">AI</div>
+      <div>
+        <h1>AlexBot</h1>
+        <p class="muted">Помощник по конспектам и ЕГЭ</p>
       </div>
     </div>
 
-    <div class="chat-input">
-      <input id="userInput" placeholder="Напиши вопрос..." autocomplete="off">
-      <button id="sendBtn">Отправить</button>
+    <nav>
+      <a href="../index.html" class="nav-link">Главная</a>
+      <a href="../notes.html" class="nav-link">Конспекты</a>
+      <a href="#" class="nav-link nav-link-accent">Бот</a>
+    </nav>
+  </header>
+
+  <div class="card chat-card">
+
+    <!-- Режимы -->
+    <div class="mode-bar">
+      <button class="nav-link nav-link-accent" onclick="setMode('ege')">🎓 Режим ЕГЭ</button>
+      <button class="nav-link" onclick="setMode('free')">💬 Свободный</button>
+    </div>
+
+    <!-- Чат -->
+    <div id="chatBox" class="chat-box">
+      <div class="msg bot">
+        Привет! Я AlexBot 🤖  
+        Могу объяснять темы и решать задания.  
+        По умолчанию включён <b>режим ЕГЭ</b>.
+      </div>
+    </div>
+
+    <!-- Ввод -->
+    <div class="input-area">
+      <input
+        id="userInput"
+        placeholder="Напиши вопрос или задание…"
+        autocomplete="off"
+      />
+      <button class="send-btn" onclick="send()">Отправить</button>
     </div>
 
   </div>
+
 </div>
 
 <script>
   const chatBox = document.getElementById('chatBox');
-  const userInput = document.getElementById('userInput');
-  const sendBtn = document.getElementById('sendBtn');
+  const input = document.getElementById('userInput');
+
+  let currentMode = 'ege';
+
+  function setMode(mode) {
+    currentMode = mode;
+    addMsg(
+      mode === 'ege'
+        ? '🎓 Режим ЕГЭ включён. Объясняю как на экзамене.'
+        : '💬 Свободный режим включён.',
+      'bot'
+    );
+  }
 
   function addMsg(text, type) {
     const div = document.createElement('div');
@@ -142,30 +169,31 @@
   }
 
   async function send() {
-    const text = userInput.value.trim();
+    const text = input.value.trim();
     if (!text) return;
 
     addMsg(text, 'user');
-    userInput.value = '';
-    sendBtn.disabled = true;
+    input.value = '';
 
     try {
       const res = await fetch('/.netlify/functions/openrouter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: text })
+        body: JSON.stringify({
+          prompt: text,
+mode: currentMode
+        })
       });
+
       const data = await res.json();
       addMsg(data.reply || 'Нет ответа', 'bot');
-    } catch {
-      addMsg('Ошибка связи', 'bot');
-    } finally {
-      sendBtn.disabled = false;
+
+    } catch (e) {
+      addMsg('Ошибка связи с сервером', 'bot');
     }
   }
 
-  sendBtn.onclick = send;
-  userInput.addEventListener('keydown', e => {
+  input.addEventListener('keypress', e => {
     if (e.key === 'Enter') send();
   });
 </script>
