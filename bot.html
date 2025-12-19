@@ -46,11 +46,11 @@
         userInput.value = '';
         sendBtn.disabled = true;
         try {
-        const response = await fetch('//.netlify/functions/openrouter'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: message })
-        });
+        const response = await fetch('/.netlify/functions/openrouter', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ prompt: message })
+});
 
 const data = await response.json();
 addMsg(data.reply || "Нет ответа", 'bot');;
