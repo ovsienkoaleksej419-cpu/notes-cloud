@@ -181,3 +181,23 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: text,
+    mode: currentMode
+        })
+      });
+
+      const data = await res.json();
+      addMsg(data.reply || 'Нет ответа', 'bot');
+
+    } catch (e) {
+      addMsg('Ошибка связи с сервером', 'bot');
+    }
+  }
+
+  input.addEventListener('keypress', e => {
+    if (e.key === 'Enter') send();
+  });
+</script>
+
+</body>
+</html>
+    
