@@ -1,76 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Конспект ЕГЭ №13: Компьютерные сети</title>
-    <link rel="stylesheet" href="../../style.css">
-    <style>
-        .network-box { background: rgba(9, 132, 227, 0.1); border: 1px solid #0984e3; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .bit-logic { font-family: 'Courier New', monospace; background: #2d3436; color: #fab1a0; padding: 5px 10px; border-radius: 4px; }
-        .step-num { background: #0984e3; color: white; padding: 2px 8px; border-radius: 50%; font-weight: bold; margin-right: 5px; }
-        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; border-left: 5px solid #0984e3; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Задание 13 — Конспекты Алексея</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    :root {
+        --accent: #00ff88; 
+        --bot-blue: #3b82f6;
+        --code-bg: #0d1117;
+    }
+
+    .net-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+
+    .info-card:hover {
+      border-color: var(--bot-blue);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .value {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .tag-method {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--accent);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .binary-string {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Задание 13: IP-адресация и маски</h1>
+  <div class="wrap">
+
+    <header>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Конспекты: Сетевые технологии</div>
+        </div>
+      </div>
+      <nav>
+        <a href="../../index.html" class="nav-link">На главную</a>
+        <a href="../notes.html" class="nav-link">Все задания</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <div class="tag-method">МЕТОД: МОДУЛЬ IPADDRESS</div>
+      <h1>Задание 13: IP-адресация</h1>
+      <p>
+        Задание требует понимания того, как <b>маска подсети</b> разделяет IP-адрес на адрес сети и адрес узла. Самый надежный способ решения в 2025 году — автоматизация на Python.
+      </p>
+
+      <div class="net-grid">
+        <div class="info-card">
+          <span class="label">Структура адреса</span>
+          <span class="value">4 байта (32 бита)</span>
+        </div>
+        <div class="info-card">
+          <span class="label">Принцип маски</span>
+          <span class="value">111...000</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Бинарная логика маски</h2>
+      <p style="color:var(--muted)">Адрес сети получается путем побитового умножения (AND) IP-адреса на маску.</p>
+      
+      
+
+      <div class="code-block">
+        <span style="color: #6272a4"># Пример перевода маски 255.255.255.240 в биты</span><br>
+        255.255.255.240 = <span class="binary-string">11111111.11111111.11111111.11110000</span><br>
+        <span style="color: var(--muted)">Единицы — это "замороженная" часть сети, нули — места для хостов.</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Автоматизация решения</h2>
+      <p>Если даны IP-адрес узла и маска, используем библиотеку <code>ipaddress</code>. Она сама сделает всю грязную работу.</p>
+      
+      <div class="code-block">
+        <span style="color:#ff79c6">import</span> ipaddress<br><br>
+        <span style="color:#6272a4"># strict=False позволяет передать адрес узла вместо адреса сети</span><br>
+        net = ipaddress.ip_network(<span style="color:#f1fa8c">'192.168.1.150/255.255.255.240'</span>, strict=<span style="color:#ff79c6">False</span>)<br><br>
+        <span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">f"Сеть:"</span>, net.network_address)<br>
         
-        <p class="intro">
-            IP-адрес состоит из 32 бит (4 байта по 8 бит). Маска подсети определяет, какая часть адреса относится к <strong>адресу сети</strong>, а какая — к <strong>номеру узла</strong>.
-        </p>
+        <span style="color:#6272a4"># Подсчет адресов с условием (например, четное кол-во единиц в битах)</span><br>
+        count = <span style="color:#bd93f9">0</span><br>
+        <span style="color:#ff79c6">for</span> addr <span style="color:#ff79c6">in</span> net:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;b_addr = <span style="color:#f1fa8c">f"{addr:b}"</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">if</span> b_addr.count(<span style="color:#f1fa8c">'1'</span>) % <span style="color:#bd93f9">2</span> == <span style="color:#bd93f9">0</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count += <span style="color:#bd93f9">1</span><br>
+        <span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">f"Результат:"</span>, count)
+      </div>
+    </section>
 
-        <div class="network-box">
-            <h3>Как работает маска?</h3>
-            <p>Маска — это всегда последовательность единиц, а затем нулей. Например:</p>
-            <p><span class="bit-logic">255.255.255.240</span> → <span class="bit-logic">11111111.11111111.11111111.11110000</span></p>
-            <p>Единицы в маске "замораживают" часть IP-адреса, делая её адресом сети. Нули — это "свободное место" для адресов компьютеров.</p>
-        </div>
+    <section class="card" style="border-top: 4px solid var(--bot-blue)">
+      <h2>⚠️ На что обратить внимание</h2>
+      <p style="line-height: 1.8;">
+        1. <b>Префиксная запись:</b> Маска 255.255.255.0 это <code>/24</code> (24 единицы).<br>
+        2. <b>Количество узлов:</b> Вычисляется как 2<sup>n</sup>, где n — кол-во нулей в маске. <br>
+        3. <b>Служебные адреса:</b> Самый первый адрес — это адрес сети, самый последний — широковещательный. В задачах часто спрашивают "сколько существует узлов", тогда вычитаем эти 2 адреса.
+      </p>
+    </section>
 
-        
+    <footer>
+      <p style="text-align:center; color:var(--muted); font-size:12px;">
+        © 2025 Овсиенко Алексей · नोट्स проекта Tesseract
+      </p>
+    </footer>
 
-        <h2>1. Ручной способ (Поразрядное И)</h2>
-        <p>Адрес сети получается путём применения операции <strong>И (AND)</strong> между IP-адресом и маской.</p>
-        <table>
-            <tr><th>Объект</th><th>Десятичный вид</th><th>Двоичный вид (последний байт)</th></tr>
-            <tr><td>IP-узел</td><td>... .150</td><td>10010<span style="color: #ff7675;">110</span></td></tr>
-            <tr><td>Маска</td><td>... .248</td><td>11111<span style="color: #ff7675;">000</span></td></tr>
-            <tr style="border-top: 2px solid #fff;"><td>Сеть</td><td>... .144</td><td>10010<span style="color: #ff7675;">000</span></td></tr>
-        </table>
-
-        <h2>2. Решение через Python (Библиотека ipaddress)</h2>
-        <p>Это самый надежный способ на ЕГЭ. Он исключает ошибки в переводах систем счисления.</p>
-
-        <div class="code-section">
-            <pre>
-<span style="color: #569cd6;">import</span> ipaddress
-
-<span style="color: #6a9955;"># Создаем объект сети: "IP-узла/маска"</span>
-<span style="color: #6a9955;"># strict=False позволяет передать адрес узла вместо адреса сети</span>
-net = ipaddress.ip_network(<span style="color: #ce9178;">'192.168.10.150/255.255.255.248'</span>, strict=<span style="color: #569cd6;">False</span>)
-
-<span style="color: #func">print</span>(<span style="color: #ce9178;">f"Адрес сети: {net.network_address}"</span>)
-<span style="color: #func">print</span>(<span style="color: #ce9178;">f"Всего адресов: {net.num_addresses}"</span>)
-
-<span style="color: #6a9955;"># Перебор всех адресов в сети (за вычетом адреса сети и широковещательного)</span>
-count = <span style="color: #b5cea8;">0</span>
-<span style="color: #569cd6;">for</span> addr <span style="color: #569cd6;">in</span> net:
-    <span style="color: #6a9955;"># Условие: например, в двоичной записи узла больше единиц, чем нулей</span>
-    b = <span style="color: #ce9178;">f"{addr:b}"</span>
-    <span style="color: #569cd6;">if</span> b.count(<span style="color: #ce9178;">'1'</span>) > b.count(<span style="color: #ce9178;">'0'</span>):
-        count += <span style="color: #b5cea8;">1</span>
-
-<span style="color: #func">print</span>(<span style="color: #ce9178;">f"Подходящих адресов: {count}"</span>)
-            </pre>
-        </div>
-
-        <div class="network-box" style="border-color: #e17055;">
-            <h3 style="color: #e17055;">Частые вопросы:</h3>
-            <ul>
-                <li><strong>Сколько узлов в сети?</strong> Формула: 2<sup>n</sup> - 2 (где n — количество нулей в маске).</li>
-                <li><strong>Что такое широковещательный адрес?</strong> Это последний адрес в сети (все нули маски заменены на единицы в IP).</li>
-                <li><strong>Prefix length (/24):</strong> Это количество единиц в маске. /24 означает 255.255.255.0.</li>
-            </ul>
-        </div>
-    </div>
+  </div>
 </body>
 </html>
