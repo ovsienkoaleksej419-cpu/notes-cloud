@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №17: Обработка числовых последовательностей</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .array-box { background: rgba(0, 210, 211, 0.1); border: 2px solid #00d2d3; padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .code-window { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; font-family: 'Consolas', monospace; border-left: 5px solid #00d2d3; }
+        .keyword { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .num { color: #b5cea8; }
+        .op { color: #c586c0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 17: Работа с массивами и файлами</h1>
+        
+        <p class="intro">
+            В этом задании нужно прочитать список чисел из файла, найти количество пар элементов, удовлетворяющих условию, и найти какую-то характеристику (например, максимальную сумму).
+        </p>
 
+        <div class="array-box">
+            <h3>Что такое "пара" в 17 задании?</h3>
+            <p>Внимательно читай условие, это критично:</p>
+            <ul>
+                <li><strong>Подряд идущие:</strong> это элементы <code>a[i]</code> и <code>a[i+1]</code>.</li>
+                <li><strong>Произвольные пары:</strong> это любые два числа из списка (встречается редко, решается через два вложенных цикла).</li>
+            </ul>
+        </div>
+
+        <h2>1. Этап первый: Чтение файла и поиск константы</h2>
+        <p>Часто условие привязано к какому-то числу из файла (например, "минимальное число, оканчивающееся на 13").</p>
+        
+        <div class="code-window">
+            <pre>
+<span class="comment"># 1. Читаем все числа в список</span>
+data = [<span class="func">int</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">open</span>(<span class="string">'17.txt'</span>)]
+
+<span class="comment"># 2. Ищем опорное число (например, макс. элемент кратный 10)</span>
+max_10 = <span class="func">max</span>(x <span class="keyword">for</span> x <span class="keyword">in</span> data <span class="keyword">if</span> x % <span class="num">10</span> == <span class="num">0</span>)
+            </pre>
+        </div>
+
+        <h2>2. Этап второй: Проход по парам</h2>
+        <p>Используем цикл <code>range(len(data) - 1)</code>, чтобы не выйти за границы списка.</p>
+
+         and a[i+1]]
+
+        <div class="code-window">
+            <pre>
+ans = []
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="func">len</span>(data) - <span class="num">1</span>):
+    v1 = data[i]
+    v2 = data[i+1]
+    
+    <span class="comment"># Пример условия: ровно одно число из пары делится на 7, 
+    # а их сумма меньше нашего max_10</span>
+    cond1 = (v1 % <span class="num">7</span> == <span class="num">0</span>) + (v2 % <span class="num">7</span> == <span class="num">0</span>) == <span class="num">1</span>
+    cond2 = (v1 + v2) < max_10
+    
+    <span class="keyword">if</span> cond1 <span class="op">and</span> cond2:
+        ans.append(v1 + v2)
+
+<span class="comment"># В ответе обычно просят количество и максимум</span>
+<span class="keyword">print</span>(<span class="func">len</span>(ans), <span class="func">max</span>(ans))
+            </pre>
+        </div>
+
+        <h2>3. Полезные фишки для условий</h2>
+        <p>Чтобы код был чище, используй логическое сложение (True = 1, False = 0):</p>
+        <ul>
+            <li><code>(x % 3 == 0) + (y % 3 == 0) == 1</code> — <strong>ровно одно</strong> из двух.</li>
+            <li><code>(x % 3 == 0) + (y % 3 == 0) >= 1</code> — <strong>хотя бы одно</strong> из двух.</li>
+            <li><code>x % 10 == 3</code> — число оканчивается на 3 (для положительных чисел).</li>
+            <li><code>abs(x) % 10 == 3</code> — число оканчивается на 3 (<strong>обязательно для отрицательных чисел!</strong>).</li>
+        </ul>
+
+        <div class="note" style="border-left: 5px solid #00d2d3; background: rgba(0, 210, 211, 0.05);">
+            <h3>Чек-лист для 17 задания:</h3>
+            <ul>
+                <li><strong>Отрицательные числа:</strong> Если в файле есть минусы, <code>x % 10</code> может работать не так, как ты ждешь. Всегда пиши <code>abs(x) % 10</code>.</li>
+                <li><strong>Границы цикла:</strong> Не забудь <code>len(data) - 1</code> для пар и <code>len(data) - 2</code> для троек.</li>
+                <li><strong>Имена переменных:</strong> Не называй список <code>list</code>, это зарезервированное слово в Python.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
