@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №14: Системы счисления</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .math-box { background: rgba(253, 203, 110, 0.1); border: 2px solid #fdcb6e; padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .code-window { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; font-family: 'Consolas', monospace; border-left: 5px solid #fdcb6e; }
+        .digit { color: #d7ba7d; font-weight: bold; }
+        .keyword { color: #569cd6; }
+        .highlight-text { color: #fdcb6e; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 14: Позиционные системы счисления</h1>
+        
+        <p class="intro">
+            Задание проверяет умение работать с числами в разных системах счисления (СС), находить остатки и переводить выражения.
+        </p>
 
+        <div class="math-box">
+            <h3>Два главных правила:</h3>
+            <ol>
+                <li>Чтобы найти <strong>последнюю цифру</strong> числа в СС с основанием <strong>N</strong>, нужно взять <code>число % N</code>.</li>
+                <li>Чтобы <strong>отбросить последнюю цифру</strong>, нужно сделать <code>число // N</code>.</li>
+            </ol>
+        </div>
+
+        <h2>Тип 1: Выражение с переменной X</h2>
+        <p>Задача: Найти значение <strong>x</strong>, при котором выражение делится на 15. Значения в разных СС.</p>
+        
+        <div class="code-window">
+            <pre>
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">"0123456789ABCDEFGHIJ"</span>: <span class="comment"># Все возможные цифры</span>
+    <span class="comment"># Переводим из СС с основанием 20 и 25: int(строка, основание)</span>
+    num1 = <span class="keyword">int</span>(<span class="keyword">f</span><span class="string">"123{x}5"</span>, 20)
+    num2 = <span class="keyword">int</span>(<span class="keyword">f</span><span class="string">"1{x}234"</span>, 25)
+    
+    val = num1 + num2
+    <span class="keyword">if</span> val % 15 == 0:
+        <span class="keyword">print</span>(val // 15)
+        <span class="keyword">break</span>
+            </pre>
+        </div>
+
+        <h2>Тип 2: Подсчет количества цифр</h2>
+        <p>Задача: Сколько цифр "4" в записи числа $5 \cdot 25^{15} + 4 \cdot 5^{10} - 15$ в 5-ричной системе?</p>
+        
+        
+
+        <div class="code-window">
+            <pre>
+n = 5 * 25**15 + 4 * 5**10 - 15
+count_4 = 0
+
+<span class="keyword">while</span> n > 0:
+    <span class="keyword">if</span> n % 5 == 4: <span class="comment"># Если последняя цифра в 5-ричной СС равна 4</span>
+        count_4 += 1
+    n //= 5 <span class="comment"># Убираем последнюю цифру</span>
+
+<span class="keyword">print</span>(count_4)
+            </pre>
+        </div>
+
+        <h2>Тип 3: Поиск основания системы (p)</h2>
+        <p>Иногда нужно найти само основание <b>p</b>. Просто перебираем его циклом.</p>
+        
+        <div class="code-window">
+            <pre>
+<span class="keyword">for</span> p <span class="keyword">in</span> <span class="keyword">range</span>(2, 100):
+    <span class="keyword">try</span>:
+        <span class="keyword">if</span> <span class="keyword">int</span>(<span class="string">"81"</span>, p) == <span class="keyword">int</span>(<span class="string">"101"</span>, 9):
+            <span class="keyword">print</span>(p)
+    <span class="keyword">except</span>: <span class="keyword">continue</span> <span class="comment"># Если цифра 8 не влезает в СС, пропускаем</span>
+            </pre>
+        </div>
+
+        <div class="note" style="border-left: 5px solid #fdcb6e;">
+            <h3 class="highlight-text">Шпаргалка:</h3>
+            <ul>
+                <li><code>int(s, p)</code> — перевод из системы <b>p</b> в десятичную.</li>
+                <li>Алфавит для СС выше 10: <code>0..9, A(10), B(11), C(12), D(13), E(14), F(15)...</code></li>
+                <li>В Python <b>3.11+</b> нет лимита на количество цифр в <code>int</code>, но если число гигантское, используй строки осторожно.</li>
+                <li>Если просят "наибольшее x" — убирай <code>break</code> и бери последнее значение.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
