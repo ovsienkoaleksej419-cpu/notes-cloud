@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №15: Логика на Python</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Courier New', monospace; border-left: 5px solid #a29bfe; }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .op { color: #c586c0; }
+        .logic-card { background: rgba(162, 155, 254, 0.1); border: 1px solid #a29bfe; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 15: Программирование логики</h1>
+        
+        <p class="intro">
+            В этом задании нужно найти такое <strong>A</strong>, при котором выражение истинно (равно 1) при любом <strong>x</strong> (и <strong>y</strong>, если он есть).
+        </p>
 
+        <div class="logic-card">
+            <strong>Таблица соответствия операторов:</strong>
+            <ul>
+                <li>И (Конъюнкция): <code>and</code></li>
+                <li>ИЛИ (Дизъюнкция): <code>or</code></li>
+                <li>НЕ (Инверсия): <code>not</code></li>
+                <li>Следование (Импликация): <code><=</code> (или <code>not x or y</code>)</li>
+                <li>Тождество: <code>==</code></li>
+            </ul>
+        </div>
+
+        <h2>Тип 1: Делимость (ДЕЛ)</h2>
+        <p>Задача: Найти минимальное натуральное А, для которого выражение истинно.</p>
+        
+        <div class="code-section">
+            <pre>
+<span class="keyword">def</span> <span class="func">D</span>(n, m):
+    <span class="keyword">return</span> n % m == 0
+
+<span class="keyword">for</span> a <span class="keyword">in</span> <span class="func">range</span>(1, 1000):
+    ok = <span class="keyword">True</span>
+    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(1, 1000):
+        <span class="comment"># Записываем выражение из условия:</span>
+        f = (D(x, 2) <span class="op"><=</span> (<span class="op">not</span> D(x, 3))) <span class="op">or</span> (x + a >= 100)
+        <span class="keyword">if</span> <span class="op">not</span> f:
+            ok = <span class="keyword">False</span>
+            <span class="keyword">break</span>
+    <span class="keyword">if</span> ok:
+        <span class="func">print</span>(a)
+        <span class="keyword">break</span> <span class="comment"># Нашли минимальное - выходим</span>
+            </pre>
+        </div>
+
+        <h2>Тип 2: Поразрядная конъюнкция (&)</h2>
+        <p>Ключевой оператор в Python: <code>&</code>. Важно помнить про приоритет операций (всегда ставь скобки!).</p>
+
+        <div class="code-section">
+            <pre>
+<span class="keyword">for</span> a <span class="keyword">in</span> <span class="func">range</span>(0, 1000):
+    <span class="keyword">if</span> <span class="func">all</span>(((x & 29 != 0) <span class="op"><=</span> ((x & 17 == 0) <span class="op"><=</span> (x & a != 0))) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(1000)):
+        <span class="func">print</span>(a)
+        <span class="keyword">break</span>
+            </pre>
+        </div>
+
+        <h2>Тип 3: Отрезки</h2>
+        <p>Для отрезков $[P, Q]$ проверяем вхождение числа: <code>P <= x <= Q</code>.</p>
+        
+        
+
+        <div class="code-section">
+            <pre>
+<span class="comment"># Допустим P = [10, 20], Q = [25, 35]</span>
+p = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(10, 21)]
+q = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(25, 36)]
+a = [] <span class="comment"># Ищем элементы, входящие в А</span>
+
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(1, 100):
+    <span class="comment"># Если при ложном А выражение ложно, значит x должен быть в А</span>
+    f = ((x <span class="keyword">in</span> a) <span class="op"><=</span> (x <span class="keyword">in</span> p)) <span class="op">or</span> (x <span class="keyword">in</span> q)
+    <span class="keyword">if</span> <span class="op">not</span> f:
+        a.append(x)
+<span class="func">print</span>(<span class="func">sorted</span>(a))
+            </pre>
+        </div>
+
+        <div class="logic-card" style="border-color: #e17055;">
+            <strong>Тонкий момент:</strong>
+            <ul>
+                <li>Функция <code>all()</code> — это быстрый способ проверить условие для всех <code>x</code>.</li>
+                <li>Если ищем <strong>минимум</strong> — печатаем первый подошедший <code>a</code> и делаем <code>break</code>.</li>
+                <li>Если ищем <strong>максимум</strong> — печатаем все и смотрим последнее число.</li>
+                <li>Диапазона <code>range(1000)</code> обычно хватает для 99% задач ЕГЭ.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
