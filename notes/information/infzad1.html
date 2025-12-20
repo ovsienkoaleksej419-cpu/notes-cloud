@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №1: Графы и таблицы</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .graph-box { background: rgba(0, 184, 148, 0.1); border: 1px solid #00b894; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .step { color: #00b894; font-weight: bold; margin-right: 10px; }
+        .method-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .method-table th, .method-table td { border: 1px solid #444; padding: 10px; text-align: left; }
+        .method-table th { background-color: #2d2d2d; }
+        .warning { border-left: 5px solid #ff7675; background: rgba(255, 118, 117, 0.1); padding: 10px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 1: Сопоставление графа и таблицы</h1>
+        
+        <p class="intro">
+            Основная задача: соотнести вершины на схеме (графе) с номерами строк/столбцов в таблице расстояний и найти длину конкретного ребра или сумму длин.
+        </p>
 
+        <div class="graph-box">
+            <h3>Алгоритм "Степени вершин"</h3>
+            <p><strong>Степень вершины</strong> — это количество дорог, выходящих из неё.</p>
+            
+            
+
+            <ol>
+                <li><span class="step">1.</span>Выпиши степени всех вершин на графе (например: А-2, Б-3, В-3...).</li>
+                <li><span class="step">2.</span>Посчитай количество заполненных ячеек в каждой строке таблицы (это степени точек П1, П2...).</li>
+                <li><span class="step">3.</span>Найди уникальные вершины. Если на графе только одна точка имеет степень 4, а в таблице только у П5 степень 4 — значит, <strong>П5 = эта точка</strong>.</li>
+                <li><span class="step">4.</span>Если вершины одинаковой степени (например, две "тройки"), смотри на их "соседей".</li>
+            </ol>
+        </div>
+
+        <h2>Как различать "близнецов"?</h2>
+        <p>Если две вершины имеют одинаковую степень (например, Б и Г — обе тройки), нужно проверить, с вершинами каких степеней они связаны:</p>
+        
+        <table class="method-table">
+            <tr>
+                <th>Точка</th>
+                <th>Степень</th>
+                <th>Соседи (их степени)</th>
+            </tr>
+            <tr>
+                <td>П1</td>
+                <td>3</td>
+                <td>2, 2, 4</td>
+            </tr>
+            <tr>
+                <td>П2</td>
+                <td>3</td>
+                <td>2, 3, 4</td>
+            </tr>
+        </table>
+        <p>Даже если П1 и П2 обе имеют по 3 дороги, их "окружение" разное — это позволяет их точно идентифицировать.</p>
+
+        <h2>Решение через Python (для сложных графов)</h2>
+        <p>Если граф слишком запутанный, можно использовать библиотеку <code>itertools</code> для перебора всех возможных соответствий букв и номеров П1-П7.</p>
+
+        <div class="code-section" style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace;">
+            <pre>
+<span style="color: #569cd6;">import</span> itertools
+
+<span style="color: #6a9955;"># Описываем связи графа (словарём)</span>
+graph = {<span style="color: #ce9178;">'А'</span>:{<span style="color: #ce9178;">'Б'</span>, <span style="color: #ce9178;">'В'</span>}, <span style="color: #ce9178;">'Б'</span>:{<span style="color: #ce9178;">'А'</span>, <span style="color: #ce9178;">'Г'</span>, <span style="color: #ce9178;">'Д'</span>}, ...}
+
+<span style="color: #6a9955;"># Описываем таблицу (номера П1..П7 и их связи)</span>
+matrix = {<span style="color: #b5cea8;">1</span>:{<span style="color: #b5cea8;">2</span>, <span style="color: #b5cea8;">5</span>}, <span style="color: #b5cea8;">2</span>:{<span style="color: #b5cea8;">1</span>, <span style="color: #b5cea8;">3</span>, <span style="color: #b5cea8;">4</span>}, ...}
+
+<span style="color: #569cd6;">for</span> p <span style="color: #569cd6;">in</span> itertools.permutations(<span style="color: #ce9178;">'АБВГДЕЖ'</span>):
+    d = {p[i]: i+<span style="color: #b5cea8;">1</span> <span style="color: #569cd6;">for</span> i <span style="color: #569cd6;">in</span> <span style="color: #func">range</span>(<span style="color: #b5cea8;">7</span>)}
+    <span style="color: #6a9955;"># Проверяем, совпадают ли все дороги графа с таблицей</span>
+    <span style="color: #569cd6;">if</span> <span style="color: #func">all</span>({d[neighbor] <span style="color: #569cd6;">for</span> neighbor <span style="color: #569cd6;">in</span> graph[v]} == matrix[d[v]] <span style="color: #569cd6;">for</span> v <span style="color: #569cd6;">in</span> p):
+        <span style="color: #func">print</span>(d)
+            </pre>
+        </div>
+
+        <div class="warning">
+            <strong>Ловушка:</strong> Всегда внимательно читай вопрос! Иногда просят длину дороги (число из таблицы), а иногда — сумму длин нескольких дорог.
+        </div>
+    </div>
+</body>
+</html>
