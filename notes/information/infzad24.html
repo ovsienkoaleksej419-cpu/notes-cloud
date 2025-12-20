@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №24: Обработка строк</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Courier New', monospace; border-left: 5px solid #f1c40f; }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .string { color: #ce9178; }
+        .highlight { background: rgba(241, 196, 15, 0.1); padding: 5px; border-radius: 3px; border: 1px solid #f1c40f; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 24: Магия строк в Python</h1>
+        
+        <p class="intro">
+            В этом задании нам дают файл с одной очень длинной строкой (до 1,000,000 символов). Нужно найти самую длинную цепочку по условию.
+        </p>
 
+        <div class="highlight">
+            <strong>Основной метод решения:</strong> Замена "плохих" или "сложных" комбинаций на пробелы через <code>replace()</code>, а затем разбиение строки через <code>split()</code>.
+        </div>
+
+        <h2>Тип 1: Простая цепочка (одинаковые символы)</h2>
+        <p>Задача: Найти максимальное количество идущих подряд символов 'A'.</p>
+        
+        <div class="code-section">
+            <pre>
+s = <span class="func">open</span>(<span class="string">'24.txt'</span>).readline()
+<span class="comment"># Заменяем все остальные символы на пробелы</span>
+<span class="keyword">for</span> char <span class="keyword">in</span> <span class="string">'BCDEFGHIJKLMNOPQRSTUVWXYZ'</span>:
+    s = s.<span class="func">replace</span>(char, <span class="string">' '</span>)
+
+<span class="comment"># Разбиваем по пробелам и ищем самую длинную строку</span>
+words = s.<span class="func">split</span>()
+ans = <span class="func">max</span>(<span class="func">len</span>(w) <span class="keyword">for</span> w <span class="keyword">in</span> words)
+<span class="func">print</span>(ans)
+            </pre>
+        </div>
+
+        <h2>Тип 2: Сложные комбинации (Пары/Тройки)</h2>
+        <p>Задача: Найти макс. длину цепочки вида ABCABC... (повторяющиеся группы).</p>
+        
+        
+
+        <div class="code-section">
+            <pre>
+s = <span class="func">open</span>(<span class="string">'24.txt'</span>).readline()
+<span class="comment"># Шаг 1: Заменяем искомую группу на один символ, которого НЕТ в файле</span>
+s = s.<span class="func">replace</span>(<span class="string">'ABC'</span>, <span class="string">'*'</span>)
+
+<span class="comment"># Шаг 2: Убираем всё, что не '*'</span>
+<span class="keyword">for</span> char <span class="keyword">in</span> <span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>:
+    s = s.<span class="func">replace</span>(char, <span class="string">' '</span>)
+
+<span class="comment"># Шаг 3: Считаем количество '*' и умножаем на длину группы (3)</span>
+words = s.<span class="func">split</span>()
+ans = <span class="func">max</span>(<span class="func">len</span>(w) <span class="keyword">for</span> w <span class="keyword">in</span> words) * 3
+<span class="func">print</span>(ans)
+            </pre>
+        </div>
+
+        <h2>Тип 3: Алгоритм "Два указателя" (Универсальный)</h2>
+        <p>Если <code>replace</code> работает слишком долго, используем один проход.</p>
+
+        <div class="code-section">
+            <pre>
+s = <span class="func">open</span>(<span class="string">'24.txt'</span>).readline()
+cur = 1
+max_len = 1
+
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="func">len</span>(s) - 1):
+    <span class="comment"># Условие: символы не должны повторяться подряд</span>
+    <span class="keyword">if</span> s[i] != s[i+1]:
+        cur += 1
+        max_len = <span class="func">max</span>(max_len, cur)
+    <span class="keyword">else</span>:
+        cur = 1
+<span class="func">print</span>(max_len)
+            </pre>
+        </div>
+
+        <div class="highlight" style="background: rgba(46, 204, 113, 0.1); border-color: #2ecc71;">
+            <h3>Советы для ускорения:</h3>
+            <ul>
+                <li>Если <code>replace</code> виснет, значит замен слишком много. Используй цикл <code>while 'AA' in s: s = s.replace('AA', 'A')</code> только для маленьких строк.</li>
+                <li>Метод <code>.split('A')</code> — отличный способ найти расстояние между буквами 'A'.</li>
+                <li>Не забывай, что <code>readline()</code> может оставить символ переноса строки <code>\n</code> в конце — используй <code>.strip()</code>.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
