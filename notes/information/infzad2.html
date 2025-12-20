@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 2: Полный гайд</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        body { background-color: #0b0e14; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
+        
+        .bot-interface {
+            background: #11151c;
+            border: 1px solid #1f2633;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .bot-interface h2 { color: #00ff88; margin-top: 0; display: flex; align-items: center; }
+        .bot-interface h2::before { content: '⚡'; margin-right: 10px; }
+
+        .op-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .op-card {
+            background: #161b22;
+            border: 1px solid #2d3643;
+            border-radius: 12px;
+            padding: 15px;
+            border-bottom: 3px solid #1f2633;
+        }
+
+        .op-title { display: block; color: #888; font-size: 0.8em; text-transform: uppercase; margin-bottom: 8px; }
+        .op-code { color: #00ff88; font-family: 'Consolas', monospace; font-weight: bold; }
+
+        .step-box {
+            background: #1a1f29;
+            border-left: 4px solid #00ff88;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .step-num {
+            background: #00ff88;
+            color: #0b0e14;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .code-window {
+            background: #0d1117;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #2d3643;
+            overflow-x: auto;
+        }
+
+        .keyword { color: #ff79c6; }
+        .func { color: #50fa7b; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 2: Логика и Таблицы</h1>
+
+        <div class="bot-interface">
+            <h2>Приоритет операций</h2>
+            <div class="op-grid">
+                <div class="op-card">
+                    <span class="op-title">1. Скобки и NOT</span>
+                    <span class="op-code">not x</span>
+                </div>
+                <div class="op-card">
+                    <span class="op-title">2. Конъюнкция (И)</span>
+                    <span class="op-code">x and y</span>
+                </div>
+                <div class="op-card">
+                    <span class="op-title">3. Дизъюнкция (ИЛИ)</span>
+                    <span class="op-code">x or y</span>
+                </div>
+                <div class="op-card">
+                    <span class="op-title">4. Импликация</span>
+                    <span class="op-code">x <= y</span>
+                </div>
+                <div class="op-card">
+                    <span class="op-title">5. Эквиваленция</span>
+                    <span class="op-code">x == y</span>
+                </div>
+            </div>
+            <p style="font-size: 0.9em; color: #888;">* Если сомневаешься в приоритете — всегда ставь лишние скобки!</p>
+        </div>
+
+        <h2>Методика решения (Алгоритм)</h2>
+
+        <div class="step-box">
+            <span class="step-num">1</span> 
+            <b>Генерация всех комбинаций:</b> Используем вложенные циклы для <code>x, y, z, w</code>. Каждая переменная принимает значения 0 и 1.
+        </div>
+
+        
+
+        <div class="step-box">
+            <span class="step-num">2</span> 
+            <b>Фильтрация по значению F:</b> В условии задачи всегда сказано, чему равна функция (0 или 1). Выводим только нужные строки.
+        </div>
+
+        <div class="code-window">
+            <pre>
+<span class="keyword">print</span>(<span class="string">'x y z w | F'</span>)
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="num">0</span>,<span class="num">1</span>:
+    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="num">0</span>,<span class="num">1</span>:
+        <span class="keyword">for</span> z <span class="keyword">in</span> <span class="num">0</span>,<span class="num">1</span>:
+            <span class="keyword">for</span> w <span class="keyword">in</span> <span class="num">0</span>,<span class="num">1</span>:
+                <span class="comment"># Записываем формулу в одну строку</span>
+                f = (x <= y) <span class="keyword">and</span> (y <= z) <span class="keyword">and</span> (z <= w)
+                
+                <span class="comment"># Допустим, в таблице из КИМа везде стоят нули (F=0)</span>
+                <span class="keyword">if</span> f == <span class="num">0</span>:
+                    <span class="keyword">print</span>(x, y, z, w, <span class="string">'|'</span>, <span class="func">int</span>(f))
+            </pre>
+        </div>
+
+        <div class="step-box">
+            <span class="step-num">3</span> 
+            <b>Анализ «уникальных» признаков:</b> Получив таблицу из Python (обычно там 3-4 строки), сравниваем её с фрагментом из задания.
+        </div>
+
+        <h3>На что смотреть при сопоставлении:</h3>
+        <ul>
+            <li><b>Вес столбца:</b> Посчитай количество единиц в каждом столбце твоей таблицы. Если в одном столбце три "1", а во всех других меньше — ищи такой же столбец в задании.</li>
+            <li><b>Уникальные строки:</b> Ищи строку, где только одна единица (или только один ноль). Она станет "зацепкой".</li>
+            <li><b>Пустые ячейки:</b> Не пытайся их заполнить сразу. Сначала расставь те переменные, в которых ты уверен на 100%.</li>
+        </ul>
+
+        <div class="bot-interface" style="border-color: #bd93f9;">
+            <h2 style="color: #bd93f9;">Pro-Tips</h2>
+            <p>1. <b>Итераторы:</b> Вместо 4-х циклов можно использовать <code>itertools.product(range(2), repeat=4)</code>.</p>
+            <p>2. <b>Отрицание:</b> В Python <code>not</code> имеет очень высокий приоритет. Конструкция <code>not x == y</code> превратится в <code>(not x) == y</code>. Если нужно отрицать всё равенство, пиши <code>not (x == y)</code>.</p>
+        </div>
+    </div>
+</body>
+</html>
