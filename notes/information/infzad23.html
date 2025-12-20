@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №23: Динамическое программирование</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .recursion-box { background: rgba(255, 121, 121, 0.1); border: 2px solid #ff7979; padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .code-window { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; font-family: 'Consolas', monospace; border-left: 5px solid #ff7979; }
+        .keyword { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .num { color: #b5cea8; }
+        .logic-op { color: #c586c0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 23: Количество путей исполнителя</h1>
+        
+        <p class="intro">
+            Нужно вычислить, сколькими способами можно преобразовать число <strong>A</strong> в число <strong>B</strong>, используя предложенный набор команд.
+        </p>
 
+        <div class="recursion-box">
+            <h3>Универсальный рекурсивный метод</h3>
+            <p>Мы создаем функцию <code>f(curr, target)</code>, которая возвращает количество путей:</p>
+            <ul>
+                <li>Если <code>curr == target</code>, мы дошли — возвращаем <strong>1</strong> путь.</li>
+                <li>Если <code>curr > target</code>, мы "проскочили" — возвращаем <strong>0</strong> путей.</li>
+                <li>Если мы еще в пути, возвращаем <strong>сумму</strong> всех возможных ходов.</li>
+            </ul>
+        </div>
+
+        
+
+        <h2>1. Базовый шаблон (Простой путь)</h2>
+        <p>Задача: Из 2 в 15 командами "+1", "+2", "*2".</p>
+        
+        <div class="code-window">
+            <pre>
+<span class="keyword">def</span> <span class="func">f</span>(curr, target):
+    <span class="keyword">if</span> curr == target: <span class="keyword">return</span> <span class="num">1</span>
+    <span class="keyword">if</span> curr > target: <span class="keyword">return</span> <span class="num">0</span>
+    
+    <span class="comment"># Суммируем все ветки развития</span>
+    <span class="keyword">return</span> f(curr + <span class="num">1</span>, target) + f(curr + <span class="num">2</span>, target) + f(curr * <span class="num">2</span>, target)
+
+<span class="keyword">print</span>(f(<span class="num">2</span>, <span class="num">15</span>))
+            </pre>
+        </div>
+
+        <h2>2. Сложные условия (Обязательные и запрещенные точки)</h2>
+        <p>Если нужно <strong>пройти через 10</strong> и <strong>не заходить в 12</strong>:</p>
+        
+        <div class="code-window">
+            <pre>
+<span class="keyword">def</span> <span class="func">f</span>(curr, target):
+    <span class="comment"># Если попали в запрещенное число 12</span>
+    <span class="keyword">if</span> curr == <span class="num">12</span> <span class="logic-op">or</span> curr > target: <span class="keyword">return</span> <span class="num">0</span>
+    <span class="keyword">if</span> curr == target: <span class="keyword">return</span> <span class="num">1</span>
+    
+    <span class="keyword">return</span> f(curr + <span class="num">1</span>, target) + f(curr * <span class="num">3</span>, target)
+
+<span class="comment"># Разбиваем задачу на два этапа:</span>
+<span class="comment"># 1. Из старта в обязательную точку (10)</span>
+<span class="comment"># 2. Из обязательной точки в финиш (20)</span>
+<span class="comment"># Результаты ПЕРЕМНОЖАЕМ</span>
+ans = f(<span class="num">2</span>, <span class="num">10</span>) * f(<span class="num">10</span>, <span class="num">20</span>)
+<span class="keyword">print</span>(ans)
+            </pre>
+        </div>
+
+        <h2>3. Траектория с убыванием</h2>
+        <p>Если команды "вычти 1" или "раздели на 2", то условия меняются местами:</p>
+        <div class="code-window">
+            <pre>
+<span class="keyword">def</span> <span class="func">f</span>(curr, target):
+    <span class="keyword">if</span> curr < target: <span class="keyword">return</span> <span class="num">0</span> <span class="comment"># Проскочили вниз</span>
+    <span class="keyword">if</span> curr == target: <span class="keyword">return</span> <span class="num">1</span>
+    <span class="keyword">return</span> f(curr - <span class="num">1</span>, target) + f(curr // <span class="num">2</span>, target)
+            </pre>
+        </div>
+
+        <div class="note" style="border-left: 5px solid #ff7979; background: rgba(255, 121, 121, 0.05);">
+            <h3>Чек-лист для 23 задания:</h3>
+            <ul>
+                <li><strong>Проходит через точку:</strong> <code>f(start, mid) * f(mid, target)</code></li>
+                <li><strong>НЕ проходит через точку:</strong> добавить <code>if curr == forbidden: return 0</code></li>
+                <li><strong>Избегай зацикливания:</strong> Если есть команда "-1", следи, чтобы <code>curr</code> не ушел в бесконечный минус (обычно такие задачи решаются динамикой через массив, но на ЕГЭ их почти нет).</li>
+                <li><strong>Ускорение:</strong> Если функция работает долго, добавь <code>from functools import lru_cache</code> и декоратор <code>@lru_cache(None)</code> перед функцией.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
