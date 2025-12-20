@@ -1,101 +1,156 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Конспект ЕГЭ №15: Логика на Python</title>
-    <link rel="stylesheet" href="../../style.css">
-    <style>
-        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Courier New', monospace; border-left: 5px solid #a29bfe; }
-        .comment { color: #6a9955; }
-        .keyword { color: #569cd6; }
-        .func { color: #dcdcaa; }
-        .op { color: #c586c0; }
-        .logic-card { background: rgba(162, 155, 254, 0.1); border: 1px solid #a29bfe; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Задание 15 — Конспекты Алексея</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    :root {
+        --accent: #00ff88; 
+        --bot-blue: #3b82f6;
+        --code-bg: #0d1117;
+    }
+
+    .logic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .logic-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .symbol {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--bot-blue);
+      margin-bottom: 5px;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .step-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .step-list li {
+        margin-bottom: 15px;
+        padding-left: 30px;
+        position: relative;
+    }
+
+    .step-list li::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Задание 15: Программирование логики</h1>
-        
-        <p class="intro">
-            В этом задании нужно найти такое <strong>A</strong>, при котором выражение истинно (равно 1) при любом <strong>x</strong> (и <strong>y</strong>, если он есть).
-        </p>
+  <div class="wrap">
 
+    <header>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Конспекты: Математическая логика</div>
+        </div>
+      </div>
+      <nav>
+        <a href="../../index.html" class="nav-link">На главную</a>
+        <a href="../../notes.html" class="nav-link">Конспекты</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <div style="display:inline-block; padding:4px 10px; background:rgba(0, 255, 136, 0.1); color:var(--accent); border-radius:6px; font-size:12px; font-weight:700; margin-bottom:10px;">
+        ТЕМА: ПОИСК ПАРАМЕТРА A
+      </div>
+      <h1>Задание 15: Логические выражения</h1>
+      <p>
+        В этом задании нужно найти такое <b>наименьшее</b> или <b>наибольшее</b> целое число <b>A</b>, при котором логическая формула истинна (равна 1) при любом значении <b>x</b> и <b>y</b>.
+      </p>
+
+      <div class="logic-grid">
         <div class="logic-card">
-            <strong>Таблица соответствия операторов:</strong>
-            <ul>
-                <li>И (Конъюнкция): <code>and</code></li>
-                <li>ИЛИ (Дизъюнкция): <code>or</code></li>
-                <li>НЕ (Инверсия): <code>not</code></li>
-                <li>Следование (Импликация): <code><=</code> (или <code>not x or y</code>)</li>
-                <li>Тождество: <code>==</code></li>
-            </ul>
+          <div class="symbol">x % d == 0</div>
+          <span style="font-size:12px; color:var(--muted)">Функция ДЕЛ(x, d)</span>
         </div>
-
-        <h2>Тип 1: Делимость (ДЕЛ)</h2>
-        <p>Задача: Найти минимальное натуральное А, для которого выражение истинно.</p>
-        
-        <div class="code-section">
-            <pre>
-<span class="keyword">def</span> <span class="func">D</span>(n, m):
-    <span class="keyword">return</span> n % m == 0
-
-<span class="keyword">for</span> a <span class="keyword">in</span> <span class="func">range</span>(1, 1000):
-    ok = <span class="keyword">True</span>
-    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(1, 1000):
-        <span class="comment"># Записываем выражение из условия:</span>
-        f = (D(x, 2) <span class="op"><=</span> (<span class="op">not</span> D(x, 3))) <span class="op">or</span> (x + a >= 100)
-        <span class="keyword">if</span> <span class="op">not</span> f:
-            ok = <span class="keyword">False</span>
-            <span class="keyword">break</span>
-    <span class="keyword">if</span> ok:
-        <span class="func">print</span>(a)
-        <span class="keyword">break</span> <span class="comment"># Нашли минимальное - выходим</span>
-            </pre>
+        <div class="logic-card">
+          <div class="symbol">A > 0</div>
+          <span style="font-size:12px; color:var(--muted)">Параметр A</span>
         </div>
+      </div>
+    </section>
 
-        <h2>Тип 2: Поразрядная конъюнкция (&)</h2>
-        <p>Ключевой оператор в Python: <code>&</code>. Важно помнить про приоритет операций (всегда ставь скобки!).</p>
+    <section class="card">
+      <h2>Универсальный код решения (Тип ДЕЛ)</h2>
+      <p style="color:var(--muted)">Мы просто перебираем значения A и проверяем, выполняется ли условие для большого диапазона x.</p>
+      
+      <div class="code-block">
+        <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">f</span>(x, A):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">return</span> (x % <span style="color:#bd93f9">2</span> == <span style="color:#bd93f9">0</span>) <= (x % <span style="color:#bd93f9">3</span> != <span style="color:#bd93f9">0</span>) <span style="color:#ff79c6">or</span> (x + A >= <span style="color:#bd93f9">100</span>)<br><br>
+        <span style="color:#ff79c6">for</span> A <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">range</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1000</span>):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">all</span>(f(x, A) <span style="color:#ff79c6">for</span> x <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">range</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1000</span>)):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">print</span>(A)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">break</span> <span style="color:#6272a4"># Для наименьшего A</span>
+      </div>
+    </section>
 
-        <div class="code-section">
-            <pre>
-<span class="keyword">for</span> a <span class="keyword">in</span> <span class="func">range</span>(0, 1000):
-    <span class="keyword">if</span> <span class="func">all</span>(((x & 29 != 0) <span class="op"><=</span> ((x & 17 == 0) <span class="op"><=</span> (x & a != 0))) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(1000)):
-        <span class="func">print</span>(a)
-        <span class="keyword">break</span>
-            </pre>
-        </div>
+    
 
-        <h2>Тип 3: Отрезки</h2>
-        <p>Для отрезков $[P, Q]$ проверяем вхождение числа: <code>P <= x <= Q</code>.</p>
-        
-        
+    <section class="card">
+      <h2>Типы задач и их особенности</h2>
+      <ul class="step-list">
+        <li>
+            <b>Тип ДЕЛ:</b> Работаем через остаток от деления <code>%</code>. Перебираем <code>x</code> от 1 до 1000.
+        </li>
+        <li>
+            <b>Тип Графики:</b> Условие зависит от <code>x</code> и <code>y</code>. В <code>all()</code> нужно добавить второй цикл: <code>all(f(x, y, A) for x in range(1, 200) for y in range(1, 200))</code>.
+        </li>
+        <li>
+            <b>Тип Отрезки:</b> Самый сложный. Переменная <code>x</code> принадлежит отрезку. Решается либо аналитически, либо перебором десятичных дробей с шагом 0.5.
+        </li>
+      </ul>
+    </section>
 
-        <div class="code-section">
-            <pre>
-<span class="comment"># Допустим P = [10, 20], Q = [25, 35]</span>
-p = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(10, 21)]
-q = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(25, 36)]
-a = [] <span class="comment"># Ищем элементы, входящие в А</span>
+    <section class="card" style="border-top: 4px solid var(--accent)">
+      <h2>💡 Главный лайфхак</h2>
+      <p style="font-size:14px; line-height:1.7;">
+        Используй функцию <b>all()</b>. Она возвращает <code>True</code> только в том случае, если выражение истинно для всех <code>x</code> в заданном диапазоне. Это намного быстрее и чище, чем писать вложенные флаги и проверки.
+      </p>
+    </section>
 
-<span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(1, 100):
-    <span class="comment"># Если при ложном А выражение ложно, значит x должен быть в А</span>
-    f = ((x <span class="keyword">in</span> a) <span class="op"><=</span> (x <span class="keyword">in</span> p)) <span class="op">or</span> (x <span class="keyword">in</span> q)
-    <span class="keyword">if</span> <span class="op">not</span> f:
-        a.append(x)
-<span class="func">print</span>(<span class="func">sorted</span>(a))
-            </pre>
-        </div>
+    <footer>
+      <p style="text-align:center; color:var(--muted); font-size:12px;">
+        © 2025 Овсиенко Алексей · Notes: Задание 15
+      </p>
+    </footer>
 
-        <div class="logic-card" style="border-color: #e17055;">
-            <strong>Тонкий момент:</strong>
-            <ul>
-                <li>Функция <code>all()</code> — это быстрый способ проверить условие для всех <code>x</code>.</li>
-                <li>Если ищем <strong>минимум</strong> — печатаем первый подошедший <code>a</code> и делаем <code>break</code>.</li>
-                <li>Если ищем <strong>максимум</strong> — печатаем все и смотрим последнее число.</li>
-                <li>Диапазона <code>range(1000)</code> обычно хватает для 99% задач ЕГЭ.</li>
-            </ul>
-        </div>
-    </div>
+  </div>
 </body>
 </html>
