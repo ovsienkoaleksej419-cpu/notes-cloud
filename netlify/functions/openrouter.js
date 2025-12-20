@@ -47,7 +47,7 @@ export async function handler(event) {
         headers: {
           "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": "https://alexberlin10.netlify.app",
+          "HTTP-Referer": "https://alexberlin11.netlify.app",
           "X-Title": "AlexBot",
         },
         body: JSON.stringify({
