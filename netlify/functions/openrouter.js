@@ -1,5 +1,14 @@
 exports.handler = async (event) => {
+  console.log("=== NEW BOT REQUEST ===");
+
   try {
+    const { prompt, mode, topic } = JSON.parse(event.body || "{}");
+
+    console.log("USER PROMPT:", prompt);
+    console.log("MODE:", mode || "default");
+    console.log("TOPIC:", topic || "none");
+    console.log("TIME:", new Date().toISOString());
+    
     const { prompt, mode } = JSON.parse(event.body || '{}');
 
     if (!prompt) {
