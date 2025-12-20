@@ -1,91 +1,131 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Конспект ЕГЭ №14: Системы счисления</title>
-    <link rel="stylesheet" href="../../style.css">
-    <style>
-        .math-box { background: rgba(253, 203, 110, 0.1); border: 2px solid #fdcb6e; padding: 20px; border-radius: 12px; margin: 20px 0; }
-        .code-window { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; font-family: 'Consolas', monospace; border-left: 5px solid #fdcb6e; }
-        .digit { color: #d7ba7d; font-weight: bold; }
-        .keyword { color: #569cd6; }
-        .highlight-text { color: #fdcb6e; font-weight: bold; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Задание 14 — Конспекты Алексея</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    :root {
+        --accent: #00ff88; 
+        --bot-blue: #3b82f6;
+        --code-bg: #0d1117;
+    }
+
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .highlight { color: var(--accent); font-weight: 700; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Задание 14: Позиционные системы счисления</h1>
-        
-        <p class="intro">
-            Задание проверяет умение работать с числами в разных системах счисления (СС), находить остатки и переводить выражения.
-        </p>
+  <div class="wrap">
 
-        <div class="math-box">
-            <h3>Два главных правила:</h3>
-            <ol>
-                <li>Чтобы найти <strong>последнюю цифру</strong> числа в СС с основанием <strong>N</strong>, нужно взять <code>число % N</code>.</li>
-                <li>Чтобы <strong>отбросить последнюю цифру</strong>, нужно сделать <code>число // N</code>.</li>
-            </ol>
+    <header>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Конспекты: Системы счисления</div>
         </div>
+      </div>
+      <nav>
+        <a href="../../index.html" class="nav-link">На главную</a>
+        <a href="/notes.html" class="nav-link">Конспекты</a>
+      </nav>
+    </header>
 
-        <h2>Тип 1: Выражение с переменной X</h2>
-        <p>Задача: Найти значение <strong>x</strong>, при котором выражение делится на 15. Значения в разных СС.</p>
-        
-        <div class="code-window">
-            <pre>
-<span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">"0123456789ABCDEFGHIJ"</span>: <span class="comment"># Все возможные цифры</span>
-    <span class="comment"># Переводим из СС с основанием 20 и 25: int(строка, основание)</span>
-    num1 = <span class="keyword">int</span>(<span class="keyword">f</span><span class="string">"123{x}5"</span>, 20)
-    num2 = <span class="keyword">int</span>(<span class="keyword">f</span><span class="string">"1{x}234"</span>, 25)
-    
-    val = num1 + num2
-    <span class="keyword">if</span> val % 15 == 0:
-        <span class="keyword">print</span>(val // 15)
-        <span class="keyword">break</span>
-            </pre>
+    <section class="card">
+      <div style="display:inline-block; padding:4px 10px; background:rgba(59, 130, 246, 0.1); color:var(--bot-blue); border-radius:6px; font-size:12px; font-weight:700; margin-bottom:10px;">
+        МЕТОД: АЛГОРИТМ ПЕРЕВОДА
+      </div>
+      <h1>Задание 14: Основания и выражения</h1>
+      <p>
+        В этом задании мы работаем с длинными арифметическими выражениями. Главная задача — перевести число в нужную систему счисления и посчитать количество определенных цифр.
+      </p>
+
+      <div class="num-grid">
+        <div class="stat-card">
+          <div style="font-size:10px; color:var(--muted); text-transform:uppercase;">Последняя цифра</div>
+          <div class="highlight" style="font-size:1.4rem;">n % base</div>
         </div>
-
-        <h2>Тип 2: Подсчет количества цифр</h2>
-        <p>Задача: Сколько цифр "4" в записи числа $5 \cdot 25^{15} + 4 \cdot 5^{10} - 15$ в 5-ричной системе?</p>
-        
-        
-
-        <div class="code-window">
-            <pre>
-n = 5 * 25**15 + 4 * 5**10 - 15
-count_4 = 0
-
-<span class="keyword">while</span> n > 0:
-    <span class="keyword">if</span> n % 5 == 4: <span class="comment"># Если последняя цифра в 5-ричной СС равна 4</span>
-        count_4 += 1
-    n //= 5 <span class="comment"># Убираем последнюю цифру</span>
-
-<span class="keyword">print</span>(count_4)
-            </pre>
+        <div class="stat-card">
+          <div style="font-size:10px; color:var(--muted); text-transform:uppercase;">Отсечь цифру</div>
+          <div class="highlight" style="font-size:1.4rem;">n // base</div>
         </div>
+      </div>
+    </section>
 
-        <h2>Тип 3: Поиск основания системы (p)</h2>
-        <p>Иногда нужно найти само основание <b>p</b>. Просто перебираем его циклом.</p>
-        
-        <div class="code-window">
-            <pre>
-<span class="keyword">for</span> p <span class="keyword">in</span> <span class="keyword">range</span>(2, 100):
-    <span class="keyword">try</span>:
-        <span class="keyword">if</span> <span class="keyword">int</span>(<span class="string">"81"</span>, p) == <span class="keyword">int</span>(<span class="string">"101"</span>, 9):
-            <span class="keyword">print</span>(p)
-    <span class="keyword">except</span>: <span class="keyword">continue</span> <span class="comment"># Если цифра 8 не влезает в СС, пропускаем</span>
-            </pre>
-        </div>
+    <section class="card">
+      <h2>1. Классический подсчет цифр</h2>
+      <p style="color:var(--muted)">Считаем, сколько раз цифра "2" встречается в записи результата выражения в 3-ричной системе.</p>
+      
+      
 
-        <div class="note" style="border-left: 5px solid #fdcb6e;">
-            <h3 class="highlight-text">Шпаргалка:</h3>
-            <ul>
-                <li><code>int(s, p)</code> — перевод из системы <b>p</b> в десятичную.</li>
-                <li>Алфавит для СС выше 10: <code>0..9, A(10), B(11), C(12), D(13), E(14), F(15)...</code></li>
-                <li>В Python <b>3.11+</b> нет лимита на количество цифр в <code>int</code>, но если число гигантское, используй строки осторожно.</li>
-                <li>Если просят "наибольшее x" — убирай <code>break</code> и бери последнее значение.</li>
-            </ul>
-        </div>
-    </div>
+      <div class="code-block">
+        n = <span style="color:#bd93f9">3</span>**<span style="color:#bd93f9">100</span> + <span style="color:#bd93f9">9</span>**<span style="color:#bd93f9">50</span> - <span style="color:#bd93f9">27</span><br>
+        count = <span style="color:#bd93f9">0</span><br>
+        <span style="color:#ff79c6">while</span> n > <span style="color:#bd93f9">0</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">if</span> n % <span style="color:#bd93f9">3</span> == <span style="color:#bd93f9">2</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count += <span style="color:#bd93f9">1</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;n //= <span style="color:#bd93f9">3</span><br>
+        <span style="color:#ff79c6">print</span>(count)
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Уравнение с неизвестным X</h2>
+      <p>Когда нужно перебрать цифру $x$ в разных системах счисления (например, 15-ричной и 17-ричной).</p>
+      <div class="code-block">
+        <span style="color:#ff79c6">for</span> x <span style="color:#ff79c6">in</span> <span style="color:#f1fa8c">'0123456789ABCDE'</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;num1 = <span style="color:#ff79c6">int</span>(<span style="color:#f1fa8c">f"12{x}4"</span>, <span style="color:#bd93f9">15</span>)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;num2 = <span style="color:#ff79c6">int</span>(<span style="color:#f1fa8c">f"1{x}45"</span>, <span style="color:#bd93f9">17</span>)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">if</span> (num1 + num2) % <span style="color:#bd93f9">14</span> == <span style="color:#bd93f9">0</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">print</span>((num1 + num2) // <span style="color:#bd93f9">14</span>)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">break</span>
+      </div>
+    </section>
+
+    <section class="card" style="border-top: 4px solid var(--accent)">
+      <h2>💡 Важные детали</h2>
+      <p style="font-size:14px; line-height:1.7;">
+        • <b>Функция int(s, base):</b> Переводит из любой системы в десятичную. Строка <code>s</code> должна содержать цифры, допустимые для этого основания.<br>
+        • <b>Алфавит:</b> Для систем выше 10 используй строку <code>string.digits + string.ascii_uppercase</code> или просто пиши <code>'0123456789ABCDEF...'</code>.
+      </p>
+    </section>
+
+    <footer>
+      <p style="text-align:center; color:var(--muted); font-size:12px;">
+        © 2025 Овсиенко Алексей · नोट्स проекта Tesseract
+      </p>
+    </footer>
+
+  </div>
 </body>
 </html>
