@@ -11,6 +11,14 @@
       "file": "notes/information/imp and ekv.html"
     },
     {
+      "title": "Графы и таблицы (задание 1)",
+      "file": "notes/information/infzad1.html"
+    },
+    {
+      "title": "Таблицы истинности (задание 2)",
+      "file": "notes/information/infzad2.html"
+    },
+    {
       "title": "Закон Фано (задание 4)",
       "file": "notes/information/fano_law.html"
     },
@@ -31,16 +39,52 @@
       "file": "notes/information/infzad9.html"
     },
     {
+      "title": "Объем памяти (задание 11)",
+      "file": "notes/information/infzad11.html"
+    },
+    {
       "title": "Системы счисления (задание 12)",
       "file": "notes/information/zad12.html"
+    },
+    {
+      "title": "IP-адреса и маски (задание 13)",
+      "file": "notes/information/infzad13.html"
+    },
+    {
+      "title": "Системы счисления: выражения (задание 14)",
+      "file": "notes/information/infzad14.html"
+    },
+    {
+      "title": "Логика: ДЕЛ, отрезки (задание 15)",
+      "file": "notes/information/infzad15.html"
     },
     {
       "title": "Рекурсивные алгоритмы (задание 16)",
       "file": "notes/information/16zadania.html"
     },
     {
+      "title": "Обработка массивов (задание 17)",
+      "file": "notes/information/infzad17.html"
+    },
+    {
       "title": "Теория игр: 19–21 задания",
       "file": "notes/information/infzad19.html"
+    },
+    {
+      "title": "Динамика: пути (задание 23)",
+      "file": "notes/information/infzad23.html"
+    },
+    {
+      "title": "Обработка строк (задание 24)",
+      "file": "notes/information/infzad24.html"
+    },
+    {
+      "title": "Сортировка и жадность (задание 26)",
+      "file": "notes/information/infzad26.html"
+    },
+    {
+      "title": "Эффективные алгоритмы (задание 27)",
+      "file": "notes/information/infzad27.html"
     }
   ]
 }
