@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №11: Вычисление объема памяти</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .calc-box { background: rgba(162, 155, 254, 0.1); border: 2px solid #6c5ce7; padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .formula { font-family: 'Times New Roman', serif; font-style: italic; font-size: 1.2em; text-align: center; color: #a29bfe; margin: 10px 0; }
+        .step-badge { background: #6c5ce7; color: white; padding: 3px 10px; border-radius: 5px; font-weight: bold; margin-right: 8px; }
+        .const { color: #e17055; font-weight: bold; }
+        .unit { color: #00b894; font-weight: bold; }
+    </pre>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 11: Память на пароли и сведения</h1>
+        
+        <p class="intro">
+            Нужно найти объем памяти в байтах для хранения сведений об объектах. Основная сложность — двойное округление (бит -> байт).
+        </p>
 
+        <div class="calc-box">
+            <h2>Три главных формулы</h2>
+            <div class="formula">1. N = 2<sup>i</sup></div>
+            <p>Где <b>N</b> — мощность алфавита (сколько разных символов), <b>i</b> — вес одного символа в <span class="unit">битах</span>.</p>
+            
+            <div class="formula">2. I<sub>пароля</sub> = k * i</div>
+            <p>Где <b>k</b> — количество символов в пароле, <b>i</b> — вес одного символа (из 1-й формулы).</p>
+
+            <div class="formula">3. V<sub>общий</sub> = I<sub>пароля_в_байтах</sub> * n</div>
+            <p>Где <b>n</b> — количество пользователей/объектов.</p>
+        </div>
+
+        <h2>Пошаговый алгоритм решения</h2>
+        
+        <p><span class="step-badge">Шаг 1</span> <b>Считаем вес символа (i).</b><br>
+        Если в алфавите 26 букв и 10 цифр (N = 36), то ближайшая степень двойки — 64 (2<sup>6</sup>). Значит, <b>i = 6 бит</b>. <br>
+        <i>Важно: Всегда округляем i в БОЛЬШУЮ сторону.</i></p>
+
+        <p><span class="step-badge">Шаг 2</span> <b>Считаем вес всего пароля в битах.</b><br>
+        Если в пароле 10 символов, то 10 * 6 = <b>60 бит</b>.</p>
+
+        <p><span class="step-badge">Шаг 3</span> <b>Переводим пароль в БАЙТЫ.</b><br>
+        По условию пароль хранится в целом числе байт. <br>
+        60 / 8 = 7.5 → округляем до <b>8 байт</b>. <br>
+        <span class="const">Запомни:</span> Делим на 8 и всегда округляем вверх до целого.</p>
+
+        <p><span class="step-badge">Шаг 4</span> <b>Доп. сведения (если есть).</b><br>
+        Если на каждого пользователя выделено еще 20 байт доп. сведений, прибавляем их к паролю: 8 + 20 = <b>28 байт</b> на объект.</p>
+
+        <p><span class="step-badge">Шаг 5</span> <b>Итоговый объем.</b><br>
+        Умножаем байты на количество объектов. Если просят ответ в Кбайт — делим на 1024.</p>
+
+        <h2>Шпаргалка по степеням 2</h2>
+        <table style="width: 100%; border-collapse: collapse; text-align: center;">
+            <tr style="background: #2d2d2d;">
+                <th>i (бит)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td>
+            </tr>
+            <tr>
+                <th>N (символов)</th><td>2</td><td>4</td><td>8</td><td>16</td><td>32</td><td>64</td><td>128</td><td>256</td>
+            </tr>
+        </table>
+
+        <div class="note" style="border-left: 5px solid #00b894; background: rgba(0, 184, 148, 0.05);">
+            <h3>На чем ловят в 2025 году:</h3>
+            <ul>
+                <li><b>Алфавит:</b> "Буквы латинского алфавита" = 26 (регистр не важен) или 52 (если заглавные и строчные различаются).</li>
+                <li><b>Байты vs Биты:</b> Переводи в байты ТОЛЬКО ПОСЛЕ того, как посчитал биты для всего пароля. Нельзя округлять до байта каждый символ!</li>
+                <li><b>Целое число:</b> Внимательно читай, что именно округляется до байт — только пароль или "пароль + доп. сведения".</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
