@@ -1,124 +1,135 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Конспект ЕГЭ №26: Системная обработка данных</title>
-    <link rel="stylesheet" href="../../style.css">
-    <style>
-        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Courier New', monospace; overflow-x: auto; border-left: 5px solid #007acc; }
-        .comment { color: #6a9955; }
-        .keyword { color: #569cd6; }
-        .func { color: #dcdcaa; }
-        .method { color: #b5cea8; }
-        .important-box { background: #2d2d2d; border: 1px dashed #569cd6; padding: 15px; margin: 20px 0; border-radius: 5px; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Задание 26 — Конспекты Алексея</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    :root {
+        --accent: #00ff88; 
+        --bot-blue: #3b82f6;
+        --code-bg: #0d1117;
+    }
+
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .logic-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      border-left: 3px solid var(--bot-blue);
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .highlight { color: var(--accent); }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Задание 26: Жадные алгоритмы и сортировка</h1>
+  <div class="wrap">
+
+    <header>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Конспекты: Сортировка и Жадные алгоритмы</div>
+        </div>
+      </div>
+      <nav>
+        <a href="../../index.html" class="nav-link">На главную</a>
+        <a href="../../notes.html" class="nav-link">Конспекты</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <div style="display:inline-block; padding:4px 10px; background:rgba(0, 255, 136, 0.1); color:var(--accent); border-radius:6px; font-size:12px; font-weight:700; margin-bottom:10px;">
+        МЕТОД: ЖАДНЫЙ ВЫБОР
+      </div>
+      <h1>Задание 26: Системная обработка данных</h1>
+      <p>
+        Обычно задача сводится к упаковке грузов, рассадке пассажиров или планированию мероприятий. Ключ к решению — <b>правильная сортировка</b> входного списка.
+      </p>
+
+      <div class="strategy-grid">
+        <div class="logic-card">
+          <b style="display:block;margin-bottom:5px;">Максимизация кол-ва:</b>
+          <span style="font-size:12px;color:var(--muted)">Сортируем по возрастанию и берем самые маленькие объекты первыми.</span>
+        </div>
+        <div class="logic-card">
+          <b style="display:block;margin-bottom:5px;">Планирование:</b>
+          <span style="font-size:12px;color:var(--muted)">Сортируем по <u>времени окончания</u> мероприятия.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Алгоритм упаковки (Пример)</h2>
+      <p style="color:var(--muted)">Дано свободное место S и список размеров файлов. Найти макс. число файлов и макс. размер последнего файла.</p>
+      
+      
+
+      <div class="code-block">
+        f = <span style="color:#ff79c6">open</span>(<span style="color:#f1fa8c">'26.txt'</span>)<br>
+        S, N = <span style="color:#ff79c6">map</span>(<span style="color:#ff79c6">int</span>, f.readline().split())<br>
+        a = <span style="color:#ff79c6">sorted</span>([<span style="color:#ff79c6">int</span>(x) <span style="color:#ff79c6">for</span> x <span style="color:#ff79c6">in</span> f])<br><br>
         
-        <p class="intro">
-            Задание проверяет умение обрабатывать данные из файлов объемом до 10,000 строк. Основной инструмент — <strong>сортировка</strong>.
-        </p>
-
-        <div class="important-box">
-            <strong>Золотое правило 26 задания:</strong> Сначала сортируем данные по условию (по возрастанию, если нужно "впихнуть" больше, или по окончанию времени, если нужно провести больше встреч).
-        </div>
-
-        <h2>Тип 1: Системный администратор (Архивация)</h2>
-        <p>Задача: уместить как можно больше файлов на диск и найти максимальный размер последнего файла.</p>
+        res = []<br>
+        <span style="color:#ff79c6">for</span> x <span style="color:#ff79c6">in</span> a:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">sum</span>(res) + x <= S:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.append(x)<br><br>
         
-        <div class="code-section">
-            <pre>
-<span class="keyword">def</span> <span class="func">archive_task</span>():
-    f = <span class="func">open</span>('26_1.txt')
-    s, n = <span class="func">map</span>(int, f.readline().split())
-    data = <span class="func">sorted</span>([<span class="func">int</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> f])
-    
-    count = 0
-    total_sum = 0
-    last_file = 0
-    
-    <span class="comment"># 1. Набираем максимум файлов</span>
-    <span class="keyword">for</span> x <span class="keyword">in</span> data:
-        <span class="keyword">if</span> total_sum + x <= s:
-            total_sum += x
-            count += 1
-            last_file = x
-        <span class="keyword">else</span>:
-            <span class="keyword">break</span>
-            
-    <span class="comment"># 2. Ищем замену для последнего файла</span>
-    total_sum -= last_file
-    <span class="keyword">for</span> x <span class="keyword">in</span> data:
-        <span class="keyword">if</span> total_sum + x <= s:
-            last_file = x
-            
-    <span class="keyword">print</span>(f"Кол-во: {count}, Макс. файл: {last_file}")
-            </pre>
-        </div>
-
-        <h2>Тип 2: Мероприятия и интервалы</h2>
-        <p>Задача: провести максимальное количество встреч в одном зале.</p>
+        <span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">"Количество:"</span>, <span style="color:#ff79c6">len</span>(res))<br><br>
         
-        
+        <span style="color:#6272a4"># Ищем замену для последнего элемента</span><br>
+        S -= <span style="color:#ff79c6">sum</span>(res[:-<span style="color:#bd93f9">1</span>])<br>
+        last = <span style="color:#ff79c6">max</span>(x <span style="color:#ff79c6">for</span> x <span style="color:#ff79c6">in</span> a <span style="color:#ff79c6">if</span> x <= S)<br>
+        <span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">"Макс. размер последнего:"</span>, last)
+      </div>
+    </section>
 
-        <div class="code-section">
-            <pre>
-<span class="keyword">def</span> <span class="func">events_task</span>():
-    f = <span class="func">open</span>('26_2.txt')
-    n = <span class="func">int</span>(f.readline())
-    <span class="comment"># Сортируем по ВРЕМЕНИ ОКОНЧАНИЯ (x[1])</span>
-    events = <span class="func">sorted</span>([<span class="func">list</span>(<span class="func">map</span>(int, x.split())) <span class="keyword">for</span> x <span class="keyword">in</span> f], key=<span class="keyword">lambda</span> x: x[1])
-    
-    count = 1
-    last_end = events[0][1]
-    
-    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(1, n):
-        <span class="keyword">if</span> events[i][0] >= last_end + 1: <span class="comment"># Перерыв 1 минута</span>
-            count += 1
-            last_end = events[i][1]
-            
-    <span class="keyword">return</span> count
-            </pre>
-        </div>
+    <section class="card">
+      <h2>Ключевые приемы</h2>
+      <ul style="line-height: 1.8; color: var(--muted); font-size: 14px;">
+        <li><b style="color:#fff;">Сортировка по двум ключам:</b> <code>a.sort(key=lambda x: (x[0], -x[1]))</code> (первый параметр по возрастанию, второй — по убыванию).</li>
+        <li><b style="color:#fff;">Двумерные списки:</b> Если в строке несколько чисел, читай их как <code>[int(x) for x in line.split()]</code>.</li>
+        <li><b style="color:#fff;">Excel:</b> Если код не пишется, 26 задание часто легко решается через сортировку и формулы в Excel.</li>
+      </ul>
+    </section>
 
-        <h2>Тип 3: Камеры хранения / Ряды в кинотеатре</h2>
-        <p>Сложные задачи на поиск подходящего места или ряда.</p>
+    <section class="card" style="border-top: 4px solid var(--accent)">
+      <h2>💡 Лайфхак для камер хранения</h2>
+      <p style="font-size:14px; line-height:1.7;">
+        Если задача про ячейки (камеры хранения), используй список <code>cells = [0] * K</code>, где хранишь время освобождения каждой ячейки. Для каждого нового клиента ищи ячейку, где <code>cells[i] < start_time</code>.
+      </p>
+    </section>
 
-        <div class="code-section">
-            <pre>
-<span class="keyword">def</span> <span class="func">storage_cells</span>():
-    f = <span class="func">open</span>('26_3.txt')
-    k = <span class="func">int</span>(f.readline()) <span class="comment"># кол-во ячеек</span>
-    n = <span class="func">int</span>(f.readline())
-    <span class="comment"># Сортируем по времени прихода</span>
-    clients = <span class="func">sorted</span>([<span class="func">list</span>(<span class="func">map</span>(int, x.split())) <span class="keyword">for</span> x <span class="keyword">in</span> f])
-    
-    cells = [0] * k <span class="comment"># Храним время освобождения ячеек</span>
-    count = 0
-    last_cell_index = 0
-    
-    <span class="keyword">for</span> start, end <span class="keyword">in</span> clients:
-        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(k):
-            <span class="keyword">if</span> cells[i] < start: <span class="comment"># Ячейка свободна (строго меньше)</span>
-                cells[i] = end
-                count += 1
-                last_cell_index = i + 1 <span class="comment"># Номер ячейки (от 1)</span>
-                <span class="keyword">break</span>
-                
-    <span class="keyword">print</span>(f"Всего клиентов: {count}, Последняя ячейка: {last_cell_index}")
-            </pre>
-        </div>
+    <footer>
+      <p style="text-align:center; color:var(--muted); font-size:12px;">
+        © 2025 Овсиенко Алексей · नोट्स проекта Tesseract
+      </p>
+    </footer>
 
-        <div class="important-box">
-            <h3>Лайфхаки для Python:</h3>
-            <ul>
-                <li><code>key=lambda x: (x[0], -x[1])</code> — сортировка по первому полю (возр.) и по второму (убыв.).</li>
-                <li>Всегда проверяй условия "включительно" (>=) или "строго" (>). В задачах про время это критично.</li>
-                <li>Если задача про ряды и места, используй словарь <code>{ряд: [список мест]}</code>.</li>
-            </ul>
-        </div>
-    </div>
+  </div>
 </body>
 </html>
