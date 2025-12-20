@@ -2,100 +2,155 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Конспект ЕГЭ №2: Логические операции</title>
+    <title>Задание 2: Таблицы истинности</title>
     <link rel="stylesheet" href="../../style.css">
     <style>
-        /* Стилизация секции под состояние "сработавшей кнопки" */
-        .logic-operations-card {
-            /* Используем типичный фон кнопки при срабатывании: глубокий синий или твой основной акцент */
-            background: linear-gradient(145deg, #007acc, #005fa3); 
-            color: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
+        body {
+            background-color: #0b0e14; /* Глубокий темный фон */
+            color: #e0e0e0;
+        }
+
+        /* Главный контейнер логических операций */
+        .bot-interface {
+            background: #11151c;
+            border: 1px solid #1f2633;
+            border-radius: 16px;
+            padding: 25px;
             margin: 20px 0;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3), 0 0 15px rgba(0, 122, 204, 0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .logic-operations-card h2 {
+        .bot-interface h2 {
+            color: #00ff88; /* Ярко-зеленый акцент из твоего примера */
+            font-size: 1.4em;
             margin-top: 0;
-            color: #fff;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-weight: 600;
         }
 
+        /* Сетка кнопок */
         .op-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
-            margin-top: 15px;
         }
 
-        .op-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Стиль кнопки-карточки */
+        .op-card {
+            background: #161b22;
+            border: 1px solid #2d3643;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        .op-item code {
-            background: rgba(0, 0, 0, 0.3) !important;
-            color: #00ffcc !important;
-            padding: 2px 6px;
-            border-radius: 4px;
+        /* Эффект свечения при наведении (как срабатывание бота) */
+        .op-card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+            transform: translateY(-2px);
         }
 
-        .op-name {
+        .op-title {
             display: block;
-            font-size: 0.9em;
-            margin-bottom: 5px;
+            color: #ffffff;
+            font-size: 1.1em;
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 12px;
         }
+
+        .op-code {
+            display: inline-block;
+            background: #0d1117;
+            color: #00ff88;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95em;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        /* Блок с кодом решения */
+        .solution-block {
+            background: #0d1117;
+            border-left: 4px solid #00ff88;
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+            font-family: 'Consolas', monospace;
+        }
+
+        .keyword { color: #ff79c6; }
+        .var { color: #bd93f9; }
+        .comment { color: #6272a4; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Задание 2: Таблицы истинности</h1>
+        <h1>Задание 2: Конструирование таблиц истинности</h1>
 
-        <div class="logic-operations-card">
+        <p>Для решения необходимо сопоставить фрагмент таблицы из условия с полной таблицей, которую мы построим программно.</p>
+
+        <div class="bot-interface">
             <h2>Логические операции (Python)</h2>
             <div class="op-grid">
-                <div class="op-item">
-                    <span class="op-name">Инверсия</span>
-                    <code>not x</code>
+                <div class="op-card">
+                    <span class="op-title">Инверсия (¬)</span>
+                    <span class="op-code">not x</span>
                 </div>
-                <div class="op-item">
-                    <span class="op-name">Конъюнкция</span>
-                    <code>x and y</code>
+                <div class="op-card">
+                    <span class="op-title">Конъюнкция (∧)</span>
+                    <span class="op-code">x and y</span>
                 </div>
-                <div class="op-item">
-                    <span class="op-name">Дизъюнкция</span>
-                    <code>x or y</code>
+                <div class="op-card">
+                    <span class="op-title">Дизъюнкция (∨)</span>
+                    <span class="op-code">x or y</span>
                 </div>
-                <div class="op-item">
-                    <span class="op-name">Импликация</span>
-                    <code>x <= y</code>
+                <div class="op-card">
+                    <span class="op-title">Импликация (→)</span>
+                    <span class="op-code">x <= y</span>
                 </div>
-                <div class="op-item">
-                    <span class="op-name">Эквиваленция</span>
-                    <code>x == y</code>
+                <div class="op-card">
+                    <span class="op-title">Эквиваленция (≡)</span>
+                    <span class="op-code">x == y</span>
+                </div>
+                <div class="op-card">
+                    <span class="op-title">Сложение (≠)</span>
+                    <span class="op-code">x != y</span>
                 </div>
             </div>
         </div>
 
-        <p>Используй этот блок как шпаргалку при написании перебора в 4 циклах <code>for</code>.</p>
+        <h3>Универсальный код для перебора:</h3>
         
-        <div class="code-section">
+        
+
+[Image of truth table logic diagram for Boolean expressions]
+
+
+        <div class="solution-block">
             <pre>
-# Пример использования в коде
-if (x <= y) and (y == z):
-    print(x, y, z)
+<span class="keyword">print</span>(<span class="string">'x y z w'</span>)
+<span class="keyword">for</span> x <span class="keyword">in</span> <span class="num">0</span>, <span class="num">1</span>:
+    <span class="keyword">for</span> y <span class="keyword">in</span> <span class="num">0</span>, <span class="num">1</span>:
+        <span class="keyword">for</span> z <span class="keyword">in</span> <span class="num">0</span>, <span class="num">1</span>:
+            <span class="keyword">for</span> w <span class="keyword">in</span> <span class="num">0</span>, <span class="num">1</span>:
+                f = (x <= y) <span class="keyword">and</span> (y == (not z)) <span class="comment"># Твоя формула</span>
+                <span class="keyword">if</span> f == <span class="num">0</span>: <span class="comment"># Если в таблице ищем ложь</span>
+                    <span class="keyword">print</span>(x, y, z, w)
             </pre>
+        </div>
+
+        <div class="bot-interface" style="border-color: #ffb86c;">
+            <h2 style="color: #ffb86c;">💡 На что обратить внимание</h2>
+            <ul style="line-height: 1.6;">
+                <li>Сначала расставь все <b>not</b>, потом <b>and</b>, потом всё остальное.</li>
+                <li>Если в ответе получается несколько одинаковых строк, внимательно смотри на пустые ячейки в КИМе.</li>
+                <li>Импликация <code>x <= y</code> работает правильно только для значений 0 и 1.</li>
+            </ul>
         </div>
     </div>
 </body>
