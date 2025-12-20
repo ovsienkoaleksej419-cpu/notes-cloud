@@ -1,176 +1,139 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>AlexBot — помощник</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>AlexBot — Помощник</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="../../style.css">
+  <!-- твой основной CSS -->
+  <link rel="stylesheet" href="/style.css">
 
   <style>
-    /* Твои существующие стили */
-    .chat-card {
-      max-width: 900px;
+    .chat {
+      max-width: 700px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       height: 80vh;
     }
 
-    .mode-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    /* Стили для кнопок режимов */
-    .mode-btn {
-      padding: 10px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      color: var(--text-main);
-      transition: 0.3s;
-    }
-
-    /* КЛАСС ДЛЯ ЗЕЛЕНОЙ ПОДСВЕТКИ */
-    .mode-btn.active {
-      background: rgba(34, 197, 94, 0.2) !important; /* Светло-зеленый фон */
-      border-color: #22c55e !important;             /* Ярко-зеленая рамка */
-      color: #22c55e !important;                    /* Зеленый текст */
-    }
-
-    /* Остальные стили чата */
     .chat-box {
       flex: 1;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      padding-right: 5px;
+      margin-bottom: 15px;
     }
 
     .msg {
-      max-width: 75%;
       padding: 14px 18px;
       border-radius: 16px;
-      font-size: 15px;
+      max-width: 80%;
       line-height: 1.5;
+      font-size: 15px;
     }
 
-    .msg.user {
+    .user {
       align-self: flex-end;
       background: rgba(34,197,94,0.15);
       border: 1px solid rgba(34,197,94,0.4);
     }
 
-    .msg.bot {
+    .bot {
       align-self: flex-start;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
-    .input-area {
+    .controls {
       display: flex;
-      gap: 12px;
-      margin-top: 16px;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
-    .input-area input {
+    .controls button {
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .controls button.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
       flex: 1;
-      padding: 16px 20px;
+      padding: 14px;
       border-radius: 14px;
       border: 1px solid var(--card-border);
-      background: rgba(15,23,42,0.7);
-      color: #fff;
-      outline: none;
+      background: rgba(15,23,42,0.8);
+      color: white;
     }
 
-    .send-btn {
+    .send {
       padding: 14px 22px;
       border-radius: 14px;
-      border: 1px solid rgba(34,197,94,0.4);
-      background: rgba(34,197,94,0.15);
-      color: var(--accent);
+      background: var(--accent);
+      color: black;
       font-weight: 700;
+      border: none;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <div class="brand">
-      <div class="logo">AI</div>
-      <div>
-        <h1>AlexBot</h1>
-        <p class="muted">Помощник по конспектам и ЕГЭ</p>
-      </div>
-    </div>
-    <nav>
-      <a href="../index.html" class="nav-link">Главная</a>
-      <a href="../notes.html" class="nav-link">Конспекты</a>
-      <a href="#" class="nav-link nav-link-accent">Бот</a>
-    </nav>
-  </header>
+<div class="container chat">
+  <h1>🤖 AlexBot</h1>
 
-  <div class="card chat-card">
-    <div class="mode-bar">
-      <button id="btn-ege" class="mode-btn active" onclick="setMode('ege')">🎓 Режим ЕГЭ</button>
-      <button id="btn-free" class="mode-btn" onclick="setMode('free')">💬 Свободный</button>
-    </div>
+  <div class="controls">
+    <button id="egeBtn" class="active">ЕГЭ режим</button>
+    <button id="freeBtn">Свободный</button>
+    <a href="/" class="back-link">← На главную</a>
+  </div>
 
-    <div id="chatBox" class="chat-box">
-      <div class="msg bot">
-        Привет! Я AlexBot 🤖  
-        По умолчанию включён <b>режим ЕГЭ</b>.
-      </div>
+  <div id="chatBox" class="chat-box">
+    <div class="msg bot">
+      Привет! Я AlexBot.  
+      Могу решать задания ЕГЭ по информатике или объяснять темы.
     </div>
+  </div>
 
-    <div class="input-area">
-      <input id="userInput" placeholder="Напиши вопрос или задание…" autocomplete="off" />
-      <button class="send-btn" onclick="send()">Отправить</button>
-    </div>
+  <div class="input-row">
+    <input id="input" placeholder="Напиши вопрос..." autocomplete="off">
+    <button class="send" id="send">Отправить</button>
   </div>
 </div>
 
 <script>
-  const chatBox = document.getElementById('chatBox');
-  const input = document.getElementById('userInput');
-  
-  let currentMode = 'ege';
+  let mode = "ege";
 
-  function setMode(mode) {
-    currentMode = mode;
+  const chatBox = document.getElementById("chatBox");
+  const input = document.getElementById("input");
 
-    // 1. Управляем визуальным переключением вкладок
-    // Убираем active у всех кнопок в панели
-    document.querySelectorAll('.mode-btn').forEach(btn => {
-      btn.classList.remove('active');
-    });
+  document.getElementById("egeBtn").onclick = () => setMode("ege");
+  document.getElementById("freeBtn").onclick = () => setMode("free");
 
-    // Добавляем active нужной кнопке
-    if (mode === 'ege') {
-      document.getElementById('btn-ege').classList.add('active');
-    } else {
-      document.getElementById('btn-free').classList.add('active');
-    }
-
-    // 2. Информируем пользователя в чате
-    addMsg(
-      mode === 'ege'
-        ? '🎓 Режим ЕГЭ включён. Объясняю как на экзамене.'
-        : '💬 Свободный режим включён.',
-      'bot'
-    );
+  function setMode(m) {
+    mode = m;
+    document.getElementById("egeBtn").classList.toggle("active", m === "ege");
+    document.getElementById("freeBtn").classList.toggle("active", m === "free");
   }
 
-  function addMsg(text, type) {
-    const div = document.createElement('div');
-    div.className = 'msg ' + type;
-    div.innerText = text;
+  function add(text, cls) {
+    const div = document.createElement("div");
+    div.className = "msg " + cls;
+    div.textContent = text;
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
   }
@@ -179,29 +142,25 @@
     const text = input.value.trim();
     if (!text) return;
 
-    addMsg(text, 'user');
-    input.value = '';
+    add(text, "user");
+    input.value = "";
 
     try {
-      const res = await fetch('/.netlify/functions/openrouter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: text,
-          mode: currentMode
-        })
+      const res = await fetch("/.netlify/functions/openrouter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: text, mode })
       });
 
       const data = await res.json();
-      addMsg(data.reply || 'Нет ответа', 'bot');
-    } catch (e) {
-      addMsg('Ошибка связи с сервером', 'bot');
+      add(data.reply || "Нет ответа", "bot");
+    } catch {
+      add("Ошибка связи с ботом", "bot");
     }
   }
 
-  input.addEventListener('keypress', e => {
-    if (e.key === 'Enter') send();
-  });
+  document.getElementById("send").onclick = send;
+  input.addEventListener("keydown", e => e.key === "Enter" && send());
 </script>
 
 </body>
