@@ -1,90 +1,161 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Конспект ЕГЭ №17: Обработка числовых последовательностей</title>
-    <link rel="stylesheet" href="../../style.css">
-    <style>
-        .array-box { background: rgba(0, 210, 211, 0.1); border: 2px solid #00d2d3; padding: 20px; border-radius: 12px; margin: 20px 0; }
-        .code-window { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; font-family: 'Consolas', monospace; border-left: 5px solid #00d2d3; }
-        .keyword { color: #569cd6; }
-        .func { color: #dcdcaa; }
-        .num { color: #b5cea8; }
-        .op { color: #c586c0; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Задание 17 — Конспекты Алексея</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    :root {
+        --accent: #00ff88; 
+        --bot-blue: #3b82f6;
+        --code-bg: #0d1117;
+    }
+
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .data-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon {
+      font-size: 20px;
+      background: rgba(59, 130, 246, 0.1);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: var(--bot-blue);
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .warning-card {
+      background: rgba(255, 184, 108, 0.05);
+      border: 1px solid rgba(255, 184, 108, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Задание 17: Работа с массивами и файлами</h1>
+  <div class="wrap">
+
+    <header>
+      <div class="brand">
+        <div class="logo">ОА</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
+          <div style="font-size:13px;color:var(--muted)">Конспекты: Обработка последовательностей</div>
+        </div>
+      </div>
+      <nav>
+        <a href="../../index.html" class="nav-link">На главную</a>
+        <a href="../../notes.html" class="nav-link">Конспекты</a>
+      </nav>
+    </header>
+
+    <section class="card">
+      <div style="display:inline-block; padding:4px 10px; background:rgba(0, 255, 136, 0.1); color:var(--accent); border-radius:6px; font-size:12px; font-weight:700; margin-bottom:10px;">
+        МЕТОД: СПИСКИ И ЦИКЛЫ
+      </div>
+      <h1>Задание 17: Работа с файлами</h1>
+      <p>
+        Нужно прочитать тысячи чисел из файла <code>17.txt</code>, найти пары (или тройки) элементов по условию и вывести их количество и экстремум (мин/макс).
+      </p>
+
+      <div class="file-grid">
+        <div class="data-card">
+          <div class="icon">📂</div>
+          <div>
+            <div style="font-size:10px; color:var(--muted);">ВХОД</div>
+            <div style="font-weight:700;">Файл .txt</div>
+          </div>
+        </div>
+        <div class="data-card">
+          <div class="icon">🔍</div>
+          <div>
+            <div style="font-size:10px; color:var(--muted);">ВЫХОД</div>
+            <div style="font-weight:700;">Кол-во и Макс</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Шаблон идеального решения</h2>
+      
+      <div class="code-block">
+        <span style="color:#6272a4"># 1. Читаем данные</span><br>
+        a = [<span style="color:#ff79c6">int</span>(x) <span style="color:#ff79c6">for</span> x <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">open</span>(<span style="color:#f1fa8c">'17.txt'</span>)]<br><br>
         
-        <p class="intro">
-            В этом задании нужно прочитать список чисел из файла, найти количество пар элементов, удовлетворяющих условию, и найти какую-то характеристику (например, максимальную сумму).
-        </p>
-
-        <div class="array-box">
-            <h3>Что такое "пара" в 17 задании?</h3>
-            <p>Внимательно читай условие, это критично:</p>
-            <ul>
-                <li><strong>Подряд идущие:</strong> это элементы <code>a[i]</code> и <code>a[i+1]</code>.</li>
-                <li><strong>Произвольные пары:</strong> это любые два числа из списка (встречается редко, решается через два вложенных цикла).</li>
-            </ul>
-        </div>
-
-        <h2>1. Этап первый: Чтение файла и поиск константы</h2>
-        <p>Часто условие привязано к какому-то числу из файла (например, "минимальное число, оканчивающееся на 13").</p>
+        <span style="color:#6272a4"># 2. Ищем константу (например, макс. число на 15)</span><br>
+        m = <span style="color:#ff79c6">max</span>(i <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> a <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">abs</span>(i) % <span style="color:#bd93f9">100</span> == <span style="color:#bd93f9">15</span>)<br><br>
         
-        <div class="code-window">
-            <pre>
-<span class="comment"># 1. Читаем все числа в список</span>
-data = [<span class="func">int</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">open</span>(<span class="string">'17.txt'</span>)]
+        <span style="color:#6272a4"># 3. Перебираем пары</span><br>
+        res = []<br>
+        <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#ff79c6">range</span>(<span style="color:#ff79c6">len</span>(a) - <span style="color:#bd93f9">1</span>):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;v1, v2 = a[i], a[i+1]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;cond1 = (<span style="color:#ff79c6">abs</span>(v1) % <span style="color:#bd93f9">2</span> == <span style="color:#bd93f9">0</span>) + (<span style="color:#ff79c6">abs</span>(v2) % <span style="color:#bd93f9">2</span> == <span style="color:#bd93f9">0</span>) == <span style="color:#bd93f9">1</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;cond2 = (v1 + v2) < m<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff79c6">if</span> cond1 <span style="color:#ff79c6">and</span> cond2:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.append(v1 + v2)<br><br>
+        
+        <span style="color:#ff79c6">print</span>(<span style="color:#ff79c6">len</span>(res), <span style="color:#ff79c6">max</span>(res))
+      </div>
+    </section>
 
-<span class="comment"># 2. Ищем опорное число (например, макс. элемент кратный 10)</span>
-max_10 = <span class="func">max</span>(x <span class="keyword">for</span> x <span class="keyword">in</span> data <span class="keyword">if</span> x % <span class="num">10</span> == <span class="num">0</span>)
-            </pre>
-        </div>
-
-        <h2>2. Этап второй: Проход по парам</h2>
-        <p>Используем цикл <code>range(len(data) - 1)</code>, чтобы не выйти за границы списка.</p>
-
-         and a[i+1]]
-
-        <div class="code-window">
-            <pre>
-ans = []
-<span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="func">len</span>(data) - <span class="num">1</span>):
-    v1 = data[i]
-    v2 = data[i+1]
     
-    <span class="comment"># Пример условия: ровно одно число из пары делится на 7, 
-    # а их сумма меньше нашего max_10</span>
-    cond1 = (v1 % <span class="num">7</span> == <span class="num">0</span>) + (v2 % <span class="num">7</span> == <span class="num">0</span>) == <span class="num">1</span>
-    cond2 = (v1 + v2) < max_10
-    
-    <span class="keyword">if</span> cond1 <span class="op">and</span> cond2:
-        ans.append(v1 + v2)
 
-<span class="comment"># В ответе обычно просят количество и максимум</span>
-<span class="keyword">print</span>(<span class="func">len</span>(ans), <span class="func">max</span>(ans))
-            </pre>
-        </div>
+    <section class="card">
+      <h2>Логические "фишки"</h2>
+      <ul style="line-height: 1.8; color: var(--muted);">
+        <li><b style="color:#fff;">Ровно один из двух:</b> <code>(cond1) + (cond2) == 1</code></li>
+        <li><b style="color:#fff;">Хотя бы один из двух:</b> <code>(cond1) + (cond2) >= 1</code></li>
+        <li><b style="color:#fff;">Ни одного из двух:</b> <code>(cond1) + (cond2) == 0</code></li>
+      </ul>
+    </section>
 
-        <h2>3. Полезные фишки для условий</h2>
-        <p>Чтобы код был чище, используй логическое сложение (True = 1, False = 0):</p>
-        <ul>
-            <li><code>(x % 3 == 0) + (y % 3 == 0) == 1</code> — <strong>ровно одно</strong> из двух.</li>
-            <li><code>(x % 3 == 0) + (y % 3 == 0) >= 1</code> — <strong>хотя бы одно</strong> из двух.</li>
-            <li><code>x % 10 == 3</code> — число оканчивается на 3 (для положительных чисел).</li>
-            <li><code>abs(x) % 10 == 3</code> — число оканчивается на 3 (<strong>обязательно для отрицательных чисел!</strong>).</li>
-        </ul>
-
-        <div class="note" style="border-left: 5px solid #00d2d3; background: rgba(0, 210, 211, 0.05);">
-            <h3>Чек-лист для 17 задания:</h3>
-            <ul>
-                <li><strong>Отрицательные числа:</strong> Если в файле есть минусы, <code>x % 10</code> может работать не так, как ты ждешь. Всегда пиши <code>abs(x) % 10</code>.</li>
-                <li><strong>Границы цикла:</strong> Не забудь <code>len(data) - 1</code> для пар и <code>len(data) - 2</code> для троек.</li>
-                <li><strong>Имена переменных:</strong> Не называй список <code>list</code>, это зарезервированное слово в Python.</li>
-            </ul>
-        </div>
+    <div class="warning-card">
+      <h3 style="margin-top:0; color:#ffb86c;">⚠️ Важно: Отрицательные числа</h3>
+      <p style="font-size:14px; margin-bottom:0;">
+        В 17 задании часто встречаются отрицательные числа. Помни: в Python <code>-17 % 10</code> даст <code>3</code>, а не <code>7</code>. Чтобы всегда получать правильную последнюю цифру, используй <b>abs(x) % 10</b>.
+      </p>
     </div>
+
+    <footer>
+      <p style="text-align:center; color:var(--muted); font-size:12px;">
+        © 2025 Овсиенко Алексей · नोट्स проекта Tesseract
+      </p>
+    </footer>
+
+  </div>
 </body>
 </html>
