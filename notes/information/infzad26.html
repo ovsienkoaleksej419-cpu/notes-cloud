@@ -1,1 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №26: Системная обработка данных</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Courier New', monospace; overflow-x: auto; border-left: 5px solid #007acc; }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .method { color: #b5cea8; }
+        .important-box { background: #2d2d2d; border: 1px dashed #569cd6; padding: 15px; margin: 20px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 26: Жадные алгоритмы и сортировка</h1>
+        
+        <p class="intro">
+            Задание проверяет умение обрабатывать данные из файлов объемом до 10,000 строк. Основной инструмент — <strong>сортировка</strong>.
+        </p>
 
+        <div class="important-box">
+            <strong>Золотое правило 26 задания:</strong> Сначала сортируем данные по условию (по возрастанию, если нужно "впихнуть" больше, или по окончанию времени, если нужно провести больше встреч).
+        </div>
+
+        <h2>Тип 1: Системный администратор (Архивация)</h2>
+        <p>Задача: уместить как можно больше файлов на диск и найти максимальный размер последнего файла.</p>
+        
+        <div class="code-section">
+            <pre>
+<span class="keyword">def</span> <span class="func">archive_task</span>():
+    f = <span class="func">open</span>('26_1.txt')
+    s, n = <span class="func">map</span>(int, f.readline().split())
+    data = <span class="func">sorted</span>([<span class="func">int</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> f])
+    
+    count = 0
+    total_sum = 0
+    last_file = 0
+    
+    <span class="comment"># 1. Набираем максимум файлов</span>
+    <span class="keyword">for</span> x <span class="keyword">in</span> data:
+        <span class="keyword">if</span> total_sum + x <= s:
+            total_sum += x
+            count += 1
+            last_file = x
+        <span class="keyword">else</span>:
+            <span class="keyword">break</span>
+            
+    <span class="comment"># 2. Ищем замену для последнего файла</span>
+    total_sum -= last_file
+    <span class="keyword">for</span> x <span class="keyword">in</span> data:
+        <span class="keyword">if</span> total_sum + x <= s:
+            last_file = x
+            
+    <span class="keyword">print</span>(f"Кол-во: {count}, Макс. файл: {last_file}")
+            </pre>
+        </div>
+
+        <h2>Тип 2: Мероприятия и интервалы</h2>
+        <p>Задача: провести максимальное количество встреч в одном зале.</p>
+        
+        
+
+        <div class="code-section">
+            <pre>
+<span class="keyword">def</span> <span class="func">events_task</span>():
+    f = <span class="func">open</span>('26_2.txt')
+    n = <span class="func">int</span>(f.readline())
+    <span class="comment"># Сортируем по ВРЕМЕНИ ОКОНЧАНИЯ (x[1])</span>
+    events = <span class="func">sorted</span>([<span class="func">list</span>(<span class="func">map</span>(int, x.split())) <span class="keyword">for</span> x <span class="keyword">in</span> f], key=<span class="keyword">lambda</span> x: x[1])
+    
+    count = 1
+    last_end = events[0][1]
+    
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(1, n):
+        <span class="keyword">if</span> events[i][0] >= last_end + 1: <span class="comment"># Перерыв 1 минута</span>
+            count += 1
+            last_end = events[i][1]
+            
+    <span class="keyword">return</span> count
+            </pre>
+        </div>
+
+        <h2>Тип 3: Камеры хранения / Ряды в кинотеатре</h2>
+        <p>Сложные задачи на поиск подходящего места или ряда.</p>
+
+        <div class="code-section">
+            <pre>
+<span class="keyword">def</span> <span class="func">storage_cells</span>():
+    f = <span class="func">open</span>('26_3.txt')
+    k = <span class="func">int</span>(f.readline()) <span class="comment"># кол-во ячеек</span>
+    n = <span class="func">int</span>(f.readline())
+    <span class="comment"># Сортируем по времени прихода</span>
+    clients = <span class="func">sorted</span>([<span class="func">list</span>(<span class="func">map</span>(int, x.split())) <span class="keyword">for</span> x <span class="keyword">in</span> f])
+    
+    cells = [0] * k <span class="comment"># Храним время освобождения ячеек</span>
+    count = 0
+    last_cell_index = 0
+    
+    <span class="keyword">for</span> start, end <span class="keyword">in</span> clients:
+        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(k):
+            <span class="keyword">if</span> cells[i] < start: <span class="comment"># Ячейка свободна (строго меньше)</span>
+                cells[i] = end
+                count += 1
+                last_cell_index = i + 1 <span class="comment"># Номер ячейки (от 1)</span>
+                <span class="keyword">break</span>
+                
+    <span class="keyword">print</span>(f"Всего клиентов: {count}, Последняя ячейка: {last_cell_index}")
+            </pre>
+        </div>
+
+        <div class="important-box">
+            <h3>Лайфхаки для Python:</h3>
+            <ul>
+                <li><code>key=lambda x: (x[0], -x[1])</code> — сортировка по первому полю (возр.) и по второму (убыв.).</li>
+                <li>Всегда проверяй условия "включительно" (>=) или "строго" (>). В задачах про время это критично.</li>
+                <li>Если задача про ряды и места, используй словарь <code>{ряд: [список мест]}</code>.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
