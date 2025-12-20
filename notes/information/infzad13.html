@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Конспект ЕГЭ №13: Компьютерные сети</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .network-box { background: rgba(9, 132, 227, 0.1); border: 1px solid #0984e3; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .bit-logic { font-family: 'Courier New', monospace; background: #2d3436; color: #fab1a0; padding: 5px 10px; border-radius: 4px; }
+        .step-num { background: #0984e3; color: white; padding: 2px 8px; border-radius: 50%; font-weight: bold; margin-right: 5px; }
+        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; border-left: 5px solid #0984e3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 13: IP-адресация и маски</h1>
+        
+        <p class="intro">
+            IP-адрес состоит из 32 бит (4 байта по 8 бит). Маска подсети определяет, какая часть адреса относится к <strong>адресу сети</strong>, а какая — к <strong>номеру узла</strong>.
+        </p>
 
+        <div class="network-box">
+            <h3>Как работает маска?</h3>
+            <p>Маска — это всегда последовательность единиц, а затем нулей. Например:</p>
+            <p><span class="bit-logic">255.255.255.240</span> → <span class="bit-logic">11111111.11111111.11111111.11110000</span></p>
+            <p>Единицы в маске "замораживают" часть IP-адреса, делая её адресом сети. Нули — это "свободное место" для адресов компьютеров.</p>
+        </div>
+
+        
+
+        <h2>1. Ручной способ (Поразрядное И)</h2>
+        <p>Адрес сети получается путём применения операции <strong>И (AND)</strong> между IP-адресом и маской.</p>
+        <table>
+            <tr><th>Объект</th><th>Десятичный вид</th><th>Двоичный вид (последний байт)</th></tr>
+            <tr><td>IP-узел</td><td>... .150</td><td>10010<span style="color: #ff7675;">110</span></td></tr>
+            <tr><td>Маска</td><td>... .248</td><td>11111<span style="color: #ff7675;">000</span></td></tr>
+            <tr style="border-top: 2px solid #fff;"><td>Сеть</td><td>... .144</td><td>10010<span style="color: #ff7675;">000</span></td></tr>
+        </table>
+
+        <h2>2. Решение через Python (Библиотека ipaddress)</h2>
+        <p>Это самый надежный способ на ЕГЭ. Он исключает ошибки в переводах систем счисления.</p>
+
+        <div class="code-section">
+            <pre>
+<span style="color: #569cd6;">import</span> ipaddress
+
+<span style="color: #6a9955;"># Создаем объект сети: "IP-узла/маска"</span>
+<span style="color: #6a9955;"># strict=False позволяет передать адрес узла вместо адреса сети</span>
+net = ipaddress.ip_network(<span style="color: #ce9178;">'192.168.10.150/255.255.255.248'</span>, strict=<span style="color: #569cd6;">False</span>)
+
+<span style="color: #func">print</span>(<span style="color: #ce9178;">f"Адрес сети: {net.network_address}"</span>)
+<span style="color: #func">print</span>(<span style="color: #ce9178;">f"Всего адресов: {net.num_addresses}"</span>)
+
+<span style="color: #6a9955;"># Перебор всех адресов в сети (за вычетом адреса сети и широковещательного)</span>
+count = <span style="color: #b5cea8;">0</span>
+<span style="color: #569cd6;">for</span> addr <span style="color: #569cd6;">in</span> net:
+    <span style="color: #6a9955;"># Условие: например, в двоичной записи узла больше единиц, чем нулей</span>
+    b = <span style="color: #ce9178;">f"{addr:b}"</span>
+    <span style="color: #569cd6;">if</span> b.count(<span style="color: #ce9178;">'1'</span>) > b.count(<span style="color: #ce9178;">'0'</span>):
+        count += <span style="color: #b5cea8;">1</span>
+
+<span style="color: #func">print</span>(<span style="color: #ce9178;">f"Подходящих адресов: {count}"</span>)
+            </pre>
+        </div>
+
+        <div class="network-box" style="border-color: #e17055;">
+            <h3 style="color: #e17055;">Частые вопросы:</h3>
+            <ul>
+                <li><strong>Сколько узлов в сети?</strong> Формула: 2<sup>n</sup> - 2 (где n — количество нулей в маске).</li>
+                <li><strong>Что такое широковещательный адрес?</strong> Это последний адрес в сети (все нули маски заменены на единицы в IP).</li>
+                <li><strong>Prefix length (/24):</strong> Это количество единиц в маске. /24 означает 255.255.255.0.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
