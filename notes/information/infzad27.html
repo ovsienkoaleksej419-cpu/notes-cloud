@@ -1,1 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Mega-Конспект ЕГЭ №27</title>
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        .code-section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: 'Courier New', monospace; overflow-x: auto; }
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .type-label { display: inline-block; background: #007acc; color: white; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Задание 27: Полное руководство (Python)</h1>
+        
+        <div class="type-label">ТИП 1: ПАРЫ ЭЛЕМЕНТОВ</div>
+        <p>Поиск количества или максимальной суммы пар с условиями на кратность и расстояние.</p>
+        
+        <div class="code-section">
+            <pre>
+<span class="comment"># Задача: Найти кол-во пар (ai, aj), i < j, сумма которых кратна K</span>
+<span class="keyword">def</span> <span class="func">solve_pairs_sum</span>():
+    f = <span class="func">open</span>('27_A.txt')
+    n = <span class="func">int</span>(f.readline())
+    k = 13
+    count = 0
+    mods = [0] * k <span class="comment"># Храним кол-во уже считанных чисел с остатками 0..k-1</span>
+    
+    <span class="keyword">for</span> line <span class="keyword">in</span> f:
+        x = <span class="func">int</span>(line)
+        remainder = x % k
+        target = (k - remainder) % k <span class="comment"># Какой остаток нужен в пару, чтобы сумма делилась на k</span>
+        count += mods[target]
+        mods[remainder] += 1
+    <span class="keyword">return</span> count
+            </pre>
+        </div>
 
+        <div class="type-label">ТИП 2: ПОДПОСЛЕДОВАТЕЛЬНОСТИ (ПРЕФИКСЫ)</div>
+        <p>Самый частый тип. Ищем непрерывный отрезок с максимальной суммой, кратной K.</p>
+
+        
+
+        <div class="code-section">
+            <pre>
+<span class="comment"># Задача: Макс. сумма подпоследовательности, кратная K</span>
+<span class="keyword">def</span> <span class="func">solve_subarray_max</span>():
+    f = <span class="func">open</span>('27_B.txt')
+    n = <span class="func">int</span>(f.readline())
+    k = 115
+    cur_sum = 0
+    max_s = 0
+    <span class="comment"># Храним МИНИМАЛЬНУЮ префиксную сумму для каждого остатка, 
+    # чтобы отняв её, получить МАКСИМАЛЬНУЮ разность</span>
+    min_prefix = [float('inf')] * k
+    min_prefix[0] = 0 <span class="comment"># Базовый случай</span>
+    
+    <span class="keyword">for</span> line <span class="keyword">in</span> f:
+        x = <span class="func">int</span>(line)
+        cur_sum += x
+        r = cur_sum % k
+        
+        <span class="keyword">if</span> min_prefix[r] != float('inf'):
+            max_s = <span class="func">max</span>(max_s, cur_sum - min_prefix[r])
+        
+        min_prefix[r] = <span class="func">min</span>(min_prefix[r], cur_sum)
+    <span class="keyword">return</span> max_s
+            </pre>
+        </div>
+
+        <div class="type-label">ТИП 3: КОЛЬЦЕВЫЕ ДОРОГИ (БИОИНФОРМАТИКА)</div>
+        <p>Расчет стоимости для кольцевых структур за O(N). Ключ — расчет разницы (Delta).</p>
+
+        <div class="code-section">
+            <pre>
+<span class="comment"># Задача: Пункт с мин. стоимостью доставки (кольцо)</span>
+<span class="keyword">def</span> <span class="func">solve_ring</span>():
+    f = <span class="func">open</span>('27.txt')
+    n = <span class="func">int</span>(f.readline())
+    a = [<span class="func">int</span>(x) <span class="keyword">for</span> x <span class="keyword">in</span> f]
+    
+    cur_cost = 0
+    left_sum = 0 <span class="comment"># Сумма грузов на левой полуокружности</span>
+    right_sum = 0 <span class="comment"># Сумма грузов на правой</span>
+    
+    <span class="comment"># 1. Считаем стоимость для 0-го пункта</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(1, n):
+        dist = <span class="func">min</span>(i, n - i)
+        cur_cost += a[i] * dist
+        <span class="comment"># Распределяем веса для будущего сдвига</span>
+        <span class="keyword">if</span> i <= n // 2: right_sum += a[i]
+        <span class="keyword">else</span>: left_sum += a[i]
+        
+    min_cost = cur_cost
+    
+    <span class="comment"># 2. Двигаем "окно" за O(1) на каждом шаге</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(1, n):
+        <span class="comment"># При сдвиге вправо: правые стали ближе, левые — дальше</span>
+        cur_cost = cur_cost - right_sum + left_sum + a[i-1]
+        
+        <span class="comment"># Перебрасываем элементы через "границу" напротив</span>
+        boundary = (i + n // 2) % n
+        right_sum = right_sum - a[i] + a[boundary]
+        left_sum = left_sum - a[boundary] + a[i-1]
+        
+        min_cost = <span class="func">min</span>(min_cost, cur_cost)
+    <span class="keyword">return</span> min_cost
+            </pre>
+        </div>
+
+        <div class="note">
+            <h3>Чек-лист перед запуском:</h3>
+            <ul>
+                <li>Используй <code>sys.stdin.readline</code> для экстремально больших файлов Б.</li>
+                <li>В задачах на пары всегда проверяй условие на расстояние <code>(j - i >= d)</code> через буферный массив или очередь.</li>
+                <li>Для поиска количества пар с произведением, кратным K, считай степени простых множителей (обычно 2 и 5 для чисел вида 10^n).</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
