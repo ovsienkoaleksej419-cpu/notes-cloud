@@ -58,6 +58,56 @@ window.__NOTES_CATALOG__ = {
       "file": "notes/physics/ege-atom-yadro.html"
     }
   ],
+  "Математика (профиль, часть 1)": [
+    {
+      "title": "Задание 1 — пространственные фигуры и проекции",
+      "file": "notes/mathematics/ege-math-z01.html"
+    },
+    {
+      "title": "Задание 2 — классическая вероятность",
+      "file": "notes/mathematics/ege-math-z02.html"
+    },
+    {
+      "title": "Задание 3 — уравнения, неравенства, системы",
+      "file": "notes/mathematics/ege-math-z03.html"
+    },
+    {
+      "title": "Задание 4 — вычисления и преобразования",
+      "file": "notes/mathematics/ege-math-z04.html"
+    },
+    {
+      "title": "Задание 5 — прикладная задача",
+      "file": "notes/mathematics/ege-math-z05.html"
+    },
+    {
+      "title": "Задание 6 — планиметрия",
+      "file": "notes/mathematics/ege-math-z06.html"
+    },
+    {
+      "title": "Задание 7 — графики и свойства функций",
+      "file": "notes/mathematics/ege-math-z07.html"
+    },
+    {
+      "title": "Задание 8 — стереометрия",
+      "file": "notes/mathematics/ege-math-z08.html"
+    },
+    {
+      "title": "Задание 9 — производная и касательная",
+      "file": "notes/mathematics/ege-math-z09.html"
+    },
+    {
+      "title": "Задание 10 — задачи с прикладным содержанием",
+      "file": "notes/mathematics/ege-math-z10.html"
+    },
+    {
+      "title": "Задание 11 — числа, прогрессии, делимость",
+      "file": "notes/mathematics/ege-math-z11.html"
+    },
+    {
+      "title": "Задание 12 — моделирование и оптимизация",
+      "file": "notes/mathematics/ege-math-z12.html"
+    }
+  ],
   "Информатика": [
     {
       "title": "Графы и таблицы (задание 1)",

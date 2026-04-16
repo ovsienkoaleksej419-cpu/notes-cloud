@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>КИМ физика — 26 заданий, ЕГЭ | LogicUp</title>
+  <title>КИМ математика профиль — 12 заданий (часть 1), ЕГЭ | LogicUp</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -123,12 +123,9 @@
       font-weight: 800;
       padding: 4px 8px;
       border-radius: 8px;
-      background: rgba(59, 130, 246, 0.2);
-      color: #93c5fd;
+      background: rgba(167, 139, 250, 0.22);
+      color: #c4b5fd;
     }
-    .badge-pt.pt2 { background: rgba(250, 204, 21, 0.15); color: #fcd34d; }
-    .badge-pt.pt3 { background: rgba(251, 146, 60, 0.18); color: #fdba74; }
-    .badge-pt.pt4 { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
     .line-name { font-size: 12px; color: var(--muted); flex: 1; min-width: 200px; }
     .task-body { color: #e2e8f0; line-height: 1.7; font-size: 15px; margin-bottom: 12px; }
     .task-body .mono { font-family: ui-monospace, monospace; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 6px; }
@@ -220,7 +217,7 @@
         <div class="logo">LU</div>
         <div>
           <div style="font-weight:800;font-size:17px">LogicUp</div>
-          <div style="font-size:12px;color:var(--muted)">КИМ · физика</div>
+          <div style="font-size:12px;color:var(--muted)">КИМ · математика профиль</div>
         </div>
       </a>
       <nav class="head-nav">
@@ -231,18 +228,18 @@
     </header>
 
     <div id="screen-pick" class="screen">
-      <h1>КИМ по физике</h1>
+      <h1>КИМ по математике профильного уровня</h1>
       <p class="story">
-        Как на экзамене: <b>26 заданий</b>, максимум <b>45 первичных баллов</b> (часть 1 и задания 21–26 с разной стоимостью по спецификации).
-        Тексты <b>учебные</b>, не являются официальными КИМ ФИПИ. Где в билете нужен развёрнутый ответ или эксперимент,
-        здесь даны <b>краткие числовые аналоги</b> с проверкой целого ответа.
+        ЕГЭ, <b>профильный уровень</b>: первая часть билета — <b>12 заданий</b>, по <b>1 первичному баллу</b> каждое, максимум <b>12 баллов</b>.
+        Содержание ориентировано на <b>типы заданий 1–12</b> по спецификации ФИПИ (многогранники, вероятность, уравнения, преобразования, прикладные, планиметрия, производная и график, объёмы, прикладной смысл производной, прогрессии, экстремум на отрезке).
+        Тексты <b>учебные</b>, не являются официальными КИМ ФИПИ; ответ вводится как <b>целое число</b> (короткий ответ части 1).
       </p>
       <p class="story" style="margin-bottom:6px">Выберите вариант билета:</p>
       <div class="kim-grid">
-        <button type="button" class="kim-btn" data-kim="0">КИМ 1<span>26 заданий · до 45 баллов</span></button>
-        <button type="button" class="kim-btn" data-kim="1">КИМ 2<span>26 заданий · до 45 баллов</span></button>
-        <button type="button" class="kim-btn" data-kim="2">КИМ 3<span>26 заданий · до 45 баллов</span></button>
-        <button type="button" class="kim-btn" data-kim="3">КИМ 4<span>26 заданий · до 45 баллов</span></button>
+        <button type="button" class="kim-btn" data-kim="0">КИМ 1<span>12 заданий · до 12 баллов</span></button>
+        <button type="button" class="kim-btn" data-kim="1">КИМ 2<span>12 заданий · до 12 баллов</span></button>
+        <button type="button" class="kim-btn" data-kim="2">КИМ 3<span>12 заданий · до 12 баллов</span></button>
+        <button type="button" class="kim-btn" data-kim="3">КИМ 4<span>12 заданий · до 12 баллов</span></button>
       </div>
       <p class="disclaimer">
         Официальная структура и демоверсии: <a href="https://fipi.ru" target="_blank" rel="noopener noreferrer" style="color:var(--blue)">fipi.ru</a>.
@@ -251,7 +248,7 @@
 
     <div id="screen-kim" class="screen" hidden>
       <div class="scorebar">
-        <div><strong id="sb-kim"></strong> · решено <strong id="sb-done">0</strong>/26 · баллы <strong id="sb-pts">0</strong>/45</div>
+        <div><strong id="sb-kim"></strong> · решено <strong id="sb-done">0</strong>/<span id="sb-total">12</span> · баллы <strong id="sb-pts">0</strong>/<span id="sb-max">12</span></div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
           <button type="button" class="btn btn-ghost" id="btn-back" style="margin:0">← Другой вариант</button>
           <a href="kim.html" class="nav-link" style="margin:0;padding:10px 16px">Предметы</a>
@@ -269,11 +266,17 @@
     </footer>
   </div>
 
-  <script src="ege-kim-tasks-physics.js"></script>
+  <script src="ege-kim-tasks-math.js"></script>
   <script src="ai-explain-error.js"></script>
   <script>
     (function () {
       document.getElementById('year').textContent = new Date().getFullYear();
+
+      var M = window.EGE_KIM_TASKS_MATH;
+      var T = M.taskCount;
+      var PMAX = M.maxPoints;
+      document.getElementById('sb-total').textContent = String(T);
+      document.getElementById('sb-max').textContent = String(PMAX);
 
       var kimIndex = 0;
       var solved = {};
@@ -287,7 +290,6 @@
       function updateBar() {
         var d = 0;
         var p = 0;
-        var T = window.EGE_KIM_TASKS_PHYSICS.taskCount;
         for (var n = 1; n <= T; n++) {
           if (solved[n]) {
             d++;
@@ -416,7 +418,7 @@
         document.getElementById('sb-kim').textContent = 'КИМ ' + (idx + 1);
         updateBar();
 
-        var tasks = window.EGE_KIM_TASKS_PHYSICS.buildAll(idx);
+        var tasks = M.buildAll(idx);
         var list = document.getElementById('task-list');
         var toc = document.getElementById('toc');
         list.innerHTML = '';
@@ -435,14 +437,9 @@
           var head = document.createElement('div');
           head.className = 'kim-task-head';
           var pt = document.createElement('span');
-          var pc = 'badge-pt';
-          if (spec.points === 2) pc += ' pt2';
-          else if (spec.points === 3) pc += ' pt3';
-          else if (spec.points === 4) pc += ' pt4';
-          pt.className = pc;
+          pt.className = 'badge-pt';
           var pb = spec.points;
-          pt.textContent =
-            pb === 1 ? '1 балл' : pb === 2 ? '2 балла' : pb === 3 ? '3 балла' : pb === 4 ? '4 балла' : pb + ' балл.';
+          pt.textContent = pb === 1 ? '1 балл' : pb + ' балл.';
           var h = document.createElement('strong');
           h.textContent = 'Задание ' + spec.num;
           var ln = document.createElement('div');
