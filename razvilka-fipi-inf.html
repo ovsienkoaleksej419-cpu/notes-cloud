@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>4 полных КИМ — 27 заданий, ЕГЭ информатика | LogicUp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root { --muted: #94a3b8; --blue: #3b82f6; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 32px 18px 70px; }
+    header.page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; }
+    .brand .logo {
+      width: 52px; height: 52px; border-radius: 14px; background: #022c22;
+      border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: var(--accent); font-size: 18px;
+    }
+    nav.head-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+    .screen {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      backdrop-filter: blur(16px);
+    }
+    .screen[hidden] { display: none !important; }
+    .screen h1 { margin: 0 0 10px; font-size: 1.55rem; font-weight: 800; letter-spacing: -0.02em; }
+    .story { color: var(--muted); line-height: 1.65; margin-bottom: 14px; font-size: 14px; }
+    .kim-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    @media (max-width: 520px) { .kim-grid { grid-template-columns: 1fr; } }
+    .kim-btn {
+      display: block;
+      padding: 18px 16px;
+      border-radius: 14px;
+      text-align: center;
+      color: #f1f5f9;
+      font-weight: 800;
+      font-size: 1.1rem;
+      border: 2px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.5);
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .kim-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .kim-btn span { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 6px; }
+    .scorebar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(2, 6, 23, 0.92);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+    .scorebar strong { color: var(--accent); }
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+      max-height: 120px;
+      overflow-y: auto;
+      padding: 4px 0;
+    }
+    .toc a {
+      font-size: 12px;
+      padding: 6px 9px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--card-border);
+    }
+    .toc a:hover { color: #fff; border-color: var(--accent); }
+    .kim-task {
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      background: rgba(15, 23, 42, 0.35);
+    }
+    .kim-task.solved { border-color: rgba(34, 197, 94, 0.45); }
+    .kim-task-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+    .badge-pt {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+    }
+    .badge-pt.pt2 { background: rgba(250, 204, 21, 0.15); color: #fcd34d; }
+    .line-name { font-size: 12px; color: var(--muted); flex: 1; min-width: 200px; }
+    .task-body { color: #e2e8f0; line-height: 1.7; font-size: 15px; margin-bottom: 12px; }
+    .task-body .mono { font-family: ui-monospace, monospace; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 6px; }
+    .in-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    input[type="number"] {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.75);
+      color: #fff;
+      font-size: 15px;
+      width: 140px;
+    }
+    input:focus { outline: none; border-color: var(--accent); }
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--card-border);
+      margin-top: 12px;
+    }
+    .btn-ghost:hover { color: #fff; border-color: var(--accent); }
+    label.choice { display: flex; align-items: center; gap: 8px; margin: 6px 0; cursor: pointer; color: var(--text-muted); font-size: 14px; }
+    label.choice:hover { color: #e2e8f0; }
+    .msg { margin-top: 8px; font-size: 13px; min-height: 1.3em; }
+    .msg.err { color: #f87171; }
+    .msg.ok { color: #4ade80; }
+    .review-hints {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      background: rgba(59, 130, 246, 0.08);
+      font-size: 13px;
+    }
+    .review-hints.is-show { display: block; }
+    .review-hints .review-title { font-weight: 700; color: #93c5fd; margin-bottom: 8px; }
+    .review-hints ul { margin: 0; padding-left: 1.2em; color: var(--muted); line-height: 1.6; }
+    .review-hints a { color: var(--blue); font-weight: 600; }
+    .ai-mistake-block {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.06);
+    }
+    .ai-mistake-block.is-show { display: block; }
+    .btn-ai-explain {
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid var(--accent);
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent);
+      font-family: inherit;
+    }
+    .btn-ai-explain:hover:not(:disabled) { background: rgba(34, 197, 94, 0.28); }
+    .btn-ai-explain:disabled { opacity: 0.6; cursor: wait; }
+    .ai-explain-status { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+    .ai-explain-out {
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+    }
+    .ai-explain-out a { color: var(--blue); font-weight: 600; }
+    .disclaimer { font-size: 11px; color: var(--muted); margin-top: 18px; line-height: 1.5; }
+    footer.page-foot { text-align: center; margin-top: 28px; color: var(--text-muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <a href="index.html" class="brand">
+        <div class="logo">LU</div>
+        <div>
+          <div style="font-weight:800;font-size:17px">LogicUp</div>
+          <div style="font-size:12px;color:var(--muted)">Полные КИМ · 27 заданий</div>
+        </div>
+      </a>
+      <nav class="head-nav">
+        <a href="index.html" class="nav-link">Главная</a>
+        <a href="test-ege-informatika.html" class="nav-link">Тесты</a>
+        <a href="bot.html" class="nav-link" style="color:#3b82f6;font-weight:700">AI Бот</a>
+      </nav>
+    </header>
+
+    <div id="screen-pick" class="screen">
+      <h1>Четыре полных КИМ</h1>
+      <p class="story">
+        Как на экзамене: <b>27 заданий</b>, максимум <b>29 первичных баллов</b> (задания 1–25 по 1 баллу, 26–27 по 2 балла).
+        Тексты <b>учебные</b>, не являются официальными КИМ ФИПИ. Задания, где в билете даются файлы таблиц, текста или программы,
+        здесь заменены <b>краткими числовыми аналогами</b> с той же проверкой ответа.
+      </p>
+      <p class="story" style="margin-bottom:6px">Выберите вариант КИМ:</p>
+      <div class="kim-grid">
+        <button type="button" class="kim-btn" data-kim="0">КИМ 1<span>27 заданий · до 29 баллов</span></button>
+        <button type="button" class="kim-btn" data-kim="1">КИМ 2<span>27 заданий · до 29 баллов</span></button>
+        <button type="button" class="kim-btn" data-kim="2">КИМ 3<span>27 заданий · до 29 баллов</span></button>
+        <button type="button" class="kim-btn" data-kim="3">КИМ 4<span>27 заданий · до 29 баллов</span></button>
+      </div>
+      <p class="disclaimer">
+        Официальная структура и демоверсии: <a href="https://fipi.ru" target="_blank" rel="noopener noreferrer" style="color:var(--blue)">fipi.ru</a>.
+      </p>
+    </div>
+
+    <div id="screen-kim" class="screen" hidden>
+      <div class="scorebar">
+        <div><strong id="sb-kim"></strong> · решено <strong id="sb-done">0</strong>/27 · баллы <strong id="sb-pts">0</strong>/29</div>
+        <button type="button" class="btn btn-ghost" id="btn-back" style="margin:0">← Другой КИМ</button>
+      </div>
+      <p class="story" style="margin-top:0">
+        Переход к заданию. После ошибки доступен <b>разбор нейросетью</b> (тот же сервис, что у AlexBot на Netlify).
+      </p>
+      <nav class="toc" id="toc"></nav>
+      <div id="task-list"></div>
+    </div>
+
+    <footer class="page-foot">
+      © <span id="year"></span> LogicUp
+    </footer>
+  </div>
+
+  <script src="ege-kim-tasks.js"></script>
+  <script src="ai-explain-error.js"></script>
+  <script>
+    (function () {
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      var kimIndex = 0;
+      var solved = {};
+      var points = {};
+
+      function show(id) {
+        document.getElementById('screen-pick').hidden = id !== 'screen-pick';
+        document.getElementById('screen-kim').hidden = id !== 'screen-kim';
+      }
+
+      function updateBar() {
+        var d = 0;
+        var p = 0;
+        for (var n = 1; n <= 27; n++) {
+          if (solved[n]) {
+            d++;
+            p += points[n] || 0;
+          }
+        }
+        document.getElementById('sb-done').textContent = String(d);
+        document.getElementById('sb-pts').textContent = String(p);
+      }
+
+      function esc(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function setReviewHints(card, spec, visible) {
+        var box = card.querySelector('.review-hints');
+        if (!box) {
+          box = document.createElement('div');
+          box.className = 'review-hints';
+          card.appendChild(box);
+        }
+        box.classList.remove('is-show');
+        if (!visible || !spec.reviewLinks || !spec.reviewLinks.length) {
+          box.innerHTML = '';
+          return;
+        }
+        var parts = [];
+        if (spec.line) {
+          parts.push('<div class="review-title">Тема задания: «' + esc(spec.line) + '»</div>');
+        }
+        parts.push('<div class="review-title" style="margin-top:8px;font-weight:600">Повторите по конспектам:</div><ul>');
+        spec.reviewLinks.forEach(function (l) {
+          parts.push('<li><a href="' + esc(l.href) + '">' + esc(l.title) + '</a></li>');
+        });
+        parts.push('</ul>');
+        box.innerHTML = parts.join('');
+        box.classList.add('is-show');
+      }
+
+      function setAiMistakeVisible(card, show) {
+        var b = card.querySelector('.ai-mistake-block');
+        if (!b) return;
+        if (show) {
+          b.classList.add('is-show');
+        } else {
+          b.classList.remove('is-show');
+          var out = b.querySelector('.ai-explain-out');
+          var st = b.querySelector('.ai-explain-status');
+          if (out) {
+            out.textContent = '';
+            out.innerHTML = '';
+          }
+          if (st) {
+            st.textContent = '';
+            st.style.display = 'none';
+          }
+          var btn = b.querySelector('.btn-ai-explain');
+          if (btn) btn.disabled = false;
+        }
+      }
+
+      function getUserAnswer(card, spec) {
+        if (spec.kind === 'logic') {
+          var r = card.querySelector('input[name="l' + spec.num + '"]:checked');
+          return r ? r.value : '(не выбрано)';
+        }
+        var raw = card.querySelector('.in-num');
+        var v = raw ? raw.value.trim() : '';
+        return v || '(пусто)';
+      }
+
+      function checkTask(num, spec, card) {
+        var msg = card.querySelector('.msg');
+        msg.className = 'msg';
+        setReviewHints(card, spec, false);
+        setAiMistakeVisible(card, false);
+        var ok = false;
+        if (spec.kind === 'logic') {
+          var r = card.querySelector('input[name="l' + num + '"]:checked');
+          if (!r) {
+            msg.textContent = 'Выберите 0 или 1.';
+            msg.classList.add('err');
+            setReviewHints(card, spec, true);
+            setAiMistakeVisible(card, true);
+            return;
+          }
+          ok = parseInt(r.value, 10) === spec.answer;
+        } else {
+          var raw = card.querySelector('.in-num').value.trim();
+          var v = parseInt(raw, 10);
+          if (raw === '' || Number.isNaN(v)) {
+            msg.textContent = 'Введите целое число.';
+            msg.classList.add('err');
+            setReviewHints(card, spec, true);
+            setAiMistakeVisible(card, true);
+            return;
+          }
+          ok = v === spec.answer;
+        }
+        if (ok) {
+          msg.textContent = spec.okText || 'Верно.';
+          msg.classList.add('ok');
+          setReviewHints(card, spec, false);
+          setAiMistakeVisible(card, false);
+          if (!solved[num]) {
+            solved[num] = true;
+            points[num] = spec.points;
+            card.classList.add('solved');
+            updateBar();
+          }
+        } else {
+          msg.textContent = 'Неверно.';
+          msg.classList.add('err');
+          setReviewHints(card, spec, true);
+          setAiMistakeVisible(card, true);
+        }
+      }
+
+      function openKim(idx) {
+        kimIndex = idx;
+        solved = {};
+        points = {};
+        document.getElementById('sb-kim').textContent = 'КИМ ' + (idx + 1);
+        updateBar();
+
+        var tasks = window.EGE_KIM_TASKS.buildAll(idx);
+        var list = document.getElementById('task-list');
+        var toc = document.getElementById('toc');
+        list.innerHTML = '';
+        toc.innerHTML = '';
+
+        tasks.forEach(function (spec) {
+          var a = document.createElement('a');
+          a.href = '#t' + spec.num;
+          a.textContent = spec.num;
+          toc.appendChild(a);
+
+          var card = document.createElement('article');
+          card.className = 'kim-task';
+          card.id = 't' + spec.num;
+
+          var head = document.createElement('div');
+          head.className = 'kim-task-head';
+          var pt = document.createElement('span');
+          pt.className = 'badge-pt' + (spec.points === 2 ? ' pt2' : '');
+          pt.textContent = spec.points === 2 ? '2 балла' : '1 балл';
+          var h = document.createElement('strong');
+          h.textContent = 'Задание ' + spec.num;
+          var ln = document.createElement('div');
+          ln.className = 'line-name';
+          ln.textContent = spec.line;
+          head.appendChild(pt);
+          head.appendChild(h);
+          head.appendChild(ln);
+
+          var body = document.createElement('div');
+          body.className = 'task-body';
+          body.innerHTML = '<p style="margin:0">' + spec.html + '</p>';
+
+          var row = document.createElement('div');
+          row.className = 'in-row';
+
+          if (spec.kind === 'logic') {
+            var l1 = document.createElement('label');
+            l1.className = 'choice';
+            l1.innerHTML = '<input type="radio" name="l' + spec.num + '" value="1" /> 1 (истина)';
+            var l0 = document.createElement('label');
+            l0.className = 'choice';
+            l0.innerHTML = '<input type="radio" name="l' + spec.num + '" value="0" /> 0 (ложь)';
+            row.appendChild(l1);
+            row.appendChild(l0);
+          } else {
+            var inp = document.createElement('input');
+            inp.type = 'number';
+            inp.className = 'in-num';
+            inp.placeholder = 'Ответ';
+            row.appendChild(inp);
+          }
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn btn-primary';
+          btn.textContent = 'Проверить';
+          (function (n, s, c) {
+            btn.addEventListener('click', function () {
+              checkTask(n, s, c);
+            });
+          })(spec.num, spec, card);
+
+          row.appendChild(btn);
+
+          var msg = document.createElement('p');
+          msg.className = 'msg';
+          var hints = document.createElement('div');
+          hints.className = 'review-hints';
+
+          var ai = document.createElement('div');
+          ai.className = 'ai-mistake-block';
+          ai.innerHTML =
+            '<button type="button" class="btn-ai-explain">Разобрать ошибку с ИИ</button>' +
+            '<p class="ai-explain-status" style="display:none"></p>' +
+            '<div class="ai-explain-out"></div>';
+          card.kimSpec = spec;
+
+          card.appendChild(head);
+          card.appendChild(body);
+          card.appendChild(row);
+          card.appendChild(msg);
+          card.appendChild(hints);
+          card.appendChild(ai);
+          list.appendChild(card);
+        });
+
+        show('screen-kim');
+        window.scrollTo(0, 0);
+      }
+
+      document.querySelectorAll('.kim-btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          openKim(parseInt(b.getAttribute('data-kim'), 10));
+        });
+      });
+
+      document.getElementById('btn-back').addEventListener('click', function () {
+        show('screen-pick');
+      });
+
+      document.getElementById('task-list').addEventListener('click', function (e) {
+        if (!e.target.classList.contains('btn-ai-explain')) return;
+        var card = e.target.closest('.kim-task');
+        var spec = card && card.kimSpec;
+        if (!card || !spec || !window.LogicUpAI) return;
+        var out = card.querySelector('.ai-explain-out');
+        var st = card.querySelector('.ai-explain-status');
+        var btn = e.target;
+        btn.disabled = true;
+        if (st) {
+          st.style.display = 'block';
+          st.textContent = 'Запрос к нейросети…';
+        }
+        if (out) {
+          out.textContent = '';
+          out.innerHTML = '';
+        }
+        var ua = getUserAnswer(card, spec);
+        window.LogicUpAI
+          .explainMistake({
+            line: spec.line,
+            plainTask: window.LogicUpAI.stripHtml(spec.html),
+            userAnswer: ua,
+            correctAnswer: spec.answer
+          })
+          .then(function (text) {
+            if (st) {
+              st.textContent = '';
+              st.style.display = 'none';
+            }
+            if (out) out.textContent = text;
+          })
+          .catch(function () {
+            if (st) {
+              st.textContent =
+                'Не удалось вызвать нейросеть (нужен хостинг с функцией Netlify). Откройте бота вручную:';
+              st.style.display = 'block';
+            }
+            if (out) {
+              out.innerHTML =
+                '<a href="bot.html">AlexBot — задать вопрос по заданию →</a>';
+            }
+          })
+          .finally(function () {
+            btn.disabled = false;
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

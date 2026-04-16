@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Тестирование — ЕГЭ по информатике | LogicUp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root { --muted: #94a3b8; --blue: #3b82f6; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+    header.page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .brand { display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; }
+    .brand .logo {
+      width: 56px; height: 56px; border-radius: 16px; background: #022c22;
+      border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: var(--accent); font-size: 20px;
+    }
+    nav.head-nav { display: flex; flex-wrap: wrap; gap: 10px; }
+    .lead { color: var(--muted); font-size: 1.05rem; line-height: 1.65; margin-bottom: 28px; }
+    .card-block {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px 30px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(16px);
+    }
+    .card-block h2 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 1.35rem;
+      color: var(--accent);
+    }
+    .card-block h3 { font-size: 1.1rem; margin: 20px 0 10px; color: #e2e8f0; }
+    #tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .task-card {
+      display: block;
+      padding: 16px 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #f1f5f9;
+      font-weight: 600;
+      border: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.45);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .task-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .task-card span { font-size: 12px; color: var(--muted); font-weight: 500; display: block; margin-top: 6px; }
+    .quiz-item {
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      background: rgba(15, 23, 42, 0.35);
+    }
+    .quiz-item p.q { font-weight: 600; margin: 0 0 12px; line-height: 1.5; }
+    .quiz-item label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    .quiz-item label:hover { color: #e2e8f0; }
+    .quiz-item input { margin-top: 4px; accent-color: var(--accent); }
+    .quiz-actions { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      border: none;
+      background: var(--blue);
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35); }
+    .btn-ghost {
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: #fff; }
+    #quiz-result { font-weight: 700; color: var(--accent); min-height: 1.5em; }
+    .quiz-review {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      background: rgba(59, 130, 246, 0.08);
+      font-size: 13px;
+    }
+    .quiz-review.is-show { display: block; }
+    .quiz-review .quiz-topic { font-size: 12px; color: #94a3b8; margin-bottom: 8px; line-height: 1.4; }
+    .quiz-review strong { color: #93c5fd; }
+    .quiz-review ul { margin: 6px 0 0; padding-left: 1.2em; color: var(--muted); line-height: 1.55; }
+    .quiz-review a { color: var(--blue); font-weight: 600; }
+    .quiz-ai-wrap {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.06);
+    }
+    .quiz-ai-wrap.is-show { display: block; }
+    .btn-ai-quiz {
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid var(--accent);
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--accent);
+      font-family: inherit;
+    }
+    .btn-ai-quiz:hover:not(:disabled) { background: rgba(34, 197, 94, 0.28); }
+    .btn-ai-quiz:disabled { opacity: 0.6; cursor: wait; }
+    .quiz-ai-status { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+    .quiz-ai-out { margin-top: 8px; font-size: 14px; line-height: 1.65; color: #e2e8f0; white-space: pre-wrap; }
+    .quiz-ai-out a { color: var(--blue); font-weight: 600; }
+    .quiz-item .hint { font-size: 13px; color: var(--muted); margin-top: 8px; display: none; }
+    .quiz-item.reveal-correct .hint { display: block; }
+    .err { color: #f87171; }
+    .ok { color: #4ade80; }
+    .ext-link { color: var(--blue); font-weight: 600; }
+    footer.page-foot { text-align: center; padding: 40px 0 20px; color: var(--text-muted); font-size: 14px; }
+    @media (max-width: 768px) {
+      header.page-head { flex-direction: column; text-align: center; }
+      .brand { flex-direction: column; }
+      nav.head-nav { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <a href="index.html" class="brand">
+        <div class="logo">LU</div>
+        <div>
+          <div style="font-weight:800;font-size:18px">LogicUp</div>
+          <div style="font-size:13px;color:var(--muted)">ЕГЭ · информатика</div>
+        </div>
+      </a>
+      <nav class="head-nav">
+        <a href="index.html" class="nav-link">Главная</a>
+        <a href="notes.html" class="nav-link">Конспекты</a>
+        <a href="bot.html" class="nav-link" style="color:#3b82f6;font-weight:700">AI Бот</a>
+      </nav>
+    </header>
+
+    <section class="card-block">
+      <h1 style="margin:0 0 12px;font-size:2rem;font-weight:800;letter-spacing:-0.03em">Тестирование: ЕГЭ по информатике</h1>
+      <p class="lead" style="margin-bottom:16px">
+        <a href="razvilka-fipi-inf.html" class="ext-link" style="font-size:1.05rem">4 полных КИМ: 27 заданий и 29 баллов, как на ЕГЭ →</a>
+      </p>
+      <p class="lead">
+        Здесь можно пройти <b>мини-тест</b> на базовые темы и перейти к <b>разборам заданий</b> по номерам билета —
+        те же материалы, что в разделе «Конспекты», но собраны под формат подготовки к экзамену.
+      </p>
+      <p class="lead" style="margin-bottom:0">
+        Официальные спецификации и демоверсии: <a class="ext-link" href="https://fipi.ru/ege-i-oge" target="_blank" rel="noopener noreferrer">сайт ФИПИ</a>.
+      </p>
+    </section>
+
+    <section class="card-block">
+      <h2>Задания по номерам (конспекты и разборы)</h2>
+      <p style="color:var(--muted);margin-top:0;margin-bottom:18px;font-size:15px">
+        Откройте нужный номер — внутри теория и примеры для самопроверки.
+      </p>
+      <div id="tasks-grid"></div>
+      <p id="tasks-error" style="display:none;color:#f87171;text-align:center;margin-top:16px"></p>
+    </section>
+
+    <section class="card-block" id="mini-quiz-section">
+      <h2>Мини-тест (5 вопросов)</h2>
+      <p style="color:var(--muted);margin-top:0;margin-bottom:20px;font-size:15px">
+        Выберите варианты и нажмите «Проверить ответы». Разбор появится под вопросами.
+      </p>
+
+      <div class="quiz-item" id="quiz-1" data-correct="b">
+        <p class="q">1. Чему равно число 1010<sub>2</sub> в десятичной системе счисления?</p>
+        <label><input type="radio" name="q1" value="a" /> 8</label>
+        <label><input type="radio" name="q1" value="b" /> 10</label>
+        <label><input type="radio" name="q1" value="c" /> 12</label>
+        <label><input type="radio" name="q1" value="d" /> 16</label>
+        <p class="hint">1·2³ + 0·2² + 1·2¹ + 0 = 8 + 2 = 10.</p>
+        <div class="quiz-review" aria-live="polite">
+          <div class="quiz-topic">Тема: перевод из двоичной системы в десятичную</div>
+          <strong>Повторите по конспектам:</strong>
+          <ul>
+            <li><a href="notes/information/infzad14.html">Задание 14 — системы счисления</a></li>
+            <li><a href="notes/information/zad12.html">Задание 12 — системы счисления</a></li>
+          </ul>
+        </div>
+        <div class="quiz-ai-wrap">
+          <button type="button" class="btn-ai-quiz">Разобрать ошибку с ИИ</button>
+          <p class="quiz-ai-status" style="display:none"></p>
+          <div class="quiz-ai-out"></div>
+        </div>
+      </div>
+
+      <div class="quiz-item" id="quiz-2" data-correct="c">
+        <p class="q">2. Сколько <b>бит</b> минимум нужно, чтобы закодировать <b>один</b> символ алфавита из <b>256</b> символов при равномерной длине кода?</p>
+        <label><input type="radio" name="q2" value="a" /> 6</label>
+        <label><input type="radio" name="q2" value="b" /> 7</label>
+        <label><input type="radio" name="q2" value="c" /> 8</label>
+        <label><input type="radio" name="q2" value="d" /> 256</label>
+        <p class="hint">Нужно найти минимальное k: 2<sup>k</sup> ≥ 256 → k = 8.</p>
+        <div class="quiz-review" aria-live="polite">
+          <div class="quiz-topic">Тема: минимальное число бит на символ при равномерном коде</div>
+          <strong>Повторите по конспектам:</strong>
+          <ul>
+            <li><a href="notes/information/infzad7.html">Задание 7 — кодирование</a></li>
+            <li><a href="notes/information/infzad11.html">Задание 11 — объём памяти</a></li>
+          </ul>
+        </div>
+        <div class="quiz-ai-wrap">
+          <button type="button" class="btn-ai-quiz">Разобрать ошибку с ИИ</button>
+          <p class="quiz-ai-status" style="display:none"></p>
+          <div class="quiz-ai-out"></div>
+        </div>
+      </div>
+
+      <div class="quiz-item" id="quiz-3" data-correct="a">
+        <p class="q">3. Чему равно выражение (1 ∧ 0) ∨ 1 в алгебре логики? (1 — истина, 0 — ложь)</p>
+        <label><input type="radio" name="q3" value="a" /> 1 (истина)</label>
+        <label><input type="radio" name="q3" value="b" /> 0 (ложь)</label>
+        <label><input type="radio" name="q3" value="c" /> Нельзя вычислить</label>
+        <p class="hint">(1 ∧ 0) = 0; 0 ∨ 1 = 1.</p>
+        <div class="quiz-review" aria-live="polite">
+          <div class="quiz-topic">Тема: алгебра логики (значение выражения)</div>
+          <strong>Повторите по конспектам:</strong>
+          <ul>
+            <li><a href="notes/information/infzad2.html">Задание 2 — логика</a></li>
+            <li><a href="notes/information/imp%20and%20ekv.html">Импликация и эквивалентность</a></li>
+          </ul>
+        </div>
+        <div class="quiz-ai-wrap">
+          <button type="button" class="btn-ai-quiz">Разобрать ошибку с ИИ</button>
+          <p class="quiz-ai-status" style="display:none"></p>
+          <div class="quiz-ai-out"></div>
+        </div>
+      </div>
+
+      <div class="quiz-item" id="quiz-4" data-correct="b">
+        <p class="q">4. Переведите число 2D<sub>16</sub> в десятичную систему (D = 13).</p>
+        <label><input type="radio" name="q4" value="a" /> 35</label>
+        <label><input type="radio" name="q4" value="b" /> 45</label>
+        <label><input type="radio" name="q4" value="c" /> 413</label>
+        <label><input type="radio" name="q4" value="d" /> 2213</label>
+        <p class="hint">2·16 + 13 = 32 + 13 = 45.</p>
+        <div class="quiz-review" aria-live="polite">
+          <div class="quiz-topic">Тема: шестнадцатеричная система счисления</div>
+          <strong>Повторите по конспектам:</strong>
+          <ul>
+            <li><a href="notes/information/infzad14.html">Задание 14 — системы счисления</a></li>
+            <li><a href="notes/information/zad12.html">Задание 12 — системы счисления</a></li>
+          </ul>
+        </div>
+        <div class="quiz-ai-wrap">
+          <button type="button" class="btn-ai-quiz">Разобрать ошибку с ИИ</button>
+          <p class="quiz-ai-status" style="display:none"></p>
+          <div class="quiz-ai-out"></div>
+        </div>
+      </div>
+
+      <div class="quiz-item" id="quiz-5" data-correct="d">
+        <p class="q">5. В задании на исполнитель «Робот» клетка считается закрашенной, если робот <b>побывал</b> в ней хотя бы раз (включая старт). Верно ли это утверждение для типовых постановок ЕГЭ?</p>
+        <label><input type="radio" name="q5" value="a" /> Нет, закрашивается только финальная клетка</label>
+        <label><input type="radio" name="q5" value="b" /> Нет, закрашиваются только клетки по команде «закрасить»</label>
+        <label><input type="radio" name="q5" value="c" /> Зависит только от цвета стен</label>
+        <label><input type="radio" name="q5" value="d" /> Да, обычно закрашивается вся траектория посещений</label>
+        <p class="hint">В стандартной модели «Кумир»/Робот закрашиваются все клетки, где робот побывал.</p>
+        <div class="quiz-review" aria-live="polite">
+          <div class="quiz-topic">Тема: исполнитель «Робот», закрашивание клеток</div>
+          <strong>Повторите по конспектам:</strong>
+          <ul>
+            <li><a href="notes/information/16zadania.html">Задание 16 — исполнитель, рекурсия</a></li>
+          </ul>
+        </div>
+        <div class="quiz-ai-wrap">
+          <button type="button" class="btn-ai-quiz">Разобрать ошибку с ИИ</button>
+          <p class="quiz-ai-status" style="display:none"></p>
+          <div class="quiz-ai-out"></div>
+        </div>
+      </div>
+
+      <div class="quiz-actions">
+        <button type="button" class="btn-primary" id="btn-check-quiz">Проверить ответы</button>
+        <button type="button" class="btn-ghost" id="btn-reset-quiz">Сбросить</button>
+        <span id="quiz-result"></span>
+      </div>
+    </section>
+
+    <footer class="page-foot">
+      © <span id="year"></span> LogicUp · <a href="index.html" style="color:var(--text-muted)">На главную</a>
+    </footer>
+  </div>
+
+  <script src="ai-explain-error.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function taskSortKey(title) {
+      const range = title.match(/(\d+)\s*[–-]\s*(\d+)/);
+      if (range) return parseInt(range[1], 10);
+      const m = title.match(/задани[ея]\s*(\d+)/i);
+      if (m) return parseInt(m[1], 10);
+      const hash = title.match(/№\s*(\d+)/i);
+      if (hash) return parseInt(hash[1], 10);
+      return 1000;
+    }
+
+    fetch('notes.json')
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var list = data['Информатика'] || [];
+        list = list.slice().sort(function (a, b) {
+          return taskSortKey(a.title) - taskSortKey(b.title);
+        });
+        var grid = document.getElementById('tasks-grid');
+        if (!list.length) {
+          grid.innerHTML = '<p style="color:var(--muted)">Материалы не найдены в notes.json</p>';
+          return;
+        }
+        list.forEach(function (note) {
+          if (!note.file || !note.title) return;
+          var a = document.createElement('a');
+          a.href = note.file;
+          a.className = 'task-card';
+          a.appendChild(document.createTextNode(note.title));
+          var span = document.createElement('span');
+          span.textContent = 'Открыть материал →';
+          a.appendChild(span);
+          grid.appendChild(a);
+        });
+      })
+      .catch(function (e) {
+        document.getElementById('tasks-error').style.display = 'block';
+        document.getElementById('tasks-error').textContent =
+          'Не удалось загрузить notes.json. Откройте страницу с локального сервера или проверьте файл в корне сайта.';
+      });
+
+    var quizIds = ['quiz-1', 'quiz-2', 'quiz-3', 'quiz-4', 'quiz-5'];
+
+    function getSelected(name) {
+      var el = document.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : null;
+    }
+
+    document.getElementById('btn-check-quiz').addEventListener('click', function () {
+      var names = ['q1', 'q2', 'q3', 'q4', 'q5'];
+      var correct = 0;
+      quizIds.forEach(function (id, i) {
+        var block = document.getElementById(id);
+        var ok = block.getAttribute('data-correct');
+        var sel = getSelected(names[i]);
+        block.classList.add('reveal-correct');
+        block.classList.remove('err', 'ok');
+        var rev = block.querySelector('.quiz-review');
+        if (rev) rev.classList.remove('is-show');
+        var aiW = block.querySelector('.quiz-ai-wrap');
+        if (aiW) aiW.classList.remove('is-show');
+        if (sel === ok) {
+          correct++;
+          block.classList.add('ok');
+        } else {
+          block.classList.add('err');
+          if (rev) rev.classList.add('is-show');
+          if (aiW) aiW.classList.add('is-show');
+        }
+      });
+      document.getElementById('quiz-result').textContent =
+        'Результат: ' + correct + ' из ' + names.length;
+    });
+
+    document.getElementById('btn-reset-quiz').addEventListener('click', function () {
+      document.querySelectorAll('.quiz-item input').forEach(function (inp) {
+        inp.checked = false;
+      });
+      quizIds.forEach(function (id) {
+        var block = document.getElementById(id);
+        block.classList.remove('reveal-correct', 'err', 'ok');
+        var rev = block.querySelector('.quiz-review');
+        if (rev) rev.classList.remove('is-show');
+        var aiW = block.querySelector('.quiz-ai-wrap');
+        if (aiW) {
+          aiW.classList.remove('is-show');
+          var ao = aiW.querySelector('.quiz-ai-out');
+          var ast = aiW.querySelector('.quiz-ai-status');
+          if (ao) {
+            ao.textContent = '';
+            ao.innerHTML = '';
+          }
+          if (ast) {
+            ast.textContent = '';
+            ast.style.display = 'none';
+          }
+        }
+      });
+      document.getElementById('quiz-result').textContent = '';
+    });
+
+    function quizLabelFor(block, name, value) {
+      if (!value) return null;
+      var inp = block.querySelector('input[name="' + name + '"][value="' + value + '"]');
+      if (!inp || !inp.closest('label')) return value;
+      return inp.closest('label').textContent.replace(/\s+/g, ' ').trim();
+    }
+
+    document.getElementById('mini-quiz-section').addEventListener('click', function (e) {
+      if (!e.target.classList.contains('btn-ai-quiz')) return;
+      var block = e.target.closest('.quiz-item');
+      if (!block || !window.LogicUpAI) return;
+      var qEl = block.querySelector('p.q');
+      var topicEl = block.querySelector('.quiz-topic');
+      var line = topicEl ? topicEl.textContent.replace(/^Тема:\s*/, '') : 'Мини-тест ЕГЭ информатика';
+      var plainQ = qEl ? window.LogicUpAI.stripHtml(qEl.innerHTML) : '';
+      var firstRadio = block.querySelector('input[type="radio"]');
+      var name = firstRadio ? firstRadio.getAttribute('name') : 'q1';
+      var sel = block.querySelector('input[name="' + name + '"]:checked');
+      var okVal = block.getAttribute('data-correct');
+      var userAns = sel ? quizLabelFor(block, name, sel.value) : '(не выбрано)';
+      var correctAns = quizLabelFor(block, name, okVal) || okVal;
+      var out = block.querySelector('.quiz-ai-out');
+      var st = block.querySelector('.quiz-ai-status');
+      var btn = e.target;
+      btn.disabled = true;
+      if (st) {
+        st.style.display = 'block';
+        st.textContent = 'Запрос к нейросети…';
+      }
+      if (out) {
+        out.textContent = '';
+        out.innerHTML = '';
+      }
+      window.LogicUpAI
+        .explainMistake({
+          line: line,
+          plainTask: plainQ,
+          userAnswer: userAns,
+          correctAnswer: correctAns
+        })
+        .then(function (text) {
+          if (st) {
+            st.textContent = '';
+            st.style.display = 'none';
+          }
+          if (out) out.textContent = text;
+        })
+        .catch(function () {
+          if (st) {
+            st.textContent = 'Нет связи с ИИ (нужен Netlify). Можно открыть бота:';
+            st.style.display = 'block';
+          }
+          if (out) out.innerHTML = '<a href="bot.html">AlexBot →</a>';
+        })
+        .finally(function () {
+          btn.disabled = false;
+        });
+    });
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Овсиенко Алексей — личный сайт</title>
+  <title>LogicUp — подготовка к ЕГЭ с ИИ</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,6 +48,33 @@
       transition: 0.3s;
     }
     .floating-bot:hover { transform: scale(1.1); }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 18px;
+    }
+    .hero-actions .btn-bot { margin-top: 0; }
+    .btn-about {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--text-main, #f1f5f9) !important;
+      border: 2px solid rgba(148, 163, 184, 0.45);
+      background: rgba(255, 255, 255, 0.06);
+      transition: 0.3s;
+    }
+    .btn-about:hover {
+      border-color: #3b82f6;
+      color: #fff !important;
+      background: rgba(59, 130, 246, 0.12);
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -55,35 +82,58 @@
 
     <header>
       <div class="brand">
-        <div class="logo">ОА</div>
+        <div class="logo">LU</div>
         <div>
-          <div style="font-weight:800;font-size:18px">Овсиенко Алексей</div>
-          <div style="font-size:13px;color:var(--muted)">Школьник · начинающий разработчик</div>
+          <div style="font-weight:800;font-size:18px">LogicUp</div>
+          <div style="font-size:13px;color:var(--muted)">Подготовка к ЕГЭ с искусственным интеллектом</div>
         </div>
       </div>
       <nav>
+        <a href="#program" class="nav-link">О программе</a>
         <a href="#about" class="nav-link">Обо мне</a>
         <a href="notes.html" class="nav-link">Конспекты</a>
+        <a href="test-ege-informatika.html" class="nav-link">Тесты: инф.</a>
+        <a href="razvilka-fipi-inf.html" class="nav-link">4 КИМ</a>
         <a href="bot.html" class="nav-link" style="color: #3b82f6; font-weight: bold;">AI Бот</a>
         <a href="#projects" class="nav-link">Проекты</a>
         <a href="#contact" class="nav-link">Контакты</a>
       </nav>
     </header>
 
+    <section class="card hero" id="program">
+      <div>
+        <p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">Образовательная программа</p>
+        <h1>LogicUp</h1>
+        <p>
+          <b>LogicUp</b> — сайт для подготовки к <b>ЕГЭ</b>: здесь собрана образовательная программа с конспектами,
+          опорными материалами и разбором заданий в логике экзамена — от базовых тем до тренировки под формат билета.
+        </p>
+        <p style="color:var(--muted)">
+          Обучение усиливается <b>искусственным интеллектом</b>: вы задаёте вопрос по предмету или конкретной задаче —
+          ИИ помогает объяснить теорию, шаг решения и типичные ошибки, чтобы быстрее закрывать пробелы перед экзаменом.
+        </p>
+        
+        <div class="hero-actions">
+          <a href="bot.html" class="btn-bot">
+            <span>🤖</span> Готовиться к ЕГЭ с ИИ-помощником
+          </a>
+          <a href="#about" class="btn-about">Обо мне</a>
+        </div>
+      </div>
+      <div class="avatar"></div>
+    </section>
+
     <section class="card hero" id="about">
       <div>
-        <h1>Привет 👋</h1>
+        <h2 style="margin-top:0;color:var(--accent)">Обо мне</h2>
+        <p style="font-size:1.35rem;font-weight:800;margin:8px 0 14px">Привет 👋</p>
         <p>
-          Меня зовут <b>Овсиенко Алексей</b>.  
+          Меня зовут <b>Овсиенко Алексей</b>.<br>
           Я учусь в школе, интересуюсь программированием, играми, серверами и веб-разработкой.
         </p>
         <p style="color:var(--muted)">
           Этот сайт — моя личная платформа с проектами и конспектами по ЕГЭ.
         </p>
-        
-        <a href="bot.html" class="btn-bot">
-          <span>🤖</span> Спросить у AI-помощника
-        </a>
       </div>
       <div class="avatar"></div>
     </section>
