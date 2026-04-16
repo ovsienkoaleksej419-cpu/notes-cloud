@@ -177,7 +177,7 @@
     <section class="card-block">
       <h1 style="margin:0 0 12px;font-size:2rem;font-weight:800;letter-spacing:-0.03em">Тестирование: ЕГЭ по информатике</h1>
       <p class="lead" style="margin-bottom:16px">
-        <a href="razvilka-fipi-inf.html" class="ext-link" style="font-size:1.05rem">4 полных КИМ: 27 заданий и 29 баллов, как на ЕГЭ →</a>
+        <a href="kim.html" class="ext-link" style="font-size:1.05rem">КИМ: выбор предмета · информатика — 27 заданий и 29 баллов →</a>
       </p>
       <p class="lead">
         Здесь можно пройти <b>мини-тест</b> на базовые темы и перейти к <b>разборам заданий</b> по номерам билета —
@@ -324,6 +324,7 @@
   </div>
 
   <script src="ai-explain-error.js"></script>
+  <script src="notes-catalog.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -337,38 +338,50 @@
       return 1000;
     }
 
-    fetch('notes.json')
-      .then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
-      .then(function (data) {
-        var list = data['Информатика'] || [];
-        list = list.slice().sort(function (a, b) {
-          return taskSortKey(a.title) - taskSortKey(b.title);
-        });
-        var grid = document.getElementById('tasks-grid');
-        if (!list.length) {
-          grid.innerHTML = '<p style="color:var(--muted)">Материалы не найдены в notes.json</p>';
-          return;
-        }
-        list.forEach(function (note) {
-          if (!note.file || !note.title) return;
-          var a = document.createElement('a');
-          a.href = note.file;
-          a.className = 'task-card';
-          a.appendChild(document.createTextNode(note.title));
-          var span = document.createElement('span');
-          span.textContent = 'Открыть материал →';
-          a.appendChild(span);
-          grid.appendChild(a);
-        });
-      })
-      .catch(function (e) {
+    function fillTasksGrid(data) {
+      var list = data['Информатика'] || [];
+      list = list.slice().sort(function (a, b) {
+        return taskSortKey(a.title) - taskSortKey(b.title);
+      });
+      var grid = document.getElementById('tasks-grid');
+      if (!list.length) {
+        grid.innerHTML = '<p style="color:var(--muted)">Материалы не найдены в каталоге конспектов</p>';
+        return;
+      }
+      list.forEach(function (note) {
+        if (!note.file || !note.title) return;
+        var a = document.createElement('a');
+        a.href = note.file;
+        a.className = 'task-card';
+        a.appendChild(document.createTextNode(note.title));
+        var span = document.createElement('span');
+        span.textContent = 'Открыть материал →';
+        a.appendChild(span);
+        grid.appendChild(a);
+      });
+    }
+
+    if (typeof window.__NOTES_CATALOG__ === 'object' && window.__NOTES_CATALOG__ !== null) {
+      try {
+        fillTasksGrid(window.__NOTES_CATALOG__);
+      } catch (e) {
         document.getElementById('tasks-error').style.display = 'block';
         document.getElementById('tasks-error').textContent =
-          'Не удалось загрузить notes.json. Откройте страницу с локального сервера или проверьте файл в корне сайта.';
-      });
+          'Ошибка при разборе каталога конспектов. Проверьте notes-catalog.js.';
+      }
+    } else {
+      fetch('notes.json')
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(fillTasksGrid)
+        .catch(function () {
+          document.getElementById('tasks-error').style.display = 'block';
+          document.getElementById('tasks-error').textContent =
+            'Не удалось загрузить каталог. Положите notes-catalog.js рядом со страницей или откройте сайт по HTTP.';
+        });
+    }
 
     var quizIds = ['quiz-1', 'quiz-2', 'quiz-3', 'quiz-4', 'quiz-5'];
 

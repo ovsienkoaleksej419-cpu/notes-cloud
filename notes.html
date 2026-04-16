@@ -3,10 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Конспекты</title>
-    </a>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  
-  <link rel="stylesheet" href="style.css"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -14,9 +12,10 @@
 
   <header class="note" style="margin-top:20px; margin-bottom: 20px;">
     <h1>📚 Конспекты</h1>
-      <div class="search-container" style="display: flex; flex-direction: column; gap: 15px;">
-    <a href="index.html" class="back-link">← На главную</a>
-    <a href="test-ege-informatika.html" class="back-link" style="border-color: rgba(59, 130, 246, 0.35); color: #93c5fd;">Тестирование: ЕГЭ по информатике →</a>
+    <div class="search-container" style="display: flex; flex-direction: column; gap: 15px;">
+      <a href="index.html" class="back-link">← На главную</a>
+      <a href="test-ege-informatika.html" class="back-link" style="border-color: rgba(59, 130, 246, 0.35); color: #93c5fd;">Тестирование: ЕГЭ по информатике →</a>
+    </div>
   </header>
 
   <section class="note" style="margin-bottom: 20px;">
@@ -26,8 +25,6 @@
       autocomplete="off"
       class="search-input"
     >
-  
-    </a>
   </section>
 
   <div id="notes"></div>
@@ -40,34 +37,73 @@
   </div>
 </footer>
 
+<!-- notes-catalog.js: тот же каталог, что в notes.json; при file:// fetch к .json блокируется, а подключение .js — нет -->
+<script src="notes-catalog.js"></script>
 <script>
 /* ===== ГОД ===== */
 document.getElementById('year').textContent = new Date().getFullYear();
 
 let allNotes = {};
 
-/* ===== ЗАГРУЗКА notes.json ===== */
-fetch('/notes.json')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('HTTP ' + response.status);
-    }
-    return response.text();
-  })
-  .then(text => {
-    const data = JSON.parse(text);
-    allNotes = data;
-    renderNotes(data);
-  })
-  .catch(err => {
-    console.error('Ошибка загрузки:', err);
-    document.getElementById('notes').innerHTML = `
+/* ===== ЗАГРУЗКА каталога: сначала notes-catalog.js (в т.ч. file://), иначе fetch notes.json по HTTP ===== */
+const NOTES_JSON_URL = new URL('notes.json', window.location.href).href;
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function showNotesLoadError(err, extraUrlLine) {
+  console.error('Ошибка загрузки:', err);
+  const urlLine = extraUrlLine
+    ? `Запрос: <code style="word-break:break-all;">${escapeHtml(extraUrlLine)}</code>`
+    : '';
+  let hint;
+  if (err instanceof SyntaxError) {
+    hint = 'Данные каталога не корректный JSON — проверьте <b>notes.json</b> / <b>notes-catalog.js</b>.';
+  } else if (window.location.protocol === 'file:') {
+    hint = 'Рядом с <b>notes.html</b> должен лежать <b>notes-catalog.js</b> (как сейчас). Если открываете по <b>file://</b>, не отключайте скрипты и не переименовывайте файл.';
+  } else {
+    hint = 'Убедитесь, что на сервере есть <b>notes-catalog.js</b> или <b>notes.json</b> в той же папке, что и <b>notes.html</b>.';
+  }
+  document.getElementById('notes').innerHTML = `
       <p class="note" style="color:#e3342f;text-align:center;">
         Ошибка загрузки конспектов.<br>
-        Проверьте наличие <b>notes.json</b> в корне сайта.
+        ${urlLine ? urlLine + '<br>' : ''}
+        <span style="font-size:14px;color:var(--text-muted);display:inline-block;margin-top:10px;text-align:left;max-width:42rem;">${hint}</span>
       </p>
     `;
-  });
+}
+
+function applyNotesData(data) {
+  allNotes = data;
+  renderNotes(data);
+}
+
+if (typeof window.__NOTES_CATALOG__ === 'object' && window.__NOTES_CATALOG__ !== null) {
+  try {
+    applyNotesData(window.__NOTES_CATALOG__);
+  } catch (e) {
+    showNotesLoadError(e, null);
+  }
+} else {
+  fetch(NOTES_JSON_URL)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      applyNotesData(data);
+    })
+    .catch(err => {
+      showNotesLoadError(err, NOTES_JSON_URL);
+    });
+}
 
 /* ===== ОТОБРАЖЕНИЕ ===== */
 function renderNotes(data) {

@@ -1,4 +1,5 @@
-{
+/** Каталог конспектов. Собран из notes.json — после правок JSON: npm run build-notes-catalog */
+window.__NOTES_CATALOG__ = {
   "Физика": [
     {
       "title": "Кинематика",
@@ -139,4 +140,4 @@
       "file": "notes/information/infzad27.html"
     }
   ]
-}
+};
